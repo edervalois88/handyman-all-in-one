@@ -23,7 +23,10 @@ export function Footer({ locale, t }: { locale: Locale; t: Dict }) {
             <p className="display mt-6 text-[1.35rem] leading-snug text-cream/90">
               {t.tagline}
             </p>
-            <Link href={route("contact", locale)} className="btn btn-primary mt-4 w-full sm:w-auto">
+            <Link
+              href={route("contact", locale)}
+              className="btn btn-ink mt-4 w-full sm:w-auto"
+            >
               {t.nav.quote}
             </Link>
           </div>

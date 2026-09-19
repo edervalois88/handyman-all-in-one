@@ -48,18 +48,18 @@ export function AboutPage({ locale, t }: { locale: Locale; t: ReturnType<typeof 
           />
 
           <ul className="mt-12 grid gap-6 sm:grid-cols-2">
-            {t.about.values.map((v, i) => (
-              <li key={v.name} className="sheet flex flex-col p-6 sm:p-7">
-                <div className="flex items-start justify-between gap-4">
+            {t.about.values.map((v) => (
+              <li key={v.name} className="sheet-stack">
+                <div className="sheet stub-b flex h-full flex-col p-6 sm:p-7">
+                  {/* Four values, no ghost numerals: the name is the heading, and a
+                      big translucent ordinal is the hero-metric scaffold this world
+                      does not use. The list needs no numbering. */}
                   <h3 className="display text-[1.7rem] text-navy">{v.name}</h3>
-                  <span className="display text-[2.2rem] leading-none text-navy/15" aria-hidden="true">
-                    {String(i + 1).padStart(2, "0")}
-                  </span>
+                  <p className="display mt-2 text-[1.15rem] leading-snug text-red">{v.body}</p>
+                  <p className="mt-4 border-t border-dashed border-rule-strong pt-4 text-[0.97rem] leading-relaxed text-navy/75">
+                    {v.detail}
+                  </p>
                 </div>
-                <p className="display mt-2 text-[1.15rem] leading-snug text-red">{v.body}</p>
-                <p className="mt-4 border-t border-dashed border-rule-strong pt-4 text-[0.97rem] leading-relaxed text-navy/75">
-                  {v.detail}
-                </p>
               </li>
             ))}
           </ul>

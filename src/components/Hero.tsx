@@ -23,7 +23,10 @@ export function Hero({ locale, t }: { locale: Locale; t: Dict }) {
               {t.hero.title}
             </h1>
 
-            <p className="label-lg mt-5 text-[1.15rem] text-red sm:text-[1.35rem]">
+            {/* Workwear Red on Warm Cream is 4.11:1, which clears WCAG AA for large
+                text but not for body size. Setting this line bold at >=1.17rem keeps
+                it large text — so the brand's red survives here without a compromise. */}
+            <p className="label-lg mt-5 text-[1.17rem] font-bold text-red sm:text-[1.4rem]">
               {t.hero.sub}
             </p>
 

@@ -113,16 +113,37 @@ and its extracted pages are archived in [`assets/brand-book/`](assets/brand-book
 
 ### Colour contrast
 
-Workwear Red, Midnight Navy and Warm Cream all clear WCAG AA in the roles the brand book
-assigns them. Two tokens exist because the brand palette alone does not:
+Every pair below was measured, not estimated. AA needs **4.5:1** for body text and **3:1** for
+large text (≥24px, or ≥18.66px bold).
 
-- **`--gold-ink` (`#8A6014`)** — Utility Gold at `#D69A3A` on Warm Cream is only ~2.1:1. It is
-  a legitimate *fill* colour, so it stays the token for gold surfaces, but every piece of gold
-  **text on a light ground** uses this darker ink (~5.2:1) instead. On Midnight Navy, Gold is
-  used directly (~7.4:1).
-- **`--ink-soft` (`#55607C`)** — the secondary ink for labels, line numbers and field names.
-  Low-opacity navy (`navy/45` and below) reads as a tasteful grey and measures under 3:1 on
-  cream; this token carries the same register at ~5.0:1.
+| Pair | Ratio | Verdict |
+|---|---|---|
+| Gold `#D69A3A` on Navy | 5.87:1 | pass — kept as-is |
+| Navy on Gold `#D69A3A` | 5.87:1 | pass — kept as-is |
+| `--gold-ink` `#8A6014` on Cream | 4.78:1 | pass |
+| `--ink-soft` `#55607C` on Cream | 5.36:1 | pass |
+| `--ink-soft` on Cream-Warm | 5.00:1 | pass |
+| Navy `/70`–`/75` on Cream (body) | 5.07–5.92:1 | pass |
+| Cream `/70`–`/85` on Navy | 6.79–9.36:1 | pass |
+| White on Workwear Red (buttons) | 4.80:1 | pass |
+| Workwear Red `#C74732` on Cream | 4.11:1 | **large text only** |
+| Cream on Workwear Red | 4.11:1 | **large text only** |
+
+Three substitutions exist because the brand palette alone does not clear AA in the roles the
+book assigns it:
+
+- **`--gold-ink` (`#8A6014`)** — Utility Gold is a legitimate *fill* and stays the token for gold
+  surfaces and for gold on navy. Every piece of gold **text on a light ground** uses this ink.
+- **`--ink-soft` (`#55607C`)** — the secondary ink. Low-opacity navy (`navy/60` and below) reads
+  as a tasteful grey and measures 1.6–3.8:1 on cream; this token carries the same register at
+  5.36:1. It is used for field labels, ghost numerals, table criteria, line numbers, the
+  "Covered" tags and the maintenance stamp.
+- **The hero sub-line** is set bold at ≥1.17rem so that Workwear Red on Cream qualifies as
+  *large* text (3:1 threshold) rather than body text. The brand's red survives there unchanged.
+
+Workwear Red is only ever used on cream as large or bold text, or as a small graphic detail —
+never for body copy. Soft Sage (`#8A9A83`) is a surface colour at 2.4:1 on cream, so it is never
+used as an ink; the maintenance register it represents is carried by wording instead.
 
 The gold asterisk system is the placeholder marker: **any figure, timeline or detail the
 business has not yet confirmed carries a gold `*`** with a footnote on the same surface. That

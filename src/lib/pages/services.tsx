@@ -68,7 +68,7 @@ export function ServicesPage({ locale, t }: { locale: Locale; t: ReturnType<type
                 </div>
 
                 <div>
-                  <h3 className="label border-b-2 border-navy/25 pb-2 text-navy/60">
+                  <h3 className="label border-b-2 border-navy/25 pb-2 text-ink-soft">
                     {t.common.included}
                   </h3>
                   <ul className="mt-4 grid gap-x-8 gap-y-2.5 sm:grid-cols-2">

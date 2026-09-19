@@ -29,7 +29,7 @@ export function AreasPage({ locale, t }: { locale: Locale; t: ReturnType<typeof 
       <div className="ground py-14 sm:py-16">
         <div className="shell grid gap-12 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,0.8fr)] lg:gap-16">
           <section>
-            <h2 className="label border-b-2 border-navy/25 pb-2 text-navy/60">
+            <h2 className="label border-b-2 border-navy/25 pb-2 text-ink-soft">
               {t.areas.listTitle}
             </h2>
 
@@ -46,7 +46,7 @@ export function AreasPage({ locale, t }: { locale: Locale; t: ReturnType<typeof 
                     </span>
                     <span className="display text-[1.2rem] text-navy">{a}</span>
                   </span>
-                  <span className="label text-sage-deep">
+                  <span className="label text-ink-soft">
                     {locale === "es" ? "Cubierta" : "Covered"}
                   </span>
                 </li>
@@ -69,7 +69,7 @@ export function AreasPage({ locale, t }: { locale: Locale; t: ReturnType<typeof 
 
           <aside className="self-start space-y-6">
             <div className="sheet p-6">
-              <h2 className="label border-b-2 border-navy/25 pb-2 text-navy/60">
+              <h2 className="label border-b-2 border-navy/25 pb-2 text-ink-soft">
                 {t.contact.hoursTitle}
               </h2>
               <ul className="mt-4 space-y-2 text-[0.96rem] text-navy/85">
@@ -86,7 +86,7 @@ export function AreasPage({ locale, t }: { locale: Locale; t: ReturnType<typeof 
             </div>
 
             <div className="sheet p-6">
-              <h2 className="label border-b-2 border-navy/25 pb-2 text-navy/60">
+              <h2 className="label border-b-2 border-navy/25 pb-2 text-ink-soft">
                 {t.footer.contactTitle}
               </h2>
               <address className="mt-4 space-y-2 text-[0.96rem] not-italic text-navy/85">

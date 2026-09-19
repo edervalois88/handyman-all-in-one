@@ -53,7 +53,7 @@ export function QuoteForm({ locale, t }: { locale: Locale; t: Dict }) {
             <p className="mt-3 max-w-[46ch] text-[0.98rem] leading-relaxed text-navy/80">
               {t.contact.successBody}
             </p>
-            <p className="label mt-5 text-navy/60">
+            <p className="label mt-5 text-ink-soft">
               {t.contact.successRef}: <span className="tnum text-navy">{ref}</span>
             </p>
             <button
@@ -155,7 +155,7 @@ export function QuoteForm({ locale, t }: { locale: Locale; t: Dict }) {
 
       <fieldset className="mt-7">
         <legend className="label text-navy">{f.services}</legend>
-        <p className="mt-1 text-[0.85rem] text-navy/60">{f.servicesHint}</p>
+        <p className="mt-1 text-[0.85rem] text-ink-soft">{f.servicesHint}</p>
         <ul className="mt-3 grid gap-2.5 sm:grid-cols-2">
           {svcOptions.map((name, i) => (
             <li key={name}>
@@ -246,7 +246,7 @@ export function QuoteForm({ locale, t }: { locale: Locale; t: Dict }) {
         <button type="submit" className="btn btn-primary" disabled={status === "sending"}>
           {status === "sending" ? f.submitting : f.submit}
         </button>
-        <p className="text-[0.82rem] text-navy/55">
+        <p className="text-[0.82rem] text-ink-soft">
           {locale === "es" ? "O llámenos al " : "Or call us at "}
           <a href={telHref} className="link-u tnum font-semibold text-navy">
             {site.contact.phone}

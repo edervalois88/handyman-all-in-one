@@ -54,7 +54,7 @@ export function ContactPage({ locale, t }: { locale: Locale; t: ReturnType<typeo
             </div>
 
             <div className="sheet p-6">
-              <h2 className="label border-b-2 border-navy/25 pb-2 text-navy/60">
+              <h2 className="label border-b-2 border-navy/25 pb-2 text-ink-soft">
                 {t.contact.hoursTitle}
               </h2>
               <ul className="mt-4 space-y-2 text-[0.96rem] text-navy/85">
@@ -71,7 +71,7 @@ export function ContactPage({ locale, t }: { locale: Locale; t: ReturnType<typeo
             </div>
 
             <div className="sheet p-6">
-              <h2 className="label border-b-2 border-navy/25 pb-2 text-navy/60">
+              <h2 className="label border-b-2 border-navy/25 pb-2 text-ink-soft">
                 {t.contact.areasTitle}
               </h2>
               <p className="mt-3 text-[0.95rem] leading-relaxed text-navy/75">

@@ -236,7 +236,7 @@ export function Compare({ locale, t }: { locale: Locale; t: Dict }) {
                     className={`label align-bottom ${
                       i === 1
                         ? "bg-transparent px-4 py-3.5 text-cream"
-                        : "border-b-2 border-navy/30 px-4 py-3.5 text-navy/60"
+                        : "border-b-2 border-navy/30 px-4 py-3.5 text-ink-soft"
                     }`}
                   >
                     {c || (
@@ -256,7 +256,7 @@ export function Compare({ locale, t }: { locale: Locale; t: Dict }) {
                       key={`${row[0]}-${ci}`}
                       className={`px-4 py-3.5 align-top text-[0.95rem] ${
                         ci === 0
-                          ? "label border-b border-rule pt-5 text-navy/60"
+                          ? "label border-b border-rule pt-5 text-ink-soft"
                           : ci === 1
                             ? "border-b border-navy/20 bg-navy px-4 text-cream"
                             : "border-b border-rule text-navy/70"
@@ -435,7 +435,7 @@ export function ClosingCta({ locale, t }: { locale: Locale; t: Dict }) {
 
           <ul className="sheet-stack self-start">
             <li className="sheet p-6">
-              <p className="label border-b border-rule-strong pb-2 text-navy/55">
+              <p className="label border-b border-rule-strong pb-2 text-ink-soft">
                 {locale === "es" ? "Lo que puede esperar" : "What you can expect"}
               </p>
               <ul className="mt-1">

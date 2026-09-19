@@ -16,7 +16,10 @@ export function Stamp({
   const colors = {
     red: "text-red",
     navy: "text-navy",
-    sage: "text-sage-deep",
+    // Soft Sage is a surface colour, not an ink: at #8A9A83 on Warm Cream it is
+    // only 2.4:1. The stamp keeps the maintenance register through its wording
+    // and carries a legible ink instead.
+    sage: "text-ink-soft",
     gold: "text-gold-ink",
     cream: "text-cream",
   }[tone];
@@ -52,6 +55,7 @@ export function SectionHead({
   const head = tone === "ink" ? "text-navy" : "text-cream";
   const muted = tone === "ink" ? "text-navy/75" : "text-cream/80";
   const lane = tone === "ink" ? "text-ink-soft" : "text-cream/70";
+  const ruleTone = tone === "ink" ? "border-ink-soft/40" : "border-cream/35";
 
   const heading = (
     <h2 className={`display whitespace-pre-line text-[clamp(2.1rem,5.4vw,4.1rem)] ${head}`}>
@@ -61,9 +65,22 @@ export function SectionHead({
 
   return (
     <div className={`${align === "center" ? "mx-auto text-center" : ""} ${className}`}>
-      <div className="flex items-stretch gap-3 sm:gap-4">
+      <div
+        className={`flex items-stretch gap-3 sm:gap-4 ${
+          index ? "flex-col sm:flex-row" : ""
+        }`}
+      >
         {index ? (
-          <p className={`label shrink-0 border-ink-soft/40 pr-3 pt-1.5 text-ink-soft sm:border-r sm:pr-4 ${lane}`}>
+          /*
+           * The form line number always sits at a rule. Below `sm` there is no
+           * room for a vertical gutter, so the numeral carries a bottom rule and
+           * the heading sits beneath it; from `sm` up the rule turns into the
+           * gutter's right border and the heading sits beside it. Either way the
+           * number is never a bare label floating above a heading.
+           */
+          <p
+            className={`label shrink-0 self-start border-b-2 pb-1.5 pt-0.5 text-ink-soft sm:self-stretch sm:border-b-0 sm:border-r sm:pb-0 sm:pr-4 sm:pt-1.5 ${lane} ${ruleTone}`}
+          >
             {index}
           </p>
         ) : null}
@@ -90,7 +107,7 @@ export function TicketField({
 }) {
   return (
     <div className="field-row">
-      <span className={`label ${tone === "ink" ? "text-navy/60" : "text-cream/60"}`}>
+      <span className={`label ${tone === "ink" ? "text-ink-soft" : "text-cream/60"}`}>
         {label}
       </span>
       <span
