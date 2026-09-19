@@ -1,6 +1,6 @@
-import { homePage } from "@/lib/pages/make";
+import { contactPage } from "@/lib/pages/make";
 
-const impl = homePage("en");
+const impl = contactPage("es");
 
 export const generateMetadata = impl.generateMetadata;
 export default impl.default;

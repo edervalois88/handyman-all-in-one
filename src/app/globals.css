@@ -1,26 +1,513 @@
 @import "tailwindcss";
 
+/* ============================================================================
+   HandyMan All-in-One — design tokens
+   Palette is law (brand book p.19). Workwear Red is reserved for actions,
+   stamps and state, never for large background fields.
+   ========================================================================== */
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --navy: #1d2945;
+  --navy-ink: #16203a;
+  --cream: #f4edda;
+  --cream-warm: #efe5cd;
+  --cream-deep: #e4d8bc;
+  --red: #c74732;
+  --red-deep: #a83a28;
+  --gold: #d69a3a;
+  --sage: #8a9a83;
+  --sage-deep: #6f7f69;
+
+  --paper: var(--cream);
+  --ink: var(--navy);
+
+  --rule: rgba(29, 41, 69, 0.18);
+  --rule-strong: rgba(29, 41, 69, 0.42);
+
+  --lift-1: 0 1px 0 rgba(29, 41, 69, 0.07), 0 2px 6px rgba(29, 41, 69, 0.08);
+  --lift-2: 0 2px 0 rgba(29, 41, 69, 0.09), 0 10px 26px rgba(29, 41, 69, 0.13);
+  --lift-3: 0 3px 0 rgba(29, 41, 69, 0.1), 0 22px 54px rgba(29, 41, 69, 0.18);
+
+  --shell: 1240px;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-navy: var(--navy);
+  --color-navy-ink: var(--navy-ink);
+  --color-cream: var(--cream);
+  --color-cream-warm: var(--cream-warm);
+  --color-cream-deep: var(--cream-deep);
+  --color-red: var(--red);
+  --color-red-deep: var(--red-deep);
+  --color-gold: var(--gold);
+  --color-sage: var(--sage);
+  --color-sage-deep: var(--sage-deep);
+  --color-paper: var(--paper);
+  --color-ink: var(--ink);
+  --color-rule: var(--rule);
+  --color-rule-strong: var(--rule-strong);
+
+  --font-display: var(--font-oswald), "Arial Narrow", system-ui, sans-serif;
+  --font-cond: var(--font-barlow-cond), "Arial Narrow", system-ui, sans-serif;
+  --font-mono: var(--font-courier), "Courier New", ui-monospace, monospace;
+
+  --shadow-lift-1: var(--lift-1);
+  --shadow-lift-2: var(--lift-2);
+  --shadow-lift-3: var(--lift-3);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+/* ============================================================================
+   Base
+   ========================================================================== */
+
+* {
+  border-color: var(--rule);
+}
+
+html {
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
   }
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-mono), "Courier New", monospace;
+  font-size: 1rem;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: var(--red);
+  color: var(--cream);
+}
+
+:focus-visible {
+  outline: 3px solid var(--red);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* register-paper ground: the page is a sheet, not a screen */
+.ground {
+  background-color: var(--paper);
+  background-image:
+    repeating-linear-gradient(
+      to bottom,
+      rgba(29, 41, 69, 0.045) 0 1px,
+      transparent 1px 28px
+    );
+}
+
+.ground-plain {
+  background-color: var(--paper);
+}
+
+/* ============================================================================
+   Typography
+   ========================================================================== */
+
+.display {
+  font-family: var(--font-display), "Arial Narrow", sans-serif;
+  font-weight: 700;
+  line-height: 0.92;
+  letter-spacing: -0.005em;
+  text-transform: uppercase;
+  text-wrap: balance;
+}
+
+.label {
+  font-family: var(--font-cond), "Arial Narrow", sans-serif;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.17em;
+  font-size: 0.7rem;
+  line-height: 1.2;
+}
+
+.label-lg {
+  font-family: var(--font-cond), "Arial Narrow", sans-serif;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.13em;
+  line-height: 1.1;
+}
+
+.tnum {
+  font-variant-numeric: tabular-nums;
+}
+
+.prose-work p {
+  max-width: 66ch;
+}
+
+.prose-work p + p {
+  margin-top: 0.9em;
+}
+
+/* ============================================================================
+   Surfaces — layered paper, no gradients, depth by overlap
+   ========================================================================== */
+
+.sheet {
+  background: var(--cream);
+  box-shadow: var(--lift-2);
+  border: 1px solid var(--rule);
+}
+
+.sheet-raised {
+  background: var(--cream);
+  box-shadow: var(--lift-3);
+  border: 1px solid var(--rule);
+}
+
+/* perforated tear edge, like a carbon-copy stub */
+.perf-t {
+  background-image: radial-gradient(circle at 6px 0, transparent 5px, var(--paper) 5px);
+  background-size: 12px 12px;
+  background-repeat: repeat-x;
+  height: 12px;
+}
+
+.perf-b {
+  background-image: radial-gradient(circle at 6px 12px, transparent 5px, var(--paper) 5px);
+  background-size: 12px 12px;
+  background-repeat: repeat-x;
+  height: 12px;
+}
+
+/* dot-matrix field grid used on the job ticket */
+.fieldgrid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.field-row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.15rem;
+  padding: 0.7rem 0;
+  border-bottom: 1px dashed var(--rule-strong);
+}
+
+.field-row:last-child {
+  border-bottom: 0;
+}
+
+@media (min-width: 640px) {
+  .field-row {
+    grid-template-columns: 12.5rem minmax(0, 1fr);
+    gap: 1rem;
+    align-items: baseline;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Margin rule — the ruled margin of a work order, not a decorative side tab.
+   A titled lane divided from the note body by a dashed rule, closed top and
+   bottom by the same heavy rule the tickets use.
+   ------------------------------------------------------------------------- */
+
+.margin-rule {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  border-top: 2px solid var(--navy);
+  border-bottom: 1px solid var(--rule);
+  background: var(--cream-warm);
+}
+
+.margin-rule__lane {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1.25rem 0.5rem;
+  border-bottom: 1px dashed var(--rule-strong);
+}
+
+.margin-rule__body {
+  padding: 1rem 1.25rem 1.2rem;
+}
+
+@media (min-width: 768px) {
+  .margin-rule {
+    grid-template-columns: 11rem minmax(0, 1fr);
+  }
+
+  .margin-rule__lane {
+    border-bottom: 0;
+    border-right: 1px dashed var(--rule-strong);
+    padding: 1.4rem 1.25rem;
+    align-items: flex-start;
+  }
+
+  .margin-rule__body {
+    padding: 1.4rem 1.6rem 1.5rem;
+  }
+}
+
+/* a lane in gold, for scope boundaries rather than plain notes */
+.margin-rule--gold {
+  border-top-color: var(--gold);
+}
+
+.margin-rule--gold .margin-rule__lane {
+  color: var(--gold);
+}
+
+/* a lane in navy, for infill notes inside a form */
+.margin-rule--navy {
+  border-top-color: var(--navy);
+}
+
+/* ============================================================================
+   Stamps
+   ========================================================================== */
+
+.stamp {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-family: var(--font-cond), "Arial Narrow", sans-serif;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.18em;
+  font-size: 0.66rem;
+  line-height: 1;
+  padding: 0.42rem 0.6rem 0.36rem;
+  border: 2px solid currentColor;
+  border-radius: 3px;
+  transform: rotate(-1.4deg);
+  white-space: nowrap;
+}
+
+.stamp-flat {
+  transform: none;
+}
+
+/* checkbox in the brand's own grammar */
+.box {
+  width: 1.05rem;
+  height: 1.05rem;
+  border: 2px solid currentColor;
+  border-radius: 2px;
+  display: inline-grid;
+  place-items: center;
+  flex: none;
+  margin-top: 0.2rem;
+}
+
+.box-on {
+  background: var(--red);
+  border-color: var(--red);
+  color: var(--cream);
+}
+
+/* ============================================================================
+   Controls
+   ========================================================================== */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  font-family: var(--font-cond), "Arial Narrow", sans-serif;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 0.94rem;
+  line-height: 1;
+  padding: 1.02rem 1.5rem 0.95rem;
+  border: 2px solid transparent;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: transform 0.12s ease, box-shadow 0.12s ease, background-color 0.12s ease;
+  text-align: center;
+}
+
+.btn-primary {
+  background: var(--red);
+  color: #fff;
+  box-shadow: 0 3px 0 var(--red-deep);
+}
+
+.btn-primary:hover {
+  background: var(--red-deep);
+}
+
+.btn-primary:active {
+  transform: translateY(2px);
+  box-shadow: 0 1px 0 var(--red-deep);
+}
+
+.btn-ink {
+  background: var(--navy);
+  color: var(--cream);
+  box-shadow: 0 3px 0 var(--navy-ink);
+}
+
+.btn-ink:hover {
+  background: var(--navy-ink);
+}
+
+.btn-ink:active {
+  transform: translateY(2px);
+  box-shadow: 0 1px 0 var(--navy-ink);
+}
+
+.btn-line {
+  background: transparent;
+  color: var(--navy);
+  border-color: var(--navy);
+}
+
+.btn-line:hover {
+  background: var(--navy);
+  color: var(--cream);
+}
+
+.btn-onnavy {
+  background: var(--cream);
+  color: var(--navy);
+  box-shadow: 0 3px 0 rgba(0, 0, 0, 0.28);
+}
+
+.btn-onnavy:hover {
+  background: #fff;
+}
+
+.link-u {
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 3px;
+  text-decoration-color: var(--red);
+}
+
+.link-u:hover {
+  color: var(--red);
+}
+
+/* ============================================================================
+   Motion — one orchestrated reveal, content visible by default
+   ========================================================================== */
+
+@keyframes hm-rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes hm-wipe {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@keyframes hm-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.35;
+  }
+}
+
+.reveal {
+  animation: hm-rise 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    animation: none;
+  }
+}
+
+.live-dot {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 999px;
+  background: var(--red);
+  animation: hm-pulse 2.4s ease-in-out infinite;
+}
+
+/* ============================================================================
+   Utilities
+   ========================================================================== */
+
+.shell {
+  width: 100%;
+  max-width: var(--shell);
+  margin-inline: auto;
+  padding-inline: 1.25rem;
+}
+
+@media (min-width: 768px) {
+  .shell {
+    padding-inline: 2rem;
+  }
+}
+
+.rule-t {
+  border-top: 2px solid var(--navy);
+}
+
+.dotted-t {
+  border-top: 1px dashed var(--rule-strong);
+}
+
+.hairline {
+  height: 1px;
+  background: var(--rule);
+}
+
+.checker {
+  background-image:
+    linear-gradient(45deg, var(--navy) 25%, transparent 25% 75%, var(--navy) 75%),
+    linear-gradient(45deg, var(--navy) 25%, transparent 25% 75%, var(--navy) 75%);
+  background-size: 24px 24px;
+  background-position: 0 0, 12px 12px;
+  background-color: var(--cream);
+}
+
+.noscroll {
+  overflow: hidden;
+}
+
+.skip {
+  position: absolute;
+  left: -9999px;
+  top: 0;
+  z-index: 100;
+}
+
+.skip:focus {
+  left: 0.75rem;
+  top: 0.75rem;
+  padding: 0.75rem 1rem;
+  background: var(--navy);
+  color: var(--cream);
+  border-radius: 3px;
 }
