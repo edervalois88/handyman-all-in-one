@@ -477,68 +477,13 @@ body {
   color: var(--red);
 }
 
-/* ============================================================================
-   Motion — exactly one authored moment: the job ticket feeds into the panel
-   and its stamp presses on. Everything else is visible by default and does not
-   animate on scroll.
-   ========================================================================== */
-
-@keyframes hm-pulse {
-  0%,
-  100% {
-    opacity: 1;
-  }
-  50% {
-    opacity: 0.35;
-  }
-}
-
-@keyframes hm-ticket-in {
-  from {
-    opacity: 0;
-    transform: translate3d(28px, -16px, 0) rotate(-2.6deg);
-  }
-  to {
-    opacity: 1;
-    transform: none;
-  }
-}
-
-@keyframes hm-stamp-press {
-  0% {
-    opacity: 0;
-    transform: rotate(-1.4deg) scale(1.45);
-    filter: blur(5px);
-  }
-  100% {
-    opacity: 1;
-    transform: rotate(-1.4deg) scale(1);
-    filter: blur(0);
-  }
-}
-
-.reveal-ticket {
-  animation: hm-ticket-in 0.72s cubic-bezier(0.16, 1, 0.3, 1) both;
-}
-
-/* the stamp strikes just after the ticket lands: down hard, settle, stop */
-.reveal-stamp {
-  animation: hm-stamp-press 0.34s cubic-bezier(0.16, 1, 0.3, 1) 0.5s both;
-}
-
+/* the open-for-business dot. Its pulse is driven by Motion, not by CSS, so the
+   site keeps a single animation authority; see components/Header.tsx. */
 .live-dot {
   width: 0.5rem;
   height: 0.5rem;
   border-radius: 999px;
   background: var(--red);
-  animation: hm-pulse 2.4s ease-in-out infinite;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .reveal-ticket,
-  .reveal-stamp {
-    animation: none;
-  }
 }
 
 /* ============================================================================

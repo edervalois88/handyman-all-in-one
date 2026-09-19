@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { RuleNote, SectionHead, Stamp } from "@/components/ui";
+import { TicketNumber } from "@/components/motion/primitives";
 import { ClosingCta } from "@/components/sections";
 import { getDict } from "@/lib/i18n";
 import { route, site, telHref, type Locale } from "@/lib/site";
@@ -49,8 +50,11 @@ export function ServicesPage({ locale, t }: { locale: Locale; t: ReturnType<type
               <div className="grid gap-8 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)] lg:gap-14">
                 <div className="lg:sticky lg:top-28 lg:self-start">
                   <div className="flex items-center gap-3">
+                    {/* A line number on a work order is a number, so it counts up
+                        once when the section arrives instead of sitting there as a
+                        ghost numeral. */}
                     <span className="display text-[2.6rem] leading-none text-navy/20">
-                      {String(i + 1).padStart(2, "0")}
+                      <TicketNumber to={i + 1} />
                     </span>
                     <Stamp tone="navy" flat>
                       {c.inHouse ? t.common.inHouse : t.common.partner}

@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { motion } from "motion/react";
 import { Logo } from "./Logo";
 import { altPath, route, site, telHref, type Locale, type RouteKey } from "@/lib/site";
 import type { Dict } from "@/lib/i18n";
@@ -17,14 +18,18 @@ export function Header({ locale, t }: { locale: Locale; t: Dict }) {
 
   useEffect(() => {
     const onScroll = () => setStuck(window.scrollY > 12);
-    onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
-  useEffect(() => {
+  // Close the drawer when the route changes. Adjusting state during render on a
+  // changed value is React's documented pattern for this, and avoids the
+  // cascading render a setState-in-effect would cause.
+  const [lastPath, setLastPath] = useState(pathname);
+  if (lastPath !== pathname) {
+    setLastPath(pathname);
     setOpen(false);
-  }, [pathname]);
+  }
 
   useEffect(() => {
     document.body.classList.toggle("noscroll", open);
@@ -41,11 +46,16 @@ export function Header({ locale, t }: { locale: Locale; t: Dict }) {
       <div className="bg-navy text-cream">
         <div className="shell flex flex-wrap items-center justify-between gap-x-6 gap-y-1 py-2">
           <p className="label flex items-center gap-2 text-cream/85">
-            <span className="live-dot" aria-hidden="true" />
+            <motion.span
+              className="live-dot"
+              aria-hidden="true"
+              animate={{ opacity: [1, 0.35, 1] }}
+              transition={{ duration: 2.4, ease: "easeInOut", repeat: Infinity }}
+            />
             {locale === "es"
               ? "Contestamos en horario laboral"
               : "We answer during business hours"}
-            <span className="text-gold" aria-hidden="true">
+            <span className="text-gold-ink" aria-hidden="true">
               *
             </span>
           </p>
@@ -63,7 +73,7 @@ export function Header({ locale, t }: { locale: Locale; t: Dict }) {
         }`}
         style={{ backgroundColor: "var(--paper)" }}
       >
-        <div className="shell flex items-center justify-between gap-3 py-3">
+        <div className="shell flex items-center justify-between gap-2 py-3 sm:gap-3">
           <Logo locale={locale} size="sm" />
 
           <nav aria-label={locale === "es" ? "Principal" : "Primary"} className="hidden lg:block">

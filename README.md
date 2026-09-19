@@ -153,6 +153,55 @@ business detail.
 
 ---
 
+### Motion
+
+There is **one animation authority**: [`motion`](https://motion.dev) (the library formerly called
+Framer Motion). Nothing animates from CSS keyframes and no second animation runtime is loaded —
+scattered effects from several runtimes is exactly the failure this design refuses, and a
+reviewer already sent an earlier build back for it.
+
+All of it lives in [`src/components/motion/primitives.tsx`](src/components/motion/primitives.tsx):
+
+| Export | What it does |
+|---|---|
+| `Reveal` | Reveals a band once, when it enters view |
+| `RevealList` / `RevealItem` | A list that settles item by item, with a small stagger |
+| `TicketNumber` | A zero-padded form line number that counts up once |
+| `EASE_OUT`, `riseTransition`, `settleTransition` | The house curve and its two durations |
+
+**The safety rule, and why it exists.** An entrance must never be able to strand content. A pure
+`whileInView` reveal leaves an element at `opacity: 0` forever if the observer never fires —
+skipping to an anchor, find-in-page, a very fast scroll, or printing all do that. The first
+build of this layer shipped that bug and six comparison cards were caught permanently invisible.
+Every reveal now fires on **whichever comes first**: the element entering view, or a 1.4s
+failsafe after mount. The worst case is a reveal that arrives early; content is never invisible.
+Under `prefers-reduced-motion` nothing animates at all and everything renders in its final state.
+
+### Vendored components from React Bits
+
+`src/components/reactbits/` holds components from [React Bits](https://reactbits.dev), which is
+distributed as source you copy in rather than as an npm package. Read
+[`src/components/reactbits/README.md`](src/components/reactbits/README.md) for the licence
+(MIT + Commons Clause, Copyright © 2026 David Haz) and for exactly what was changed locally.
+
+- **`SplitFlapText`** renders the ticket's `STATUS` field as the mechanical board an office would
+  actually have on the wall, cycling through the states a job passes through. Its logic is
+  upstream's; its stylesheet is rewritten, because upstream draws the tiles with gradients, inset
+  shadows and 3D perspective — simulated physicality, which this project refuses. The local
+  version is flat paper: cream stock, navy ink, one hairline across the fold, `--lift-1` for depth.
+- **`CountUp`** is vendored unmodified. It already depends only on `motion/react`.
+
+Components from the wider catalogue were **rejected on evidence**, not on taste: `SplitText` and
+`Shuffle` import `gsap/SplitText`, a Club GreenSock plugin that is not in the free `gsap` package,
+so they fail the production build. `ScrollStack` pulls in Lenis for smooth scrolling, a second
+motion runtime.
+
+> Note on naming: the npm package literally called `react-bits` is **not** this library. It is an
+> unrelated 2017 React Native helper (`dmiller9911/react-bits`) that depends on
+> `create-react-class`. The official React Bits installs through `jsrepo` or `shadcn`.
+
+---
+
 ## Running it
 
 ```bash

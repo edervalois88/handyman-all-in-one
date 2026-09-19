@@ -46,7 +46,7 @@ export function HomePage({ locale }: { locale: Locale }) {
       <Process locale={locale} t={t} />
       <Compare locale={locale} t={t} />
       <AreasTeaser locale={locale} t={t} />
-      <Faq locale={locale} t={t} />
+      <Faq t={t} />
       <ClosingCta locale={locale} t={t} />
     </>
   );

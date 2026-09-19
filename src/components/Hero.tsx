@@ -1,5 +1,10 @@
+"use client";
+
 import Link from "next/link";
+import { motion } from "motion/react";
 import { PromiseRow, Stamp, TicketField } from "./ui";
+import SplitFlapText from "./reactbits/SplitFlapText";
+import { EASE_OUT } from "./motion/primitives";
 import { route, site, telHref, type Locale } from "@/lib/site";
 import type { Dict } from "@/lib/i18n";
 
@@ -7,8 +12,18 @@ import type { Dict } from "@/lib/i18n";
  * First viewport. A navy work-order panel carries the promise and the single
  * primary action; the cream job ticket overlaps it, so the visitor's first
  * impression is the artifact this whole design world is built from.
+ *
+ * The site's one authored motion moment lives here, orchestrated by Motion (the
+ * library formerly called Framer Motion): the ticket FEEDS INTO the panel and
+ * its stamp STRIKES once just after it lands. It replaces what used to be CSS
+ * keyframes, so there is exactly one animation authority on the site rather
+ * than two. Motion's own `useReducedMotion` disables both.
  */
 export function Hero({ locale, t }: { locale: Locale; t: Dict }) {
+  const statusIndex = t.hero.ticketFields.findIndex(
+    ([, value]) => value === t.hero.ticketStatus,
+  );
+
   return (
     <section className="relative overflow-hidden bg-navy">
       <div className="shell relative pb-12 pt-12 sm:pb-16 sm:pt-16 lg:pb-20 lg:pt-20">
@@ -58,7 +73,12 @@ export function Hero({ locale, t }: { locale: Locale; t: Dict }) {
           </div>
 
           {/* ── right: the job ticket, overlapping the panel ──────────── */}
-          <div className="reveal-ticket relative lg:-mb-8">
+          <motion.div
+            className="relative lg:-mb-8"
+            initial={{ opacity: 0, x: 28, y: -16, rotate: -2.6 }}
+            animate={{ opacity: 1, x: 0, y: 0, rotate: 0 }}
+            transition={{ duration: 0.72, ease: EASE_OUT }}
+          >
             <div
               aria-hidden="true"
               className="sheet absolute -left-3 -top-3 hidden h-full w-full rotate-[-1.1deg] opacity-50 lg:block"
@@ -70,15 +90,43 @@ export function Hero({ locale, t }: { locale: Locale; t: Dict }) {
               </div>
 
               <div className="px-5 sm:px-7">
-                {t.hero.ticketFields.map(([label, value]) => (
-                  <TicketField key={label} label={label} value={value} />
-                ))}
+                {t.hero.ticketFields.map(([label, value], i) =>
+                  i === statusIndex ? (
+                    /* The status field is the board the office would actually have on
+                       the wall, cycling through the states a job passes through:
+                       React Bits' SplitFlapText, re-skinned flat onto this world's
+                       paper and ink. */
+                    <div key={label} className="field-row">
+                      <span className="label text-ink-soft">{label}</span>
+                      <SplitFlapText
+                        words={[...t.hero.ticketStatusCycle]}
+                        padTo={0}
+                        gap={2}
+                        fontSize={13}
+                        flipDuration={0.1}
+                        stagger={0.05}
+                        cycleDelay={2600}
+                        charset="alpha"
+                        flipsPerChar={5}
+                        tileColor="var(--navy)"
+                        textColor="var(--cream)"
+                      />
+                    </div>
+                  ) : (
+                    <TicketField key={label} label={label} value={value} />
+                  ),
+                )}
               </div>
 
               <div className="flex flex-wrap items-center justify-between gap-4 border-t-2 border-navy/20 px-5 py-5 sm:px-7">
-                <Stamp tone="red" className="reveal-stamp">
-                  {t.hero.ticketStamp}
-                </Stamp>
+                <motion.span
+                  className="inline-flex"
+                  initial={{ opacity: 0, scale: 1.45, filter: "blur(5px)" }}
+                  animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
+                  transition={{ duration: 0.34, ease: EASE_OUT, delay: 0.5 }}
+                >
+                  <Stamp tone="red">{t.hero.ticketStamp}</Stamp>
+                </motion.span>
                 <p className="label text-ink-soft">
                   {locale === "es" ? "Precio aprobado antes de empezar" : "Priced before we start"}
                 </p>
@@ -91,7 +139,7 @@ export function Hero({ locale, t }: { locale: Locale; t: Dict }) {
                   : "not a real customer and not real pricing."}
               </p>
             </div>
-          </div>
+          </motion.div>
         </div>
       </div>
 

@@ -100,10 +100,25 @@ Every component is built in the world's own vocabulary. There is no stock compon
 | `QuoteForm` | `components/QuoteForm.tsx` | The conversion surface: native validation, custom checkbox in the world's grammar, working success and error states. |
 | `Header` / `Footer` | `components/` | Sticky nav with drawer and EN/ES toggle; footer with contact, hours, coverage and the placeholder notice. |
 
-**Motion.** Exactly one authored moment, drawn from the world's own material: the job ticket feeds
-into the panel (`hm-ticket-in`) and its APPROVED stamp strikes once just after it lands
-(`hm-stamp-press`). Nothing else animates on scroll; every other element is visible by default.
-Both are disabled under `prefers-reduced-motion`.
+**Motion.** Exactly one authored moment is drawn from the world's own material: the job ticket
+feeds into the panel and its APPROVED stamp strikes once just after it lands. Around it, bands
+and lists settle once as they enter view. All of it is orchestrated by **one authority**,
+[`motion`](https://motion.dev), in
+[`src/components/motion/primitives.tsx`](src/components/motion/primitives.tsx) — no CSS keyframes
+and no second runtime. The house curve is `cubic-bezier(0.16, 1, 0.3, 1)`: fast departure, long
+settle, no overshoot, no bounce.
+
+An entrance may never strand content. A pure `whileInView` reveal leaves an element at
+`opacity: 0` forever when the observer does not fire — skipping to an anchor, find-in-page, a
+very fast scroll, or printing. Every reveal therefore fires on whichever comes first: entering
+view, or a 1.4s failsafe after mount. Under `prefers-reduced-motion` nothing animates and
+everything renders in its final state.
+
+**Third-party components.** [`src/components/reactbits/`](src/components/reactbits/) carries
+components from React Bits, vendored and attributed (MIT + Commons Clause, © 2026 David Haz).
+`SplitFlapText` renders the ticket's `STATUS` field as the office's mechanical board, cycling the
+states a job passes through — upstream's logic with this world's surface, because upstream's
+tiles are gradients, inset shadows and 3D, which §6 refuses. `CountUp` is vendored as-is.
 
 **Browser surfaces.** `::selection` is red on cream, `:focus-visible` is a 3px red ring, `<html>`
 carries `scroll-behavior: smooth` (reverted under reduced motion), tabular numerals ship on every

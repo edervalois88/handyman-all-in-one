@@ -1,4 +1,3 @@
-import { site } from "@/lib/site";
 import type { Locale } from "@/lib/site";
 
 /** A rotated rubber stamp. Used for state, never decoration. */
@@ -208,39 +207,5 @@ export function PromiseRow({
         </li>
       ))}
     </ul>
-  );
-}
-
-export function ContactChips({
-  locale,
-  tone = "ink",
-  showAddress = true,
-}: {
-  locale: Locale;
-  tone?: "ink" | "cream";
-  showAddress?: boolean;
-}) {
-  const muted = tone === "ink" ? "text-navy/70" : "text-cream/75";
-  return (
-    <address className={`not-italic text-[0.95rem] leading-relaxed ${muted}`}>
-      <a
-        href={`tel:${site.contact.phoneHref}`}
-        className="link-u font-semibold"
-        style={{ color: "inherit" }}
-      >
-        {site.contact.phone}
-      </a>
-      <br />
-      <a href={`mailto:${site.contact.email}`} className="link-u">
-        {site.contact.email}
-      </a>
-      {showAddress ? (
-        <>
-          <br />
-          {site.contact.addressLine}, {site.contact.city}, {site.contact.state}{" "}
-          {site.contact.zip}
-        </>
-      ) : null}
-    </address>
   );
 }

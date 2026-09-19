@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { SectionHead, Stamp } from "@/components/ui";
+import { RevealItem, RevealList } from "@/components/motion/primitives";
 import { ClosingCta } from "@/components/sections";
 import { getDict } from "@/lib/i18n";
 import { route, site, type Locale } from "@/lib/site";
@@ -25,18 +26,18 @@ export function AboutPage({ locale, t }: { locale: Locale; t: ReturnType<typeof 
 
       {/* mission / vision / positioning, as three stamped directives */}
       <section className="border-b-2 border-navy bg-cream py-14 sm:py-16">
-        <div className="shell grid gap-px lg:grid-cols-3">
+        <RevealList className="shell grid gap-px lg:grid-cols-3">
           {[
             { label: t.about.missionLabel, body: t.about.mission },
             { label: t.about.visionLabel, body: t.about.vision },
             { label: t.about.positioningLabel, body: t.about.positioning },
           ].map((b) => (
-            <div key={b.label} className="border-t-2 border-navy pt-6 lg:pr-10">
+            <RevealItem key={b.label} className="border-t-2 border-navy pt-6 lg:pr-10">
               <span className="label text-red">{b.label}</span>
               <p className="mt-3 text-[1.08rem] leading-relaxed text-navy">{b.body}</p>
-            </div>
+            </RevealItem>
           ))}
-        </div>
+        </RevealList>
       </section>
 
       {/* values, as a control sheet */}
@@ -47,9 +48,9 @@ export function AboutPage({ locale, t }: { locale: Locale; t: ReturnType<typeof 
             title={locale === "es" ? "Lo que no\nnegociamos." : "What we don't\ntrade away."}
           />
 
-          <ul className="mt-12 grid gap-6 sm:grid-cols-2">
+          <RevealList className="mt-12 grid gap-6 sm:grid-cols-2">
             {t.about.values.map((v) => (
-              <li key={v.name} className="sheet-stack">
+              <RevealItem key={v.name} className="sheet-stack">
                 <div className="sheet stub-b flex h-full flex-col p-6 sm:p-7">
                   {/* Four values, no ghost numerals: the name is the heading, and a
                       big translucent ordinal is the hero-metric scaffold this world
@@ -60,9 +61,9 @@ export function AboutPage({ locale, t }: { locale: Locale; t: ReturnType<typeof 
                     {v.detail}
                   </p>
                 </div>
-              </li>
+              </RevealItem>
             ))}
-          </ul>
+          </RevealList>
         </div>
       </section>
 
@@ -79,9 +80,9 @@ export function AboutPage({ locale, t }: { locale: Locale; t: ReturnType<typeof 
             </Stamp>
           </div>
 
-          <ul className="self-start">
+          <RevealList className="self-start">
             {t.about.standard.map((s) => (
-              <li
+              <RevealItem
                 key={s}
                 className="flex items-start gap-4 border-b border-rule py-5 text-[1.02rem] leading-relaxed text-navy"
               >
@@ -98,9 +99,9 @@ export function AboutPage({ locale, t }: { locale: Locale; t: ReturnType<typeof 
                   </svg>
                 </span>
                 {s}
-              </li>
+              </RevealItem>
             ))}
-          </ul>
+          </RevealList>
         </div>
 
         <div className="shell mt-12">

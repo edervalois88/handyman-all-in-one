@@ -25,7 +25,13 @@ export function Logo({
   const color = tone === "ink" ? "text-navy" : "text-cream";
 
   const inner = (
-    <span className="flex items-center gap-2.5 sm:gap-3">
+    /*
+     * `min-w-0` on the wrapper and `break-words` nowhere: the mark shrinks and
+     * the wordmark is allowed to be clipped by its own box rather than pushing
+     * the header wider than the viewport. At 320px the sibling action buttons
+     * need every pixel, and an unshrinkable lockup is what overflowed there.
+     */
+    <span className="flex min-w-0 items-center gap-2 sm:gap-3">
       <Image
         src={markSrc}
         alt=""
@@ -35,7 +41,7 @@ export function Logo({
         className="h-auto w-auto shrink-0"
         style={{ height: dims, width: "auto" }}
       />
-      <span className={`flex flex-col ${color}`}>
+      <span className={`flex min-w-0 flex-col ${color}`}>
         <span
           className={`display ${word} leading-[0.85] tracking-[-0.01em]`}
           style={{ fontStretch: "condensed" }}
@@ -53,7 +59,7 @@ export function Logo({
   return (
     <Link
       href={route("home", locale)}
-      className="inline-flex items-center rounded-sm"
+      className="inline-flex min-w-0 items-center rounded-sm"
       aria-label={`HandyMan All-in-One — ${locale === "en" ? "home" : "inicio"}`}
     >
       {inner}

@@ -74,6 +74,16 @@ export const en = {
       ["Status", "Quote approved"],
       ["Arrival", "Tue, 8:00 – 10:00 AM"],
     ] as Rows,
+    /** The Status row renders as a mechanical board; see `ticketStatusCycle`. */
+    ticketStatus: "Quote approved",
+    /** The states a job passes through, as the office board would cycle them. */
+    ticketStatusCycle: [
+      "Quote approved",
+      "Scheduled",
+      "Crew on site",
+      "Work complete",
+      "Warranty active",
+    ] as List,
     ticketStamp: "Approved",
   },
 

@@ -56,6 +56,16 @@ export const es: Dict = {
       ["Estado", "Cotización aprobada"],
       ["Llegada", "Mar, 8:00 – 10:00 AM"],
     ] as const,
+    /** La fila de Estado se dibuja como un tablero mecánico. */
+    ticketStatus: "Cotización aprobada",
+    /** Los estados por los que pasa un trabajo. */
+    ticketStatusCycle: [
+      "Cotización aprobada",
+      "Agendado",
+      "Equipo en sitio",
+      "Trabajo terminado",
+      "Garantía activa",
+    ] as const,
     ticketStamp: "Aprobado",
   },
 
