@@ -182,30 +182,3 @@ export function Placeholder({
 }
 
 /** The four-beat promise, rendered as a compact stamp row. */
-export function PromiseRow({
-  items,
-  tone = "cream",
-}: {
-  items: readonly { n: string; title: string; body: string }[];
-  tone?: "ink" | "cream";
-}) {
-  const border = tone === "ink" ? "border-navy/20" : "border-cream/25";
-  const head = tone === "ink" ? "text-navy" : "text-cream";
-  const muted = tone === "ink" ? "text-navy/70" : "text-cream/75";
-  const num = "text-red";
-
-  return (
-    <ul className="grid gap-px sm:grid-cols-2 lg:grid-cols-4">
-      {items.map((it) => (
-        <li
-          key={it.n}
-          className={`border-t-2 ${border} pt-5 sm:pr-6`}
-        >
-          <span className={`label ${num}`}>{it.n}</span>
-          <h3 className={`display mt-2 text-[1.5rem] ${head}`}>{it.title}</h3>
-          <p className={`mt-2 text-[0.95rem] leading-relaxed ${muted}`}>{it.body}</p>
-        </li>
-      ))}
-    </ul>
-  );
-}

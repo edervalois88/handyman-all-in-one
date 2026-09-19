@@ -31,7 +31,7 @@ export function Logo({
      * the header wider than the viewport. At 320px the sibling action buttons
      * need every pixel, and an unshrinkable lockup is what overflowed there.
      */
-    <span className="flex min-w-0 items-center gap-2 sm:gap-3">
+    <span className="logo-lockup flex min-w-0 items-center gap-2 sm:gap-3">
       <Image
         src={markSrc}
         alt=""
@@ -43,12 +43,12 @@ export function Logo({
       />
       <span className={`flex min-w-0 flex-col ${color}`}>
         <span
-          className={`display ${word} leading-[0.85] tracking-[-0.01em]`}
+          className={`logo-word display ${word} leading-[0.85] tracking-[-0.01em]`}
           style={{ fontStretch: "condensed" }}
         >
           HANDYMAN
         </span>
-        <span className={`label-lg ${sub} mt-[0.18em] leading-none opacity-90`}>
+        <span className={`logo-sub label-lg ${sub} mt-[0.18em] leading-none opacity-90`}>
           All&nbsp;-&nbsp;in&nbsp;-&nbsp;One
         </span>
       </span>

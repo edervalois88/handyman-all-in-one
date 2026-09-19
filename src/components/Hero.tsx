@@ -2,9 +2,9 @@
 
 import Link from "next/link";
 import { motion } from "motion/react";
-import { PromiseRow, Stamp, TicketField } from "./ui";
+import { Stamp, TicketField } from "./ui";
 import SplitFlapText from "./reactbits/SplitFlapText";
-import { EASE_OUT } from "./motion/primitives";
+import { PinToBoard, strikeTransition, ticketTransition } from "./motion/primitives";
 import { route, site, telHref, type Locale } from "@/lib/site";
 import type { Dict } from "@/lib/i18n";
 
@@ -77,7 +77,7 @@ export function Hero({ locale, t }: { locale: Locale; t: Dict }) {
             className="relative lg:-mb-8"
             initial={{ opacity: 0, x: 28, y: -16, rotate: -2.6 }}
             animate={{ opacity: 1, x: 0, y: 0, rotate: 0 }}
-            transition={{ duration: 0.72, ease: EASE_OUT }}
+            transition={ticketTransition}
           >
             <div
               aria-hidden="true"
@@ -102,7 +102,7 @@ export function Hero({ locale, t }: { locale: Locale; t: Dict }) {
                         words={[...t.hero.ticketStatusCycle]}
                         padTo={0}
                         gap={2}
-                        fontSize={13}
+                        fontSize={16}
                         flipDuration={0.1}
                         stagger={0.05}
                         cycleDelay={2600}
@@ -123,7 +123,7 @@ export function Hero({ locale, t }: { locale: Locale; t: Dict }) {
                   className="inline-flex"
                   initial={{ opacity: 0, scale: 1.45, filter: "blur(5px)" }}
                   animate={{ opacity: 1, scale: 1, filter: "blur(0px)" }}
-                  transition={{ duration: 0.34, ease: EASE_OUT, delay: 0.5 }}
+                  transition={{ ...strikeTransition, delay: 0.5 }}
                 >
                   <Stamp tone="red">{t.hero.ticketStamp}</Stamp>
                 </motion.span>
@@ -149,7 +149,14 @@ export function Hero({ locale, t }: { locale: Locale; t: Dict }) {
   );
 }
 
-/** The four-beat brand promise, given its own band so it reads as a pledge. */
+/**
+ * The four-beat brand promise, given its own band so it reads as a pledge.
+ *
+ * This band carries the site's only scroll response: each commitment is PINNED
+ * to the board in turn, the way a form is stamped and filed. One authored
+ * moment, made of the world's own action, on four small tokens — not an
+ * entrance applied to every section.
+ */
 export function PromiseBand({ t }: { t: Dict }) {
   return (
     <section className="border-b-2 border-navy bg-cream py-12 sm:py-14">
@@ -162,9 +169,15 @@ export function PromiseBand({ t }: { t: Dict }) {
             {t.promise.body}
           </p>
         </div>
-        <div className="mt-9">
-          <PromiseRow items={t.promise.items} tone="ink" />
-        </div>
+        <ul className="mt-9 grid gap-px sm:grid-cols-2 lg:grid-cols-4">
+          {t.promise.items.map((it, i) => (
+            <PinToBoard key={it.n} index={i} className="border-t-2 border-navy/20 pt-5 sm:pr-6">
+              <span className="label text-red">{it.n}</span>
+              <h3 className="display mt-2 text-[1.5rem] text-navy">{it.title}</h3>
+              <p className="mt-2 text-[0.95rem] leading-relaxed text-navy/70">{it.body}</p>
+            </PinToBoard>
+          ))}
+        </ul>
       </div>
     </section>
   );

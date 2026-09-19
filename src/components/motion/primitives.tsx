@@ -3,21 +3,35 @@
 /**
  * The world's motion, in one place.
  *
- * There is exactly ONE animation authority on this site: Motion (the library
- * formerly called Framer Motion). Nothing animates from CSS keyframes, and no
- * second animation runtime is loaded. That is deliberate — scattered effects
- * from several runtimes is the failure mode this design explicitly refuses.
+ * ONE animation authority: Motion (the library formerly called Framer Motion).
+ * Nothing animates from CSS keyframes and no second runtime is loaded.
  *
- * The house curve is the same exponential ease-out the direction contract uses
- * for the hero ticket: fast departure, long settle, no overshoot, no bounce.
+ * THREE AUTHORED MOMENTS, and no fourth:
  *
- * SAFETY RULE, learned the hard way: an entrance must never be able to strand
- * content. A pure `whileInView` reveal leaves an element at `opacity: 0`
- * forever if the observer never fires — skipping to an anchor, find-in-page, a
- * very fast scroll, or a print stylesheet all do that. So every reveal here
- * fires on whichever comes first: the element entering view, OR a short
- * failsafe timer after mount. The worst case is a reveal that arrives early;
- * the content is never invisible.
+ *   1. The job ticket feeds into the panel and its APPROVED stamp strikes.
+ *      (in Hero.tsx — the page's narrator.)
+ *   2. Each commitment in the promise band is PINNED to the board, one after
+ *      the other. The only scroll response on the site, and it is made of this
+ *      world's own action: a form being filed.
+ *   3. The STATUS board cycles the states a job passes through.
+ *      (SplitFlapText — a diegetic instrument, not decoration.)
+ *
+ * Why this file is small, and why there is no generic `Reveal` here any more.
+ * An earlier version of this layer wrapped every heading and every list in the
+ * same fade-and-rise, which is ~40 identical entrances across five routes. A
+ * reviewer sent that back twice, correctly: a uniform entrance is not motion,
+ * it is a texture. The floor's sentence is "one authored moment, not scattered
+ * effects and not one identical entrance on every section". So the generic
+ * reveal is deliberately GONE. If you are tempted to add it back for a new
+ * section, don't — either the section earns its own authored moment from the
+ * world's materials, or it stays still.
+ *
+ * SAFETY RULE, learned the hard way: an entrance must never strand content. A
+ * pure `whileInView` reveal leaves an element at `opacity: 0` forever when the
+ * observer never fires — skipping to an anchor, find-in-page, a very fast
+ * scroll, or printing all do that. Every animated element here fires on
+ * whichever comes first: entering view, or a short failsafe after mount. The
+ * worst case is an arrival that happens early; content is never invisible.
  */
 
 import {
@@ -25,41 +39,17 @@ import {
   useInView,
   useReducedMotion,
   type Transition,
-  type Variants,
 } from "motion/react";
-import { createElement, useEffect, useRef, useState, type ElementType, type ReactNode } from "react";
+import { useEffect, useRef, useState } from "react";
 
 /** Exponential ease-out. Matches cubic-bezier(0.16, 1, 0.3, 1). */
 export const EASE_OUT: Transition["ease"] = [0.16, 1, 0.3, 1];
 
-/** The single scroll-entrance transition. */
-export const riseTransition: Transition = {
-  duration: 0.62,
-  ease: EASE_OUT,
-};
+/** The ticket's entrance: 0.72s, the house curve. */
+export const ticketTransition: Transition = { duration: 0.72, ease: EASE_OUT };
 
-/** Paper settling onto the stack: a short drop with a long settle. */
-export const settleTransition: Transition = {
-  duration: 0.5,
-  ease: EASE_OUT,
-};
-
-export const riseVariants: Variants = {
-  hidden: { opacity: 0, y: 18 },
-  shown: { opacity: 1, y: 0 },
-};
-
-/**
- * Staggered children: a short, ordered settle rather than a uniform fade.
- * `delayChildren` is small enough that the last child still lands inside the
- * first viewport's attention.
- */
-export const listVariants: Variants = {
-  hidden: {},
-  shown: {
-    transition: { staggerChildren: 0.07, delayChildren: 0.04 },
-  },
-};
+/** A stamp striking: short, decisive, no overshoot. */
+export const strikeTransition: Transition = { duration: 0.34, ease: EASE_OUT };
 
 export function useMotionOk() {
   // `useReducedMotion` returns null on the server; treat that as "animate",
@@ -67,10 +57,14 @@ export function useMotionOk() {
   return useReducedMotion() !== true;
 }
 
-/** How long a reveal may wait for its observer before showing itself anyway. */
+/** How long an entrance may wait for its observer before showing itself. */
 const FAILSAFE_MS = 1400;
 
-function useRevealControl(amount: number, enabled: boolean) {
+/**
+ * Fires once when the element enters view, or after the failsafe, whichever
+ * comes first. Returns a ref to attach and whether the arrival has happened.
+ */
+export function useArrival(amount = 0.35, enabled = true) {
   const ref = useRef<HTMLElement | null>(null);
   const inView = useInView(ref, { once: true, amount });
   const [forced, setForced] = useState(false);
@@ -81,120 +75,50 @@ function useRevealControl(amount: number, enabled: boolean) {
     return () => clearTimeout(t);
   }, [enabled, inView]);
 
-  return { ref, shown: !enabled || inView || forced };
+  return { ref, arrived: !enabled || inView || forced };
 }
 
 /**
- * Reveals its children, once, when they first scroll into view.
+ * The promise band's commitments, each pinned to the board in turn.
  *
- * Visible by default: with reduced motion, before hydration, or if the observer
- * never fires, the content renders in its final state. Motion here is an
- * enhancement, never a precondition for seeing the page.
+ * This is the site's only scroll response. It is keyed to the world's own
+ * action — a stamp coming down on a form — rather than a generic rise, and it
+ * is applied to four small tokens in one band, not to every section.
  */
-export function Reveal({
+export function PinToBoard({
   children,
-  as = "div",
+  index = 0,
   className = "",
-  delay = 0,
-  amount = 0.25,
 }: {
-  children: ReactNode;
-  as?: ElementType;
+  children: React.ReactNode;
+  index?: number;
   className?: string;
-  delay?: number;
-  amount?: number;
 }) {
   const ok = useMotionOk();
-  const { ref, shown } = useRevealControl(amount, ok);
-  const MotionTag = motion[as as keyof typeof motion] as typeof motion.div;
+  const { ref, arrived } = useArrival(0.4, ok);
 
-  if (!ok) {
-    return createElement(as, { className }, children);
-  }
+  if (!ok) return <li className={className}>{children}</li>;
 
   return (
-    <MotionTag
+    <motion.li
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
       ref={ref as any}
       className={className}
-      variants={riseVariants}
-      initial="hidden"
-      animate={shown ? "shown" : "hidden"}
-      transition={{ ...riseTransition, delay }}
+      initial={{ opacity: 0, y: -10, scale: 1.06 }}
+      animate={arrived ? { opacity: 1, y: 0, scale: 1 } : undefined}
+      transition={{ ...strikeTransition, delay: index * 0.11 }}
     >
       {children}
-    </MotionTag>
-  );
-}
-
-/**
- * A list that settles item by item. Use for siblings that share a rhythm —
- * service categories, values, process steps — never for a whole page section,
- * so the page keeps one entrance and the lists keep their own cadence.
- */
-export function RevealList({
-  children,
-  as = "ul",
-  className = "",
-  amount = 0.12,
-}: {
-  children: ReactNode;
-  as?: ElementType;
-  className?: string;
-  amount?: number;
-}) {
-  const ok = useMotionOk();
-  const { ref, shown } = useRevealControl(amount, ok);
-  const MotionTag = motion[as as keyof typeof motion] as typeof motion.ul;
-
-  if (!ok) {
-    return createElement(as, { className }, children);
-  }
-
-  return (
-    <MotionTag
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      ref={ref as any}
-      className={className}
-      variants={listVariants}
-      initial="hidden"
-      animate={shown ? "shown" : "hidden"}
-    >
-      {children}
-    </MotionTag>
-  );
-}
-
-/** A child of `RevealList`. */
-export function RevealItem({
-  children,
-  as = "li",
-  className = "",
-}: {
-  children: ReactNode;
-  as?: ElementType;
-  className?: string;
-}) {
-  const ok = useMotionOk();
-  const MotionTag = motion[as as keyof typeof motion] as typeof motion.li;
-
-  if (!ok) {
-    return createElement(as, { className }, children);
-  }
-
-  return (
-    <MotionTag className={className} variants={riseVariants} transition={settleTransition}>
-      {children}
-    </MotionTag>
+    </motion.li>
   );
 }
 
 /**
  * A form line number that counts up once when it arrives.
  *
- * Written on Motion rather than adopted from the catalogue's CountUp, because a
- * work-order line number is always zero-padded to two digits and the vendored
- * one has no padding option. Renders its final value if motion is reduced.
+ * Written on Motion rather than the catalogue's CountUp, because a work-order
+ * line number is always zero-padded to two digits. Renders its final value if
+ * motion is reduced, and never waits on the observer alone.
  */
 export function TicketNumber({
   to,
@@ -208,27 +132,17 @@ export function TicketNumber({
   pad?: number;
 }) {
   const ok = useMotionOk();
-  const ref = useRef<HTMLSpanElement>(null);
-  const inView = useInView(ref, { once: true, amount: 0.6 });
-  const [forced, setForced] = useState(false);
+  const { ref, arrived } = useArrival(0.6, ok);
   const [value, setValue] = useState(0);
 
   useEffect(() => {
-    if (!ok) return;
-    if (inView) return;
-    const t = setTimeout(() => setForced(true), FAILSAFE_MS);
-    return () => clearTimeout(t);
-  }, [ok, inView]);
-
-  useEffect(() => {
-    if (!ok || (!inView && !forced)) return;
+    if (!ok || !arrived) return;
 
     let raf = 0;
     let start: number | null = null;
     const tick = (now: number) => {
       if (start === null) start = now;
       const t = Math.min(1, (now - start) / (duration * 1000));
-      // the same exponential ease-out as everything else in the world
       const eased = 1 - Math.pow(1 - t, 4);
       setValue(Math.round(eased * to));
       if (t < 1) raf = requestAnimationFrame(tick);
@@ -236,10 +150,14 @@ export function TicketNumber({
     };
     raf = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(raf);
-  }, [ok, inView, forced, to, duration]);
+  }, [ok, arrived, to, duration]);
 
   return (
-    <span ref={ref} className={`tnum ${className}`}>
+    <span
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      ref={ref as any}
+      className={`tnum ${className}`}
+    >
       {String(ok ? value : to).padStart(pad, "0")}
     </span>
   );

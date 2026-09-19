@@ -477,8 +477,7 @@ body {
   color: var(--red);
 }
 
-/* the open-for-business dot. Its pulse is driven by Motion, not by CSS, so the
-   site keeps a single animation authority; see components/Header.tsx. */
+/* the open-for-business dot. Static by design: see components/Header.tsx. */
 .live-dot {
   width: 0.5rem;
   height: 0.5rem;
@@ -501,6 +500,67 @@ body {
   .shell {
     padding-inline: 2rem;
   }
+}
+
+/* ---------------------------------------------------------------------------
+   The lockup at the narrowest shipped widths.
+   A flex row that has run out of room shrinks a text box below its own content
+   width instead of overflowing the viewport — so `scrollWidth` looks healthy
+   while the wordmark is silently clipped. That is what happened at 320 and 360:
+   the brand name lost its last letters and the document reported no overflow.
+   These are the largest sizes that fit beside the header's actions.
+   ------------------------------------------------------------------------- */
+
+@media (max-width: 380px) {
+  .logo-word {
+    font-size: 0.82rem;
+  }
+  .logo-sub {
+    font-size: 0.36rem;
+  }
+  .logo-lockup {
+    gap: 0.35rem;
+  }
+}
+
+/*
+ * Spanish is the tighter language at 320px, not English: the language toggle
+ * reads "ESPAÑOL" where English reads "ENGLISH", which is ~10px wider and comes
+ * straight out of the lockup's share of a 280px bar. That 10px is the whole
+ * difference between the brand name printing and being clipped.
+ */
+@media (max-width: 340px) {
+  .logo-word {
+    font-size: 0.72rem;
+  }
+  .logo-sub {
+    font-size: 0.32rem;
+  }
+  .logo-lockup {
+    gap: 0.3rem;
+  }
+}
+
+@media (min-width: 381px) and (max-width: 420px) {
+  .logo-word {
+    font-size: 1.12rem;
+  }
+  .logo-sub {
+    font-size: 0.46rem;
+  }
+  .logo-lockup {
+    gap: 0.5rem;
+  }
+}
+
+/*
+ * Safety net. If the lockup is ever squeezed below the wordmark's natural width
+ * again, it loses a whole letter cleanly at the box edge instead of breaking
+ * mid-glyph — and the clipping is at least honest about itself.
+ */
+.logo-word {
+  overflow: hidden;
+  white-space: nowrap;
 }
 
 .rule-t {

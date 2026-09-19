@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { RuleNote, SectionHead } from "@/components/ui";
-import { Reveal } from "@/components/motion/primitives";
 import { ClosingCta } from "@/components/sections";
 import { getDict } from "@/lib/i18n";
 import { site, telHref, type Locale } from "@/lib/site";
@@ -69,7 +68,7 @@ export function AreasPage({ locale, t }: { locale: Locale; t: ReturnType<typeof 
           </section>
 
           <aside className="self-start space-y-6">
-            <Reveal className="sheet p-6">
+            <div className="sheet p-6">
               <h2 className="label border-b-2 border-navy/25 pb-2 text-ink-soft">
                 {t.contact.hoursTitle}
               </h2>
@@ -84,9 +83,9 @@ export function AreasPage({ locale, t }: { locale: Locale; t: ReturnType<typeof 
                 ))}
               </ul>
               <p className="label mt-4 text-gold-ink">* {t.common.placeholderNote}</p>
-            </Reveal>
+            </div>
 
-            <Reveal className="sheet p-6">
+            <div className="sheet p-6">
               <h2 className="label border-b-2 border-navy/25 pb-2 text-ink-soft">
                 {t.footer.contactTitle}
               </h2>
@@ -108,7 +107,7 @@ export function AreasPage({ locale, t }: { locale: Locale; t: ReturnType<typeof 
                 </p>
               </address>
               <p className="label mt-4 text-gold-ink">* {t.common.placeholderNote}</p>
-            </Reveal>
+            </div>
           </aside>
         </div>
       </div>

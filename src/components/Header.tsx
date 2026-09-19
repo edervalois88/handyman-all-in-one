@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { motion } from "motion/react";
 import { Logo } from "./Logo";
 import { altPath, route, site, telHref, type Locale, type RouteKey } from "@/lib/site";
 import type { Dict } from "@/lib/i18n";
@@ -46,12 +45,11 @@ export function Header({ locale, t }: { locale: Locale; t: Dict }) {
       <div className="bg-navy text-cream">
         <div className="shell flex flex-wrap items-center justify-between gap-x-6 gap-y-1 py-2">
           <p className="label flex items-center gap-2 text-cream/85">
-            <motion.span
-              className="live-dot"
-              aria-hidden="true"
-              animate={{ opacity: [1, 0.35, 1] }}
-              transition={{ duration: 2.4, ease: "easeInOut", repeat: Infinity }}
-            />
+            {/* Static, not pulsing: the STATUS board already carries the page's
+                one continuous motion, and a second perpetual loop for a single
+                idea was competing with it. The dot marks the state; it does not
+                need to perform it. */}
+            <span className="live-dot" aria-hidden="true" />
             {locale === "es"
               ? "Contestamos en horario laboral"
               : "We answer during business hours"}
@@ -109,9 +107,23 @@ export function Header({ locale, t }: { locale: Locale; t: Dict }) {
               {t.meta.switchTo}
             </Link>
 
+            {/*
+              * The CALL button appears from 360px up, not 320. It duplicates the
+              * phone number already sitting in the utility strip directly above,
+              * and at 320px it costs the lockup its brand name: Spanish "LLAMAR
+              * AHORA" is ~34px wider than "CALL NOW", which left the wordmark 70px
+              * against the 60px it needs and clipped it.
+              *
+              * NOTE the `max-[359px]:!hidden`. Tailwind v4 emits variant-ordered
+              * utilities after unvariant ones, so `min-[360px]:inline-flex` wins
+              * over a bare `hidden` at EVERY width and the button never actually
+              * hid. That mistake was made twice in this file before it was caught
+              * by measuring the rendered widths rather than trusting the class
+              * list. The important modifier makes the intent unambiguous.
+              */}
             <a
               href={telHref}
-              className="btn btn-ink hidden px-4 py-3 text-[0.85rem] sm:inline-flex"
+              className="btn btn-ink hidden px-4 py-3 text-[0.85rem] min-[360px]:inline-flex max-[359px]:!hidden"
             >
               {t.nav.call}
             </a>
@@ -121,9 +133,13 @@ export function Header({ locale, t }: { locale: Locale; t: Dict }) {
               onClick={() => setOpen((v) => !v)}
               aria-expanded={open}
               aria-controls="mobile-nav"
-              className="label-lg flex items-center gap-2 rounded-sm border-2 border-navy/25 px-3 py-2 text-[0.72rem] text-navy lg:hidden"
+              aria-label={open ? t.nav.close : t.nav.menu}
+              className="label-lg flex items-center gap-2 rounded-sm border-2 border-navy/25 px-2.5 py-2 text-[0.72rem] text-navy sm:px-3 lg:hidden"
             >
-              {open ? t.nav.close : t.nav.menu}
+              {/* The word is hidden below `sm` and the icon carries the control,
+                  because at 320px the lockup needs those ~34px to print the brand
+                  name in full. The accessible name stays on the button. */}
+              <span className="hidden sm:inline">{open ? t.nav.close : t.nav.menu}</span>
               <span aria-hidden="true" className="flex flex-col gap-[3px]">
                 <span className="block h-[2px] w-3.5 bg-navy" />
                 <span className="block h-[2px] w-3.5 bg-navy" />

@@ -86,7 +86,6 @@ const CHARSETS: Record<string, string> = {
 const styles = `
 .split-flap-text{
   font-family:var(--font-mono),"Courier New",monospace;
-  font-size:var(--split-flap-font-size,1rem);
   font-weight:700;
   line-height:1;
   letter-spacing:0;
@@ -94,6 +93,27 @@ const styles = `
   gap:var(--split-flap-gap,2px);
   flex-wrap:nowrap;
   max-width:100%;
+  /*
+   * LOCAL MODIFICATION 5 - the board scales down on narrow screens.
+   * A fixed tile size cannot serve both a 1440px ticket and a 320px one: the
+   * longest phrase measures ~275px, which fits the value column at every width
+   * above ~360px and overflows it below that. The font size is the one knob that
+   * changes the board's whole footprint, so the container scales it and the
+   * caller sets the base size. The nowrap above guarantees it degrades by getting
+   * smaller, never by wrapping mid-phrase.
+   */
+  font-size:var(--split-flap-font-size,1rem);
+}
+@media (max-width:400px){
+  .split-flap-text{font-size:calc(var(--split-flap-font-size,1rem) * .78)}
+}
+/*
+ * The binding case at the narrowest width is SPANISH, not English: its longest
+ * state ("Cotización aprobada", 19 characters) is 3 characters wider than the
+ * English one, and at a 205px value column that is the whole margin.
+ */
+@media (max-width:340px){
+  .split-flap-text{font-size:calc(var(--split-flap-font-size,1rem) * .62)}
 }
 /* Every tile is the SAME width, fixed in px, and the row never wraps. An
    em-based width makes each tile as wide as its own character, so a fixed-length
@@ -445,11 +465,24 @@ export default function SplitFlapText({
   return (
     <>
       <style>{styles}</style>
+      {/*
+       * LOCAL MODIFICATION 4 — accessibility. Upstream puts `role="text"` and an
+       * `aria-label` on the container with the tiles hidden. `role="text"` is not
+       * an ARIA role, and a named generic element is dropped by some assistive
+       * tech, so the state could go unannounced.
+       *
+       * Instead: an sr-only text node carries the settled phrase and the board
+       * itself is `aria-hidden`. The value is always exposed to the reading
+       * order, and it stays current because the node re-renders with the tiles.
+       *
+       * It is deliberately NOT a live region: a board that cycles every 2.6
+       * seconds announcing itself would be hostile to a screen-reader user.
+       */}
+      <span className="sr-only">{settledText}</span>
       <div
         className={`split-flap-text inline-flex items-center whitespace-pre select-none ${className}`.trim()}
         style={componentStyle}
-        role="text"
-        aria-label={settledText || undefined}
+        aria-hidden="true"
         {...props}
       >
         {tiles.map((tile, index) => (

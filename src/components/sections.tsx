@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { Reveal, RevealItem, RevealList } from "./motion/primitives";
 import { RuleNote, SectionHead, Stamp } from "./ui";
 import { route, site, telHref, type Locale } from "@/lib/site";
 import type { Dict } from "@/lib/i18n";
@@ -14,15 +13,13 @@ export function Problem({ locale, t }: { locale: Locale; t: Dict }) {
       <div className="shell">
         <div className="grid gap-12 lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)] lg:gap-16">
           <div>
-            <Reveal>
               <SectionHead
               index="01"
-              title={t.problem.title}
-              body={t.problem.body}
-              tone="ink"
+            title={t.problem.title}
+            body={t.problem.body}
+            tone="ink"
               />
-            </Reveal>
-            <RuleNote
+          <RuleNote
               lane={locale === "es" ? "En resumen" : "In short"}
               className="mt-8"
             >
@@ -30,9 +27,9 @@ export function Problem({ locale, t }: { locale: Locale; t: Dict }) {
             </RuleNote>
           </div>
 
-          <RevealList className="grid gap-5 self-start">
+<ul className="grid gap-5 self-start">
             {t.problem.alt.map((a, i) => (
-              <RevealItem key={a.label} className="sheet flex gap-5 p-5 sm:p-6">
+              <li key={a.label} className="sheet flex gap-5 p-5 sm:p-6">
                 <div className="shrink-0 border-r border-ink-soft/50 pr-4 text-center">
                   <span className="display block text-[2.2rem] leading-none text-ink-soft">
                     {String(i + 1).padStart(2, "0")}
@@ -45,9 +42,9 @@ export function Problem({ locale, t }: { locale: Locale; t: Dict }) {
                     {a.body}
                   </p>
                 </div>
-              </RevealItem>
+              </li>
             ))}
-          </RevealList>
+</ul>
         </div>
       </div>
     </section>
@@ -60,18 +57,16 @@ export function Solution({ locale, t }: { locale: Locale; t: Dict }) {
   return (
     <section className="ground py-16 sm:py-20 md:py-24">
       <div className="shell">
-        <Reveal>
           <SectionHead
           index="02"
           title={t.solution.title}
           body={t.solution.body}
           className="max-w-[62ch]"
           />
-        </Reveal>
 
-        <RevealList className="mt-12 grid gap-px md:grid-cols-3">
+<ul className="mt-12 grid gap-px md:grid-cols-3">
           {t.solution.points.map((p, i) => (
-            <RevealItem key={p.title} className="flex gap-4 border-t-2 border-navy pt-6 md:pr-8">
+            <li key={p.title} className="flex gap-4 border-t-2 border-navy pt-6 md:pr-8">
               <span className="label shrink-0 border-r border-ink-soft/50 pr-4 pt-1.5 text-ink-soft">
                 {String(i + 1).padStart(2, "0")}
               </span>
@@ -81,9 +76,9 @@ export function Solution({ locale, t }: { locale: Locale; t: Dict }) {
                   {p.body}
                 </p>
               </div>
-            </RevealItem>
+            </li>
           ))}
-        </RevealList>
+</ul>
 
         <div className="mt-12 flex flex-wrap items-center gap-4">
           <Link href={route("about", locale)} className="btn btn-line">
@@ -106,18 +101,16 @@ export function ServiceGrid({ locale, t }: { locale: Locale; t: Dict }) {
   return (
     <section className="border-y-2 border-navy bg-cream py-16 sm:py-20 md:py-24">
       <div className="shell">
-        <Reveal>
           <SectionHead
           index="03"
           title={t.services.title}
           body={t.services.body}
           className="max-w-[62ch]"
           />
-        </Reveal>
 
-        <RevealList className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+<ul className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {t.services.categories.map((c) => (
-            <RevealItem key={c.id} className="sheet-stack">
+            <li key={c.id} className="sheet-stack">
               <div className="sheet stub-b flex h-full flex-col p-6">
                 <div className="flex items-start justify-between gap-3">
                   <h3 className="display text-[1.4rem] leading-tight text-navy">{c.name}</h3>
@@ -148,9 +141,9 @@ export function ServiceGrid({ locale, t }: { locale: Locale; t: Dict }) {
                   </Link>
                 </div>
               </div>
-            </RevealItem>
+            </li>
           ))}
-        </RevealList>
+</ul>
 
         <div className="mt-12 flex flex-wrap items-center gap-4">
           <Link href={route("services", locale)} className="btn btn-ink">
@@ -171,19 +164,17 @@ export function Process({ locale, t }: { locale: Locale; t: Dict }) {
   return (
     <section className="bg-navy py-16 text-cream sm:py-20 md:py-24">
       <div className="shell">
-        <Reveal>
           <SectionHead
           index="04"
           title={t.process.title}
           body={t.process.body}
           tone="cream"
           />
-        </Reveal>
 
         {/* A live status timeline: the job's own progress, as on a ticket. */}
-        <RevealList as="ol" className="mt-12">
+<ol className="mt-12">
           {t.process.steps.map((s) => (
-            <RevealItem
+            <li
               key={s.n}
               className="grid gap-3 border-t border-cream/20 py-6 sm:grid-cols-[4.5rem_minmax(0,1fr)_11rem] sm:items-baseline sm:gap-6"
             >
@@ -197,9 +188,9 @@ export function Process({ locale, t }: { locale: Locale; t: Dict }) {
               <span className="label justify-self-start border border-cream/30 px-2.5 py-1.5 text-gold-ink sm:justify-self-end">
                 {s.meta} <span aria-hidden="true">*</span>
               </span>
-            </RevealItem>
+            </li>
           ))}
-        </RevealList>
+</ol>
 
         <div className="mt-10 flex flex-wrap items-center gap-4">
           <Link href={route("contact", locale)} className="btn btn-primary">
@@ -228,19 +219,17 @@ export function Compare({ locale, t }: { locale: Locale; t: Dict }) {
   return (
     <section className="ground py-16 sm:py-20 md:py-24">
       <div className="shell">
-        <Reveal>
           <SectionHead
           index="05"
           title={t.compare.title}
           body={t.compare.body}
           />
-        </Reveal>
 
         {/* Wide: a real table, one column per option. */}
         <div className="mt-12 hidden lg:block">
           <table className="w-full border-collapse text-left">
-            <caption className="sr-only">{t.compare.title}</caption>
-            <thead>
+          <caption className="sr-only">{t.compare.title}</caption>
+          <thead>
               <tr>
                 {t.compare.cols.map((c, i) => (
                   <th
@@ -261,7 +250,7 @@ export function Compare({ locale, t }: { locale: Locale; t: Dict }) {
                 ))}
               </tr>
             </thead>
-            <tbody>
+          <tbody>
               {t.compare.rows.map((row, ri) => (
                 <tr key={row[0]} className={ri % 2 ? "bg-cream-warm/60" : ""}>
                   {row.map((cell, ci) => (
@@ -296,9 +285,9 @@ export function Compare({ locale, t }: { locale: Locale; t: Dict }) {
 
         {/* Narrow: one sheet per criterion, so all three answers stay on screen
             instead of a scroll box that hides both rivals. */}
-        <RevealList className="mt-12 grid gap-5 sm:grid-cols-2 lg:hidden">
+<ul className="mt-12 grid gap-5 sm:grid-cols-2 lg:hidden">
           {t.compare.rows.map((row, ri) => (
-            <RevealItem key={row[0]} className="sheet-stack">
+            <li key={row[0]} className="sheet-stack">
               <div className="sheet flex h-full flex-col">
                 <div className="flex items-baseline gap-3 border-b-2 border-navy/20 px-5 py-3.5">
                   <span className="label tnum text-ink-soft">
@@ -326,9 +315,9 @@ export function Compare({ locale, t }: { locale: Locale; t: Dict }) {
                   </div>
                 </dl>
               </div>
-            </RevealItem>
+            </li>
           ))}
-        </RevealList>
+</ul>
       </div>
     </section>
   );
@@ -340,21 +329,19 @@ export function AreasTeaser({ locale, t }: { locale: Locale; t: Dict }) {
   return (
     <section className="border-y border-rule bg-cream py-16 sm:py-20 md:py-24">
       <div className="shell grid gap-12 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:gap-16">
-        <Reveal>
           <SectionHead index="06" title={t.areas.title} body={t.areas.body} />
-        </Reveal>
 
         <div className="self-start">
-          <RevealList className="grid grid-cols-2 gap-px sm:grid-cols-3">
+<ul className="grid grid-cols-2 gap-px sm:grid-cols-3">
             {site.areas.map((a) => (
-              <RevealItem
+              <li
                 key={a}
                 className="border-t-2 border-navy/25 px-1 py-3 text-[1rem] text-navy"
               >
                 {a}
-              </RevealItem>
+              </li>
             ))}
-          </RevealList>
+</ul>
           <p className="label mt-4 text-gold-ink">* {t.areas.note}</p>
 
           <div className="sheet mt-8 p-5 sm:p-6">
@@ -381,20 +368,17 @@ export function Faq({ t }: { t: Dict }) {
   return (
     <section className="ground py-16 sm:py-20 md:py-24">
       <div className="shell grid gap-12 lg:grid-cols-[minmax(0,0.72fr)_minmax(0,1.28fr)] lg:gap-16">
-        <Reveal>
           <SectionHead index="07" title={t.faq.title} />
-        </Reveal>
 
         <div className="border-t-2 border-navy">
-          {t.faq.items.map((item, i) => (
-            <Reveal key={item.q} delay={Math.min(i, 5) * 0.04}>
-              <details className="group border-b border-rule py-1">
-                <summary className="flex cursor-pointer list-none items-start justify-between gap-6 py-4">
-                  <span className="display text-[1.22rem] leading-snug text-navy">{item.q}</span>
-                  <span
-                    aria-hidden="true"
-                    className="mt-1 grid h-6 w-6 shrink-0 place-items-center border-2 border-navy text-navy transition-transform group-open:rotate-45"
-                  >
+          {t.faq.items.map((item) => (
+            <details key={item.q} className="group border-b border-rule py-1">
+              <summary className="flex cursor-pointer list-none items-start justify-between gap-6 py-4">
+                <span className="display text-[1.22rem] leading-snug text-navy">{item.q}</span>
+                <span
+                  aria-hidden="true"
+                  className="mt-1 grid h-6 w-6 shrink-0 place-items-center border-2 border-navy text-navy transition-transform group-open:rotate-45"
+                >
                     <svg viewBox="0 0 12 12" className="h-3 w-3">
                       <path
                         d="M6 1v10M1 6h10"
@@ -409,7 +393,6 @@ export function Faq({ t }: { t: Dict }) {
                   {item.a}
                 </p>
               </details>
-            </Reveal>
           ))}
         </div>
       </div>
