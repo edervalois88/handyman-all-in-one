@@ -55,7 +55,10 @@ export function SectionHead({
   const head = tone === "ink" ? "text-navy" : "text-cream";
   const muted = tone === "ink" ? "text-navy/75" : "text-cream/80";
   const lane = tone === "ink" ? "text-ink-soft" : "text-cream/70";
-  const ruleTone = tone === "ink" ? "border-ink-soft/40" : "border-cream/35";
+  // one rule weight, declared once, shared by the bottom rule (below sm) and the
+  // gutter's right border (from sm up), so the device does not change identity
+  // when the breakpoint flips
+  const ruleWeight = tone === "ink" ? "border-rule-strong" : "border-cream/30";
 
   const heading = (
     <h2 className={`display whitespace-pre-line text-[clamp(2.1rem,5.4vw,4.1rem)] ${head}`}>
@@ -76,10 +79,12 @@ export function SectionHead({
            * room for a vertical gutter, so the numeral carries a bottom rule and
            * the heading sits beneath it; from `sm` up the rule turns into the
            * gutter's right border and the heading sits beside it. Either way the
-           * number is never a bare label floating above a heading.
+           * number is never a bare label floating above a heading, and the rule
+           * keeps ONE weight across the breakpoint so it reads as the same device
+           * rather than two.
            */
           <p
-            className={`label shrink-0 self-start border-b-2 pb-1.5 pt-0.5 text-ink-soft sm:self-stretch sm:border-b-0 sm:border-r sm:pb-0 sm:pr-4 sm:pt-1.5 ${lane} ${ruleTone}`}
+            className={`label shrink-0 self-start border-b pb-1.5 pt-0.5 text-ink-soft sm:self-stretch sm:border-b-0 sm:border-r sm:pb-0 sm:pr-4 sm:pt-1.5 ${lane} ${ruleWeight}`}
           >
             {index}
           </p>

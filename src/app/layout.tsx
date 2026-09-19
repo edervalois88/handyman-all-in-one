@@ -67,27 +67,44 @@ export const viewport: Viewport = {
   colorScheme: "light",
 };
 
+/* ─────────────────────────────────────────────────────────────────────────────
+   THE DIRECTION CONTRACT.
+
+   Emitted as the first child of <body> so it survives the production build and
+   anyone can audit the built output against it. It is a raw HTML comment rather
+   than a JSX comment because JSX comments are stripped by the compiler, and a
+   contract the build erased is a contract nobody can audit.
+
+   THESIS, OWN-WORLD, STORY, FIRST VIEWPORT, FORM, FINISH.
+   ───────────────────────────────────────────────────────────────────────────── */
+const DIRECTION_CONTRACT = `THESIS: the accountability of a real home-services company is only checkable on paper, so this page is built as its paperwork — a work order you can read — refusing the category's navy hero + smiling-technician stock photo + invented five-star carousel.
+OWN-WORLD: Warm Cream carbon-copy stock, Midnight Navy ink, Workwear Red reserved for stamps, state and actions only; condensed workwear display caps, typewriter body, dotted field rules, tabbed sheets, perforated stubs, red rubber stamps, and depth built from overlapping paper — no gradients.
+STORY: the visitor sees their own list of six stalled jobs, understands that one company answers, arrives, quotes first and stands behind the work, and starts a written quote.
+FIRST VIEWPORT: a navy work-order panel on the left carrying the promise and the primary action, and the cream job ticket overlapping it on the right with live fields and an APPROVED stamp; a cream checker band anchors the base.
+FORM: grounded direction 6 of 7 — The Work Order (seed e7d16d82).
+FINISH: unreviewed and undocumented is unfinished; this build ends with the finish review, the verdict, and DESIGN.md.`;
+
+const DIRECTION_CONTRACT_ID = "direction-contract";
+
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       className={`${oswald.variable} ${barlowCond.variable} ${courier.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col">
-        {/* THESIS: the accountability of a real home-services company is only checkable on
-            paper, so this page is built as its paperwork — a work order you can read —
-            refusing the category's navy hero + smiling-technician stock photo + invented
-            five-star carousel. OWN-WORLD: Warm Cream carbon-copy stock, Midnight Navy ink,
-            Workwear Red reserved for stamps, state and actions only; condensed workwear
-            display caps, typewriter body, dotted field rules, tabbed sheets, perforated
-            stubs, red rubber stamps, and depth built from overlapping paper — no gradients.
-            STORY: the visitor sees their own list of six stalled jobs, understands that one
-            company answers, arrives, quotes first and stands behind the work, and starts a
-            written quote. FIRST VIEWPORT: a navy work-order panel on the left carrying the
-            promise and the primary action, and the cream job ticket overlapping it on the
-            right with live fields and an APPROVED stamp; a cream checker band anchors the
-            base. FORM: grounded direction 6 of 7 — The Work Order (seed e7d16d82).
-            FINISH: unreviewed and undocumented is unfinished; this build ends with the
-            finish review, the verdict, and DESIGN.md. */}
+        {/*
+         * The contract lives in the body as a raw HTML comment. A JSX comment is
+         * stripped by the compiler and a contract the build erased is a contract
+         * nobody can audit, so it is injected as markup and `grep e7d16d82` finds
+         * it in the built output. The host uses `display: contents` so it adds no
+         * box of its own to the layout.
+         */}
+        <div
+          id={DIRECTION_CONTRACT_ID}
+          style={{ display: "contents" }}
+          suppressHydrationWarning
+          dangerouslySetInnerHTML={{ __html: `<!--\n${DIRECTION_CONTRACT}\n-->` }}
+        />
         {children}
       </body>
     </html>
