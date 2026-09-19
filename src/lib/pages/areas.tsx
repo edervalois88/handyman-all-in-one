@@ -13,7 +13,7 @@ export function areasMetadata(locale: Locale): Metadata {
       locale === "es"
         ? "Mantenemos un radio corto a propósito: traslados cortos significan llegadas puntuales y visitas de seguimiento la misma semana."
         : "We keep a tight radius on purpose: short drives mean the crew arrives when we said it would and can return the same week.",
-    openGraph: { title: `${t.areas.kicker} | ${site.nameFull}`, description: t.areas.body },
+    openGraph: { title: `${t.nav.areas} | ${site.nameFull}`, description: t.areas.body },
   };
 }
 
@@ -22,13 +22,7 @@ export function AreasPage({ locale, t }: { locale: Locale; t: ReturnType<typeof 
     <>
       <header className="bg-navy py-14 text-cream sm:py-16">
         <div className="shell">
-          <SectionHead
-            index="—"
-            kicker={t.areas.kicker}
-            title={t.areas.title}
-            body={t.areas.body}
-            tone="cream"
-          />
+          <SectionHead title={t.areas.title} body={t.areas.body} tone="cream" />
         </div>
       </header>
 

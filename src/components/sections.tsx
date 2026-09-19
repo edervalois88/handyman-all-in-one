@@ -13,7 +13,6 @@ export function Problem({ locale, t }: { locale: Locale; t: Dict }) {
           <div>
             <SectionHead
               index="01"
-              kicker={t.problem.kicker}
               title={t.problem.title}
               body={t.problem.body}
               tone="ink"
@@ -29,15 +28,14 @@ export function Problem({ locale, t }: { locale: Locale; t: Dict }) {
           <ul className="grid gap-5 self-start">
             {t.problem.alt.map((a, i) => (
               <li key={a.label} className="sheet flex gap-5 p-5 sm:p-6">
-                <span
-                  className="display shrink-0 text-[2.4rem] leading-none text-navy/25"
-                  aria-hidden="true"
-                >
-                  {String(i + 1).padStart(2, "0")}
-                </span>
-                <div>
-                  <span className="label text-red">{a.label}</span>
-                  <h3 className="display mt-1.5 text-[1.35rem] text-navy">{a.title}</h3>
+                <div className="shrink-0 border-r border-navy/15 pr-4 text-center">
+                  <span className="display block text-[2.2rem] leading-none text-navy/25">
+                    {String(i + 1).padStart(2, "0")}
+                  </span>
+                  <span className="label mt-2 block text-navy/45">{a.label}</span>
+                </div>
+                <div className="min-w-0">
+                  <h3 className="display text-[1.35rem] text-navy">{a.title}</h3>
                   <p className="mt-2 max-w-[46ch] text-[0.97rem] leading-relaxed text-navy/75">
                     {a.body}
                   </p>
@@ -59,7 +57,6 @@ export function Solution({ locale, t }: { locale: Locale; t: Dict }) {
       <div className="shell">
         <SectionHead
           index="02"
-          kicker={t.solution.kicker}
           title={t.solution.title}
           body={t.solution.body}
           className="max-w-[62ch]"
@@ -67,14 +64,16 @@ export function Solution({ locale, t }: { locale: Locale; t: Dict }) {
 
         <ul className="mt-12 grid gap-px md:grid-cols-3">
           {t.solution.points.map((p, i) => (
-            <li key={p.title} className="border-t-2 border-navy pt-6 md:pr-8">
-              <span className="label text-red">
+            <li key={p.title} className="flex gap-4 border-t-2 border-navy pt-6 md:pr-8">
+              <span className="label shrink-0 border-r border-navy/15 pr-4 pt-1.5 text-navy/45">
                 {String(i + 1).padStart(2, "0")}
               </span>
-              <h3 className="display mt-2 text-[1.55rem] text-navy">{p.title}</h3>
-              <p className="mt-2.5 max-w-[38ch] text-[0.98rem] leading-relaxed text-navy/75">
-                {p.body}
-              </p>
+              <div className="min-w-0">
+                <h3 className="display text-[1.55rem] text-navy">{p.title}</h3>
+                <p className="mt-2.5 max-w-[38ch] text-[0.98rem] leading-relaxed text-navy/75">
+                  {p.body}
+                </p>
+              </div>
             </li>
           ))}
         </ul>
@@ -102,7 +101,6 @@ export function ServiceGrid({ locale, t }: { locale: Locale; t: Dict }) {
       <div className="shell">
         <SectionHead
           index="03"
-          kicker={t.services.kicker}
           title={t.services.title}
           body={t.services.body}
           className="max-w-[62ch]"
@@ -110,34 +108,36 @@ export function ServiceGrid({ locale, t }: { locale: Locale; t: Dict }) {
 
         <ul className="mt-12 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {t.services.categories.map((c) => (
-            <li key={c.id} className="sheet flex h-full flex-col p-6">
-              <div className="flex items-start justify-between gap-3">
-                <h3 className="display text-[1.4rem] leading-tight text-navy">{c.name}</h3>
-              </div>
-              <Stamp tone={c.inHouse ? "navy" : "sage"} flat className="mt-3 self-start">
-                {c.inHouse ? t.common.inHouse : t.common.partner}
-              </Stamp>
-              <p className="mt-4 text-[0.96rem] leading-relaxed text-navy/75">{c.blurb}</p>
-              <ul className="mt-5 space-y-2 border-t border-dashed border-rule-strong pt-5">
-                {c.items.slice(0, 4).map((item) => (
-                  <li key={item} className="flex gap-2.5 text-[0.93rem] leading-snug text-navy/85">
-                    <span className="mt-[0.42rem] h-1.5 w-1.5 shrink-0 bg-red" aria-hidden="true" />
-                    {item}
-                  </li>
-                ))}
-              </ul>
-              <div className="mt-auto pt-5">
-                {c.items.length > 4 ? (
-                  <p className="label mb-3 text-navy/45">
-                    +{c.items.length - 4} {locale === "es" ? "más" : "more"}
-                  </p>
-                ) : null}
-                <Link
-                  href={`${route("services", locale)}#${c.id}`}
-                  className="label-lg inline-block border-b-2 border-red pb-1 text-navy hover:text-red"
-                >
-                  {t.common.learnMore}
-                </Link>
+            <li key={c.id} className="sheet-stack">
+              <div className="sheet stub-b flex h-full flex-col p-6">
+                <div className="flex items-start justify-between gap-3">
+                  <h3 className="display text-[1.4rem] leading-tight text-navy">{c.name}</h3>
+                </div>
+                <Stamp tone={c.inHouse ? "navy" : "sage"} flat className="mt-3 self-start">
+                  {c.inHouse ? t.common.inHouse : t.common.partner}
+                </Stamp>
+                <p className="mt-4 text-[0.96rem] leading-relaxed text-navy/75">{c.blurb}</p>
+                <ul className="mt-5 space-y-2 border-t border-dashed border-rule-strong pt-5">
+                  {c.items.slice(0, 4).map((item) => (
+                    <li key={item} className="flex gap-2.5 text-[0.93rem] leading-snug text-navy/85">
+                      <span className="mt-[0.42rem] h-1.5 w-1.5 shrink-0 bg-red" aria-hidden="true" />
+                      {item}
+                    </li>
+                  ))}
+                </ul>
+                <div className="mt-auto pt-5">
+                  {c.items.length > 4 ? (
+                    <p className="label mb-3 text-navy/45">
+                      +{c.items.length - 4} {locale === "es" ? "más" : "more"}
+                    </p>
+                  ) : null}
+                  <Link
+                    href={`${route("services", locale)}#${c.id}`}
+                    className="label-lg inline-block border-b-2 border-red pb-1 text-navy hover:text-red"
+                  >
+                    {t.common.learnMore}
+                  </Link>
+                </div>
               </div>
             </li>
           ))}
@@ -164,7 +164,6 @@ export function Process({ locale, t }: { locale: Locale; t: Dict }) {
       <div className="shell">
         <SectionHead
           index="04"
-          kicker={t.process.kicker}
           title={t.process.title}
           body={t.process.body}
           tone="cream"
@@ -184,14 +183,14 @@ export function Process({ locale, t }: { locale: Locale; t: Dict }) {
                   {s.body}
                 </p>
               </div>
-              <span className="label justify-self-start border border-cream/30 px-2.5 py-1.5 text-cream/80 sm:justify-self-end">
-                {s.meta}
+              <span className="label justify-self-start border border-cream/30 px-2.5 py-1.5 text-gold sm:justify-self-end">
+                {s.meta} <span aria-hidden="true">*</span>
               </span>
             </li>
           ))}
         </ol>
 
-        <div className="mt-12 flex flex-wrap items-center gap-4">
+        <div className="mt-10 flex flex-wrap items-center gap-4">
           <Link href={route("contact", locale)} className="btn btn-primary">
             {t.nav.quote}
           </Link>
@@ -202,6 +201,11 @@ export function Process({ locale, t }: { locale: Locale; t: Dict }) {
             <span className="tnum">{site.contact.phone}</span>
           </a>
         </div>
+        <p className="mt-5 text-[0.78rem] leading-relaxed text-gold">
+          * {locale === "es"
+            ? "Plazos de ejemplo — reemplazar por los compromisos reales antes de publicar."
+            : "Example timelines — replace with the real commitments before launch."}
+        </p>
       </div>
     </section>
   );
@@ -215,13 +219,13 @@ export function Compare({ locale, t }: { locale: Locale; t: Dict }) {
       <div className="shell">
         <SectionHead
           index="05"
-          kicker={t.compare.kicker}
           title={t.compare.title}
           body={t.compare.body}
         />
 
-        <div className="mt-12 overflow-x-auto">
-          <table className="w-full min-w-[46rem] border-collapse text-left">
+        {/* Wide: a real table, one column per option. */}
+        <div className="mt-12 hidden lg:block">
+          <table className="w-full border-collapse text-left">
             <caption className="sr-only">{t.compare.title}</caption>
             <thead>
               <tr>
@@ -276,6 +280,42 @@ export function Compare({ locale, t }: { locale: Locale; t: Dict }) {
             </tbody>
           </table>
         </div>
+
+        {/* Narrow: one sheet per criterion, so all three answers stay on screen
+            instead of a scroll box that hides both rivals. */}
+        <ul className="mt-12 grid gap-5 sm:grid-cols-2 lg:hidden">
+          {t.compare.rows.map((row, ri) => (
+            <li key={row[0]} className="sheet-stack">
+              <div className="sheet flex h-full flex-col">
+                <div className="flex items-baseline gap-3 border-b-2 border-navy/20 px-5 py-3.5">
+                  <span className="label tnum text-navy/35">
+                    {String(ri + 1).padStart(2, "0")}
+                  </span>
+                  <h3 className="label text-navy">{row[0]}</h3>
+                </div>
+
+                <div className="bg-navy px-5 py-4">
+                  <p className="label text-cream/60">{t.compare.cols[1]}</p>
+                  <p className="mt-1.5 flex items-start gap-2.5 text-[1rem] font-semibold text-cream">
+                    <span className="mt-[0.5rem] h-1.5 w-1.5 shrink-0 bg-red" aria-hidden="true" />
+                    {row[1]}
+                  </p>
+                </div>
+
+                <dl className="mt-auto divide-y divide-dashed divide-rule-strong px-5">
+                  <div className="flex items-baseline justify-between gap-4 py-3">
+                    <dt className="label text-navy/50">{t.compare.cols[2]}</dt>
+                    <dd className="text-right text-[0.92rem] text-navy/75">{row[2]}</dd>
+                  </div>
+                  <div className="flex items-baseline justify-between gap-4 py-3">
+                    <dt className="label text-navy/50">{t.compare.cols[3]}</dt>
+                    <dd className="text-right text-[0.92rem] text-navy/75">{row[3]}</dd>
+                  </div>
+                </dl>
+              </div>
+            </li>
+          ))}
+        </ul>
       </div>
     </section>
   );
@@ -287,7 +327,7 @@ export function AreasTeaser({ locale, t }: { locale: Locale; t: Dict }) {
   return (
     <section className="border-y border-rule bg-cream py-16 sm:py-20 md:py-24">
       <div className="shell grid gap-12 lg:grid-cols-[minmax(0,0.9fr)_minmax(0,1.1fr)] lg:gap-16">
-        <SectionHead index="06" kicker={t.areas.kicker} title={t.areas.title} body={t.areas.body} />
+        <SectionHead index="06" title={t.areas.title} body={t.areas.body} />
 
         <div className="self-start">
           <ul className="grid grid-cols-2 gap-px sm:grid-cols-3">
@@ -326,7 +366,7 @@ export function Faq({ locale, t }: { locale: Locale; t: Dict }) {
   return (
     <section className="ground py-16 sm:py-20 md:py-24">
       <div className="shell grid gap-12 lg:grid-cols-[minmax(0,0.72fr)_minmax(0,1.28fr)] lg:gap-16">
-        <SectionHead index="07" kicker={t.faq.kicker} title={t.faq.title} />
+        <SectionHead index="07" title={t.faq.title} />
 
         <div className="border-t-2 border-navy">
           {t.faq.items.map((item) => (
@@ -362,10 +402,10 @@ export function Faq({ locale, t }: { locale: Locale; t: Dict }) {
 
 export function ClosingCta({ locale, t }: { locale: Locale; t: Dict }) {
   return (
-    <section className="relative overflow-hidden bg-red text-cream">
+    <section className="relative overflow-hidden bg-navy text-cream">
       <div
         aria-hidden="true"
-        className="pointer-events-none absolute -right-16 -top-16 hidden h-64 w-64 opacity-20 lg:block"
+        className="pointer-events-none absolute -right-16 -top-16 hidden h-64 w-64 opacity-[0.18] lg:block"
       >
         <div className="checker h-full w-full" />
       </div>
@@ -373,50 +413,59 @@ export function ClosingCta({ locale, t }: { locale: Locale; t: Dict }) {
       <div className="shell relative py-16 sm:py-20 md:py-24">
         <div className="grid gap-10 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)] lg:items-center lg:gap-16">
           <div>
-            <span className="label border-b-2 border-cream/40 pb-1 text-cream/85">
-              {t.cta.kicker}
-            </span>
-            <h2 className="display mt-6 whitespace-pre-line text-[clamp(2.3rem,6.2vw,4.4rem)] text-cream">
+            <h2 className="display whitespace-pre-line text-[clamp(2.3rem,6.2vw,4.4rem)] text-cream">
               {t.cta.title}
             </h2>
-            <p className="mt-5 max-w-[52ch] text-[1.05rem] leading-relaxed text-cream/90">
+            <p className="mt-6 max-w-[52ch] text-[1.05rem] leading-relaxed text-cream/85">
               {t.cta.body}
             </p>
 
             <div className="mt-9 flex flex-col gap-3 sm:flex-row sm:items-center">
-              <Link href={route("contact", locale)} className="btn btn-ink">
+              <Link href={route("contact", locale)} className="btn btn-primary">
                 {t.cta.primary}
               </Link>
               <a
                 href={telHref}
-                className="btn border-2 border-cream bg-transparent text-cream shadow-none hover:bg-cream hover:text-red"
+                className="btn border-2 border-cream/45 bg-transparent text-cream shadow-none hover:bg-cream hover:text-navy"
               >
                 {t.cta.secondary.replace("{phone}", site.contact.phone)}
               </a>
             </div>
           </div>
 
-          <ul className="grid gap-px self-start">
-            {t.cta.bullets.map((b) => (
-              <li
-                key={b}
-                className="flex items-start gap-3.5 border-t border-cream/35 py-4 text-[1.02rem]"
-              >
-                <span className="box border-cream text-cream" aria-hidden="true">
-                  <svg viewBox="0 0 12 12" className="h-2.5 w-2.5">
-                    <path
-                      d="M1 6.4 4.2 9.6 11 2.4"
-                      fill="none"
-                      stroke="currentColor"
-                      strokeWidth="2.6"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                    />
-                  </svg>
-                </span>
-                <span className="font-semibold">{b}</span>
-              </li>
-            ))}
+          <ul className="sheet-stack self-start">
+            <li className="sheet p-6">
+              <p className="label border-b border-rule-strong pb-2 text-navy/55">
+                {locale === "es" ? "Lo que puede esperar" : "What you can expect"}
+              </p>
+              <ul className="mt-1">
+                {t.cta.bullets.map((b) => (
+                  <li
+                    key={b}
+                    className="flex items-start gap-3.5 border-b border-dashed border-rule-strong py-3.5 text-[0.98rem] text-navy last:border-b-0"
+                  >
+                    <span className="box box-on" aria-hidden="true">
+                      <svg viewBox="0 0 12 12" className="h-2.5 w-2.5">
+                        <path
+                          d="M1 6.4 4.2 9.6 11 2.4"
+                          fill="none"
+                          stroke="currentColor"
+                          strokeWidth="2.6"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
+                    </span>
+                    <span className="font-semibold">{b}</span>
+                  </li>
+                ))}
+              </ul>
+              <p className="mt-3 text-[0.78rem] leading-relaxed text-gold">
+                * {locale === "es"
+                  ? "Cifras y plazos de ejemplo — reemplazar por los reales antes de publicar."
+                  : "Example figures and timelines — replace with the real ones before launch."}
+              </p>
+            </li>
           </ul>
         </div>
       </div>

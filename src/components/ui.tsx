@@ -27,10 +27,15 @@ export function Stamp({
   );
 }
 
-/** Section header in the work-order grammar: numbered, ruled, plainly labelled. */
+/**
+ * Section header in the work-order grammar.
+ *
+ * The heading names the section on its own — no kicker, no eyebrow. Where the
+ * world wants a marker, the form line number sits in the ruled margin gutter
+ * beside the heading, which is where a work order keeps it.
+ */
 export function SectionHead({
   index,
-  kicker,
   title,
   body,
   tone = "ink",
@@ -38,7 +43,6 @@ export function SectionHead({
   className = "",
 }: {
   index?: string;
-  kicker: string;
   title: string;
   body?: string;
   tone?: "ink" | "cream";
@@ -47,36 +51,46 @@ export function SectionHead({
 }) {
   const head = tone === "ink" ? "text-navy" : "text-cream";
   const muted = tone === "ink" ? "text-navy/75" : "text-cream/80";
-  const rule = tone === "ink" ? "border-navy/25" : "border-cream/30";
+  const lane = tone === "ink" ? "text-navy/45" : "text-cream/50";
+  const laneRule = tone === "ink" ? "border-navy/20" : "border-cream/25";
+
+  const heading = (
+    <h2 className={`display whitespace-pre-line text-[clamp(2.1rem,5.4vw,4.1rem)] ${head}`}>
+      {title}
+    </h2>
+  );
 
   return (
-    <div
-      className={`${align === "center" ? "mx-auto text-center" : ""} ${className}`}
-    >
-      <div
-        className={`flex items-center gap-3 border-b-2 ${rule} pb-2 ${
-          align === "center" ? "justify-center" : ""
-        }`}
-      >
-        {index ? (
-          <span className={`label ${tone === "ink" ? "text-red" : "text-cream/70"}`}>
+    <div className={`${align === "center" ? "mx-auto text-center" : ""} ${className}`}>
+      {index ? (
+        <div className="flex items-stretch gap-4">
+          <p
+            className={`label hidden shrink-0 border-r ${laneRule} pr-4 pt-1.5 sm:block ${lane}`}
+            aria-hidden="true"
+          >
             {index}
-          </span>
-        ) : null}
-        <span className={`label ${muted}`}>{kicker}</span>
-      </div>
-      <h2
-        className={`display mt-6 whitespace-pre-line text-[clamp(2.1rem,5.4vw,4.1rem)] ${head}`}
-      >
-        {title}
-      </h2>
-      {body ? (
-        <p className={`mt-5 max-w-[52ch] text-[1.02rem] leading-relaxed ${muted} ${
-          align === "center" ? "mx-auto" : ""
-        }`}>
-          {body}
-        </p>
-      ) : null}
+          </p>
+          <div className="min-w-0">
+            {heading}
+            {body ? (
+              <p className={`mt-5 max-w-[52ch] text-[1.02rem] leading-relaxed ${muted}`}>{body}</p>
+            ) : null}
+          </div>
+        </div>
+      ) : (
+        <>
+          {heading}
+          {body ? (
+            <p
+              className={`mt-5 max-w-[52ch] text-[1.02rem] leading-relaxed ${muted} ${
+                align === "center" ? "mx-auto" : ""
+              }`}
+            >
+              {body}
+            </p>
+          ) : null}
+        </>
+      )}
     </div>
   );
 }

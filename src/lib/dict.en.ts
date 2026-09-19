@@ -59,7 +59,6 @@ export const en = {
   },
 
   hero: {
-    kicker: "Home repair & maintenance",
     title: "Your home,\nhandled.",
     sub: "One company. One standard. One point of contact.",
     body:
@@ -79,7 +78,6 @@ export const en = {
   },
 
   problem: {
-    kicker: "The problem",
     title: "Finding someone\nisn't the hard part.",
     body:
       "Homeowners are tired of calling multiple contractors, waiting for no-shows, and managing different people for every small repair. The problem is not finding someone who can do the work. It is finding someone reliable enough to answer, arrive, and stand behind it.",
@@ -108,7 +106,6 @@ export const en = {
   },
 
   solution: {
-    kicker: "Our solution",
     title: "One company owns\nthe whole list.",
     body:
       "HandyMan manages small-to-mid-sized home projects through qualified in-house technicians and licensed trade partners when required. The customer hires HandyMan — not an individual worker. We schedule the job, communicate the price, and take responsibility for the result.",
@@ -130,7 +127,6 @@ export const en = {
   },
 
   promise: {
-    kicker: "Brand promise",
     title: "Four things, every job.",
     body: "This is the standard we hold ourselves to. It does not change with the size of the job.",
     items: [
@@ -142,7 +138,6 @@ export const en = {
   },
 
   services: {
-    kicker: "Services",
     title: "What we take\ncare of.",
     body:
       "Everyday repairs, the projects that have been sitting on your list, and the seasonal work that keeps a house ahead of itself. Grouped by what you actually need done — not by which trade we have to call.",
@@ -304,7 +299,6 @@ export const en = {
   },
 
   process: {
-    kicker: "How it works",
     title: "Five steps,\nno surprises.",
     body:
       "You always know which step you are on and what happens next. Nothing starts until you approve the price.",
@@ -348,7 +342,6 @@ export const en = {
   },
 
   compare: {
-    kicker: "Why HandyMan",
     title: "The difference is\nwho is accountable.",
     body:
       "There is nothing wrong with a good independent tradesperson. The trouble starts when six of them each hold a piece of your list.",
@@ -364,7 +357,6 @@ export const en = {
   },
 
   areas: {
-    kicker: "Service areas",
     title: "Where we work.",
     body:
       "We keep a tight radius on purpose. Short drives mean the crew arrives when we said it would, and can come back the same week if anything needs a second look.",
@@ -376,7 +368,6 @@ export const en = {
   },
 
   about: {
-    kicker: "About",
     title: "Built around one\nsimple idea.",
     body:
       "HandyMan All-in-One is a home repair and maintenance company built around one simple idea: homeowners should only need one trusted company to take care of their entire home. From everyday repairs to seasonal projects, we coordinate the right professionals and remain accountable from beginning to end.",
@@ -425,7 +416,6 @@ export const en = {
   },
 
   faq: {
-    kicker: "Questions",
     title: "Straight answers.",
     items: [
       {
@@ -464,7 +454,6 @@ export const en = {
   },
 
   cta: {
-    kicker: "Get started",
     title: "Tell us what's\non your list.",
     body:
       "Send it over and we will come back with one written quote. No obligation, no pressure, and no charge for the conversation.",
@@ -479,7 +468,6 @@ export const en = {
   },
 
   contact: {
-    kicker: "Request a quote",
     title: "Start your list.",
     body:
       "The more you tell us, the more accurate the quote. Photos and a rough description are enough to get going.",

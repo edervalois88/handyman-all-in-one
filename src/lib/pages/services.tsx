@@ -13,7 +13,7 @@ export function servicesMetadata(locale: Locale): Metadata {
       locale === "es"
         ? "Reparaciones del día a día, plomería y electricidad dentro del alcance de handyman, carpintería, pintura, exterior y seguridad — más la lista clara de cuándo traemos un socio licenciado."
         : "Everyday repairs, handyman-scope plumbing and electrical, carpentry, painting, exterior and safety work — plus the plain list of when we bring a licensed trade partner.",
-    openGraph: { title: `${t.services.kicker} | ${site.nameFull}`, description: t.services.body },
+    openGraph: { title: `${t.nav.services} | ${site.nameFull}`, description: t.services.body },
   };
 }
 
@@ -22,18 +22,12 @@ export function ServicesPage({ locale, t }: { locale: Locale; t: ReturnType<type
     <>
       <header className="bg-navy py-14 text-cream sm:py-16">
         <div className="shell">
-          <SectionHead
-            index="—"
-            kicker={t.services.kicker}
-            title={t.services.title}
-            body={t.services.body}
-            tone="cream"
-          />
+          <SectionHead title={t.services.title} body={t.services.body} tone="cream" />
         </div>
       </header>
 
       {/* jump list, laid out as a ticket index */}
-      <nav aria-label={t.services.kicker} className="border-b-2 border-navy bg-cream">
+      <nav aria-label={t.nav.services} className="border-b-2 border-navy bg-cream">
         <div className="shell flex flex-wrap gap-x-6 gap-y-2 py-4">
           {t.services.categories.map((c, i) => (
             <a
@@ -118,8 +112,7 @@ export function ServicesPage({ locale, t }: { locale: Locale; t: ReturnType<type
           {/* the licensed-partner boundary, made explicit */}
           <section id="licensed" className="scroll-mt-28 border-t-2 border-navy pt-12">
             <SectionHead
-              index="—"
-              kicker={locale === "es" ? "Alcance del trabajo" : "Scope of work"}
+              
               title={t.services.boundaryTitle}
               body={t.services.boundaryBody}
             />

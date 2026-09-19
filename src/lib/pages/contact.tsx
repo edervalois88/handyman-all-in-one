@@ -9,7 +9,7 @@ export function contactMetadata(locale: Locale): Metadata {
   return {
     title: locale === "es" ? "Solicitar cotización" : "Request a quote",
     description: t.contact.body,
-    openGraph: { title: `${t.contact.kicker} | ${site.nameFull}`, description: t.contact.body },
+    openGraph: { title: `${t.nav.contact} | ${site.nameFull}`, description: t.contact.body },
   };
 }
 
@@ -18,13 +18,7 @@ export function ContactPage({ locale, t }: { locale: Locale; t: ReturnType<typeo
     <>
       <header className="bg-navy py-14 text-cream sm:py-16">
         <div className="shell">
-          <SectionHead
-            index="—"
-            kicker={t.contact.kicker}
-            title={t.contact.title}
-            body={t.contact.body}
-            tone="cream"
-          />
+          <SectionHead title={t.contact.title} body={t.contact.body} tone="cream" />
         </div>
       </header>
 

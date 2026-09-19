@@ -10,7 +10,7 @@ export function aboutMetadata(locale: Locale): Metadata {
   return {
     title: locale === "es" ? "Nosotros" : "About",
     description: t.about.body.slice(0, 158),
-    openGraph: { title: `${t.about.kicker} | ${site.nameFull}`, description: t.about.positioning },
+    openGraph: { title: `${t.nav.about} | ${site.nameFull}`, description: t.about.positioning },
   };
 }
 
@@ -19,13 +19,7 @@ export function AboutPage({ locale, t }: { locale: Locale; t: ReturnType<typeof 
     <>
       <header className="bg-navy py-14 text-cream sm:py-16">
         <div className="shell">
-          <SectionHead
-            index="—"
-            kicker={t.about.kicker}
-            title={t.about.title}
-            body={t.about.body}
-            tone="cream"
-          />
+          <SectionHead title={t.about.title} body={t.about.body} tone="cream" />
         </div>
       </header>
 
@@ -49,8 +43,7 @@ export function AboutPage({ locale, t }: { locale: Locale; t: ReturnType<typeof 
       <section className="ground py-14 sm:py-16">
         <div className="shell">
           <SectionHead
-            index="—"
-            kicker={t.about.valuesLabel}
+            
             title={locale === "es" ? "Lo que no\nnegociamos." : "What we don't\ntrade away."}
           />
 
@@ -78,8 +71,7 @@ export function AboutPage({ locale, t }: { locale: Locale; t: ReturnType<typeof 
         <div className="shell grid gap-12 lg:grid-cols-[minmax(0,0.8fr)_minmax(0,1.2fr)] lg:gap-16">
           <div>
             <SectionHead
-              index="—"
-              kicker={t.about.standardLabel}
+              
               title={locale === "es" ? "Cómo se\nve en la práctica." : "What it looks\nlike in practice."}
             />
             <Stamp tone="red" className="mt-8">

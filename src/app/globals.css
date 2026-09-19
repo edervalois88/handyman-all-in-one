@@ -175,6 +175,49 @@ body {
   border: 1px solid var(--rule);
 }
 
+/* ---------------------------------------------------------------------------
+   Paper-depth continuity. The carbon-copy stack is not a hero-only flourish:
+   any sheet that stands for a document carries the sheet beneath it, so the
+   stack survives past the first screen.
+   ------------------------------------------------------------------------- */
+
+.sheet-stack {
+  position: relative;
+}
+
+.sheet-stack::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: translate(-5px, 5px) rotate(-0.7deg);
+  background: var(--cream-warm);
+  border: 1px solid var(--rule);
+  box-shadow: var(--lift-1);
+  z-index: -1;
+}
+
+.sheet-stack > * {
+  position: relative;
+}
+
+/* a perforated stub along the bottom edge of a document sheet */
+.stub-b {
+  position: relative;
+  padding-bottom: 1.5rem;
+}
+
+.stub-b::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 12px;
+  background-image: radial-gradient(circle at 6px 12px, transparent 5px, var(--paper) 5px);
+  background-size: 12px 12px;
+  background-repeat: repeat-x;
+}
+
 /* perforated tear edge, like a carbon-copy stub */
 .perf-t {
   background-image: radial-gradient(circle at 6px 0, transparent 5px, var(--paper) 5px);
@@ -278,6 +321,7 @@ body {
    ========================================================================== */
 
 .stamp {
+  position: relative;
   display: inline-flex;
   align-items: center;
   gap: 0.4rem;
@@ -294,8 +338,29 @@ body {
   white-space: nowrap;
 }
 
+/*
+ * Ink impression: a rubber stamp never prints perfectly flat. A second, offset
+ * copy of the same border prints slightly heavier on one corner, which is what
+ * real overprint looks like, and costs no asset.
+ */
+.stamp::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border: 2px solid currentColor;
+  border-radius: 3px;
+  opacity: 0.45;
+  transform: translate(1px, 1px) rotate(0.5deg);
+  clip-path: polygon(0 0, 58% 0, 44% 100%, 0 100%);
+  pointer-events: none;
+}
+
 .stamp-flat {
   transform: none;
+}
+
+.stamp-flat::before {
+  transform: translate(1px, 1px);
 }
 
 /* checkbox in the brand's own grammar */
@@ -342,31 +407,33 @@ body {
 .btn-primary {
   background: var(--red);
   color: #fff;
-  box-shadow: 0 3px 0 var(--red-deep);
+  box-shadow: var(--lift-2);
 }
 
 .btn-primary:hover {
   background: var(--red-deep);
+  box-shadow: var(--lift-3);
 }
 
 .btn-primary:active {
-  transform: translateY(2px);
-  box-shadow: 0 1px 0 var(--red-deep);
+  transform: translateY(1px);
+  box-shadow: var(--lift-1);
 }
 
 .btn-ink {
   background: var(--navy);
   color: var(--cream);
-  box-shadow: 0 3px 0 var(--navy-ink);
+  box-shadow: var(--lift-2);
 }
 
 .btn-ink:hover {
   background: var(--navy-ink);
+  box-shadow: var(--lift-3);
 }
 
 .btn-ink:active {
-  transform: translateY(2px);
-  box-shadow: 0 1px 0 var(--navy-ink);
+  transform: translateY(1px);
+  box-shadow: var(--lift-1);
 }
 
 .btn-line {
@@ -383,11 +450,12 @@ body {
 .btn-onnavy {
   background: var(--cream);
   color: var(--navy);
-  box-shadow: 0 3px 0 rgba(0, 0, 0, 0.28);
+  box-shadow: var(--lift-2);
 }
 
 .btn-onnavy:hover {
   background: #fff;
+  box-shadow: var(--lift-3);
 }
 
 .link-u {
@@ -402,28 +470,10 @@ body {
 }
 
 /* ============================================================================
-   Motion — one orchestrated reveal, content visible by default
+   Motion — exactly one authored moment: the job ticket feeds into the panel
+   and its stamp presses on. Everything else is visible by default and does not
+   animate on scroll.
    ========================================================================== */
-
-@keyframes hm-rise {
-  from {
-    opacity: 0;
-    transform: translateY(14px);
-  }
-  to {
-    opacity: 1;
-    transform: none;
-  }
-}
-
-@keyframes hm-wipe {
-  from {
-    transform: scaleX(0);
-  }
-  to {
-    transform: scaleX(1);
-  }
-}
 
 @keyframes hm-pulse {
   0%,
@@ -435,14 +485,42 @@ body {
   }
 }
 
-.reveal {
-  animation: hm-rise 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
+@keyframes hm-ticket-in {
+  from {
+    opacity: 0;
+    transform: translate3d(28px, -16px, 0) rotate(-2.6deg);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .reveal {
-    animation: none;
+@keyframes hm-stamp-press {
+  0% {
+    opacity: 0;
+    transform: rotate(-1.4deg) scale(1.5);
+    filter: blur(4px);
   }
+  62% {
+    opacity: 1;
+    transform: rotate(-1.4deg) scale(0.97);
+    filter: blur(0);
+  }
+  100% {
+    opacity: 1;
+    transform: rotate(-1.4deg) scale(1);
+    filter: blur(0);
+  }
+}
+
+.reveal-ticket {
+  animation: hm-ticket-in 0.72s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* the stamp strikes just after the ticket lands */
+.reveal-stamp {
+  animation: hm-stamp-press 0.42s cubic-bezier(0.34, 1.56, 0.64, 1) 0.5s both;
 }
 
 .live-dot {
@@ -451,6 +529,13 @@ body {
   border-radius: 999px;
   background: var(--red);
   animation: hm-pulse 2.4s ease-in-out infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal-ticket,
+  .reveal-stamp {
+    animation: none;
+  }
 }
 
 /* ============================================================================

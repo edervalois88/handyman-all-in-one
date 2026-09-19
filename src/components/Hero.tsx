@@ -14,15 +14,10 @@ export function Hero({ locale, t }: { locale: Locale; t: Dict }) {
       <div className="shell relative pb-12 pt-12 sm:pb-16 sm:pt-16 lg:pb-20 lg:pt-20">
         <div className="grid items-center gap-10 lg:grid-cols-[minmax(0,1.02fr)_minmax(0,0.98fr)] lg:gap-14">
           {/* ── left: the promise ─────────────────────────────────────── */}
-          <div className="reveal">
-            <div className="flex flex-wrap items-center gap-3">
-              <span className="label border-b-2 border-cream/30 pb-1 text-cream/75">
-                {t.hero.kicker}
-              </span>
-              <Stamp tone="red" flat>
-                {t.hero.ticketNo}
-              </Stamp>
-            </div>
+          <div>
+            <Stamp tone="red" flat>
+              {t.hero.ticketNo} · {t.common.inHouse}
+            </Stamp>
 
             <h1 className="display mt-6 whitespace-pre-line text-[clamp(2.55rem,8.6vw,6.2rem)] text-cream">
               {t.hero.title}
@@ -60,7 +55,7 @@ export function Hero({ locale, t }: { locale: Locale; t: Dict }) {
           </div>
 
           {/* ── right: the job ticket, overlapping the panel ──────────── */}
-          <div className="relative reveal lg:-mb-8">
+          <div className="reveal-ticket relative lg:-mb-8">
             <div
               aria-hidden="true"
               className="sheet absolute -left-3 -top-3 hidden h-full w-full rotate-[-1.1deg] opacity-50 lg:block"
@@ -78,11 +73,20 @@ export function Hero({ locale, t }: { locale: Locale; t: Dict }) {
               </div>
 
               <div className="flex flex-wrap items-center justify-between gap-4 border-t-2 border-navy/20 px-5 py-5 sm:px-7">
-                <Stamp tone="red">{t.hero.ticketStamp}</Stamp>
+                <Stamp tone="red" className="reveal-stamp">
+                  {t.hero.ticketStamp}
+                </Stamp>
                 <p className="label text-navy/50">
                   {locale === "es" ? "Precio aprobado antes de empezar" : "Priced before we start"}
                 </p>
               </div>
+
+              {/* the ticket is authored demonstration data, and says so */}
+              <p className="border-t border-dashed border-rule-strong px-5 py-3 text-[0.75rem] leading-relaxed text-gold sm:px-7">
+                * {t.common.syntheticNote} — {locale === "es"
+                  ? "no es un cliente real ni precios reales."
+                  : "not a real customer and not real pricing."}
+              </p>
             </div>
           </div>
         </div>

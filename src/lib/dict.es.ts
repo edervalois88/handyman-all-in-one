@@ -41,7 +41,6 @@ export const es: Dict = {
   },
 
   hero: {
-    kicker: "Reparación y mantenimiento del hogar",
     title: "Su casa,\nresuelta.",
     sub: "Una empresa. Un estándar. Un solo contacto.",
     body:
@@ -61,7 +60,6 @@ export const es: Dict = {
   },
 
   problem: {
-    kicker: "El problema",
     title: "Encontrar a alguien\nno es lo difícil.",
     body:
       "Los propietarios están cansados de llamar a varios contratistas, esperar a quien nunca llega y lidiar con personas distintas por cada reparación pequeña. El problema no es encontrar a alguien que pueda hacer el trabajo. Es encontrar a alguien lo bastante confiable para contestar, llegar y responder por lo hecho.",
@@ -90,7 +88,6 @@ export const es: Dict = {
   },
 
   solution: {
-    kicker: "Nuestra solución",
     title: "Una empresa se hace\ncargo de toda la lista.",
     body:
       "HandyMan gestiona proyectos pequeños y medianos mediante técnicos propios calificados y socios de oficio licenciados cuando se requieren. El cliente contrata a HandyMan, no a un trabajador individual. Agendamos el trabajo, comunicamos el precio y respondemos por el resultado.",
@@ -114,7 +111,6 @@ export const es: Dict = {
   },
 
   promise: {
-    kicker: "Promesa de marca",
     title: "Cuatro cosas, en cada trabajo.",
     body: "Es el estándar que mantenemos. No cambia según el tamaño del trabajo.",
     items: [
@@ -126,7 +122,6 @@ export const es: Dict = {
   },
 
   services: {
-    kicker: "Servicios",
     title: "De qué nos\nencargamos.",
     body:
       "Reparaciones del día a día, los proyectos que llevan meses en su lista y el trabajo de temporada que mantiene una casa adelantada. Agrupado por lo que usted necesita resolver, no por el oficio que tengamos que llamar.",
@@ -290,7 +285,6 @@ export const es: Dict = {
   },
 
   process: {
-    kicker: "Cómo funciona",
     title: "Cinco pasos,\nsin sorpresas.",
     body:
       "Usted siempre sabe en qué paso va y qué sigue. Nada empieza hasta que apruebe el precio.",
@@ -334,7 +328,6 @@ export const es: Dict = {
   },
 
   compare: {
-    kicker: "Por qué HandyMan",
     title: "La diferencia es\nquién responde.",
     body:
       "No hay nada malo con un buen profesional independiente. El problema empieza cuando seis de ellos tienen cada uno un pedazo de su lista.",
@@ -350,7 +343,6 @@ export const es: Dict = {
   },
 
   areas: {
-    kicker: "Zonas de servicio",
     title: "Dónde trabajamos.",
     body:
       "Mantenemos un radio corto a propósito. Traslados cortos significan que el equipo llega cuando dijimos y puede volver la misma semana si algo necesita una segunda revisión.",
@@ -362,7 +354,6 @@ export const es: Dict = {
   },
 
   about: {
-    kicker: "Nosotros",
     title: "Construido sobre\nuna idea simple.",
     body:
       "HandyMan All-in-One es una empresa de reparación y mantenimiento del hogar construida sobre una idea simple: un propietario debería necesitar una sola empresa de confianza para cuidar toda su casa. Desde reparaciones cotidianas hasta proyectos de temporada, coordinamos a los profesionales correctos y respondemos de principio a fin.",
@@ -411,7 +402,6 @@ export const es: Dict = {
   },
 
   faq: {
-    kicker: "Preguntas",
     title: "Respuestas directas.",
     items: [
       {
@@ -450,7 +440,6 @@ export const es: Dict = {
   },
 
   cta: {
-    kicker: "Empecemos",
     title: "Cuéntenos qué\ntiene pendiente.",
     body:
       "Mándelo y le respondemos con una cotización por escrito. Sin compromiso, sin presión y sin costo por la conversación.",
@@ -465,7 +454,6 @@ export const es: Dict = {
   },
 
   contact: {
-    kicker: "Solicitar cotización",
     title: "Empiece su lista.",
     body:
       "Cuanto más nos cuente, más precisa será la cotización. Fotos y una descripción general bastan para arrancar.",

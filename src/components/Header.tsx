@@ -45,6 +45,9 @@ export function Header({ locale, t }: { locale: Locale; t: Dict }) {
             {locale === "es"
               ? "Contestamos en horario laboral"
               : "We answer during business hours"}
+            <span className="text-gold" aria-hidden="true">
+              *
+            </span>
           </p>
           <div className="flex items-center gap-3 text-[0.82rem]">
             <a href={telHref} className="label text-cream hover:text-white">
@@ -98,7 +101,7 @@ export function Header({ locale, t }: { locale: Locale; t: Dict }) {
 
             <a
               href={telHref}
-              className="btn btn-ink hidden px-4 py-3 text-[0.85rem] md:inline-flex"
+              className="btn btn-ink hidden px-4 py-3 text-[0.85rem] sm:inline-flex"
             >
               {t.nav.call}
             </a>
