@@ -57,8 +57,8 @@ export const site = {
     city: "Springfield",
     state: "ST",
     zip: "00000",
-    /** Set to the real public URL once the domain is connected. */
-    url: "https://handyman-all-in-one.vercel.app",
+    /** The live production URL. Update this when the real domain is connected. */
+    url: "https://handyman-site-liard.vercel.app",
   },
 
   /** ⚠️ PLACEHOLDER — replace with the real coverage list. */
