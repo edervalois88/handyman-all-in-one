@@ -259,8 +259,19 @@ body {
 }
 
 @media (min-width: 640px) {
+  /*
+   * The value lane is `minmax(min-content, 1fr)`, not `1fr`.
+   *
+   * The status board is a fixed-length instrument: its tile row cannot shrink
+   * below its widest state, so a value lane that can be squeezed under that
+   * forces the board to fall back to shorter states for no good reason. At
+   * 1024px the label lane took 200px and left the value lane 169px, which was
+   * 106px short of the English board alone. `min-content` lets the lane grow to
+   * fit whatever the value actually needs — the board, or a long address — and
+   * the band scrolls past it rather than crushing it.
+   */
   .field-row {
-    grid-template-columns: 12.5rem minmax(0, 1fr);
+    grid-template-columns: 12.5rem minmax(min-content, 1fr);
     gap: 1rem;
     align-items: baseline;
   }

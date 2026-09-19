@@ -200,13 +200,36 @@ distributed as source you copy in rather than as an npm package. Read
   version is flat paper: navy ink on cream stock, one hairline across the fold, `--lift-1` for
   depth.
 
-  **The board never drops below the field scale.** The first attempt at narrow screens scaled the
-  type down by a viewport width query, and a review rejected it: at 390px the ticket's field row
-  stacks label-over-value, so the board has the ticket's whole inner width and the longest Spanish
-  state needs only ~261px of it — the scale was spending a ~100px margin to shrink the one field
-  that carries state. Instead the row is a **container**, and a narrow container gets *shorter
-  states at the same size* (`ticketStatusCycleShort`): a brief word at the field scale beats a
-  long one at half of it.
+  **The board never drops below the field scale, and there is exactly one of it.**
+  Two faults were found here by measuring, and both are worth knowing before touching this
+  component:
+
+  1. Scaling the type down by a viewport query was wrong. At 390px the ticket's field row stacks
+     label-over-value, so the board has the column's full width — the scale was spending a wide
+     margin to shrink the one field that carries state. A narrow column now gets **shorter states
+     at the same size** (`ticketStatusCycleShort`): a brief word at the field scale beats a long
+     one at half of it.
+  2. Mounting both variants and hiding one with CSS was wrong. `display: none` stops neither a
+     timer nor a `requestAnimationFrame` chain, so the hidden board kept flipping forever — and
+     on phones the hidden one is the *longer* phrase set, i.e. the bigger board spinning hardest
+     on the device class least able to afford it. `src/components/StatusBoard.tsx` mounts exactly
+     one board and measures the column with a probe that sits out of flow, so its own width can
+     never shrink the column it is measuring. That feedback loop was the third fault, and the
+     subtlest: an over-predicting estimate made the board overflow, the overflow shrank the
+     column, and the observer then measured the shrunken column and rejected the full phrase for
+     a reason it had caused itself.
+
+  The ticket's value lane is `minmax(min-content, 1fr)` for the same reason: a fixed-length
+  instrument cannot live in a track that is allowed to squeeze it.
+
+  | width | EN | ES |
+  |---|---|---|
+  | 320 | Quote approved (206px) | Cotización aprobada (261px) |
+  | 390 | Quote approved (205px) | Cotización aprobada (261px) |
+  | 1440 | Quote approved (205px) | Cotización aprobada (261px) |
+
+  The full state is used at **every** width in both languages. The short set remains as the
+  fallback for a genuinely narrower column.
 - **`CountUp`** is vendored unmodified. It already depends only on `motion/react`.
 
 Components from the wider catalogue were **rejected on evidence**, not on taste: `SplitText` and

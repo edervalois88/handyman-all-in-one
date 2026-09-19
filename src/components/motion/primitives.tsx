@@ -6,7 +6,7 @@
  * ONE animation authority: Motion (the library formerly called Framer Motion).
  * Nothing animates from CSS keyframes and no second runtime is loaded.
  *
- * THREE AUTHORED MOMENTS, and no fourth:
+ * THREE AUTHORED MOMENTS, plus the line-number counters:
  *
  *   1. The job ticket feeds into the panel and its APPROVED stamp strikes.
  *      (in Hero.tsx — the page's narrator.)
@@ -15,6 +15,9 @@
  *      world's own action: a form being filed.
  *   3. The STATUS board cycles the states a job passes through.
  *      (SplitFlapText — a diegetic instrument, not decoration.)
+ *
+ *   And a small fourth, on one page only: TicketNumber counts the services line
+ *   numbers up, which is a work order numbering its own lines.
  *
  * Why this file is small, and why there is no generic `Reveal` here any more.
  * An earlier version of this layer wrapped every heading and every list in the

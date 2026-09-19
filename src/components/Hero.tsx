@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { motion } from "motion/react";
 import { Stamp, TicketField } from "./ui";
-import SplitFlapText from "./reactbits/SplitFlapText";
+import { StatusBoard } from "./StatusBoard";
 import { PinToBoard, strikeTransition, ticketTransition } from "./motion/primitives";
 import { route, site, telHref, type Locale } from "@/lib/site";
 import type { Dict } from "@/lib/i18n";
@@ -100,37 +100,19 @@ export function Hero({ locale, t }: { locale: Locale; t: Dict }) {
                        The row is a CONTAINER, so the board can react to the width it
                        actually has rather than to the viewport. When that width is
                        tight the board keeps its size and swaps in shorter states —
-                       a brief word at the field scale beats a long one at half of it. */
+                       a brief word at the field scale beats a long one at half of it.
+                       StatusBoard resolves that width in JS so only ONE board is ever
+                       mounted and no hidden one keeps animating. */
                     <div
                       key={label}
                       className="field-row"
                       style={{ containerType: "inline-size", containerName: "board" }}
                     >
                       <span className="label text-ink-soft">{label}</span>
-                      <div className="flex flex-wrap items-center gap-x-3 gap-y-1.5">
-                        {(
-                          [
-                            ["full", t.hero.ticketStatusCycle],
-                            ["short", t.hero.ticketStatusCycleShort],
-                          ] as const
-                        ).map(([variant, phrases]) => (
-                          <SplitFlapText
-                            key={variant}
-                            className={`split-flap-text--${variant}`}
-                            words={[...phrases]}
-                            padTo={0}
-                            gap={2}
-                            fontSize={16}
-                            flipDuration={0.1}
-                            stagger={0.05}
-                            cycleDelay={2600}
-                            charset="alpha"
-                            flipsPerChar={5}
-                            tileColor="var(--navy)"
-                            textColor="var(--cream)"
-                          />
-                        ))}
-                      </div>
+                      <StatusBoard
+                        full={t.hero.ticketStatusCycle}
+                        short={t.hero.ticketStatusCycleShort}
+                      />
                     </div>
                   ) : (
                     <TicketField key={label} label={label} value={value} />

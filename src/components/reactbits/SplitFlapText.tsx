@@ -97,26 +97,14 @@ const styles = `
 }
 
 /*
- * LOCAL MODIFICATION 5 — the board never drops below the value it carries.
+ * LOCAL MODIFICATION 5 — the type never scales.
  *
- * The first attempt at narrow screens scaled the TYPE down by a viewport width
- * query. A review rejected it, correctly: at 390px the ticket's field row stacks
- * label-over-value, so the board has the ticket's whole inner width (~310px) and
- * the longest Spanish state needs only ~261px of it — the scale was spending a
- * ~100px margin to shrink the one field that carries state, down to ~7px glyphs.
- *
- * So the type no longer scales at all. Instead the phrase set is chosen by the
- * CONTAINER's width, and a narrow container gets shorter states of the same size:
- * a brief word at the field scale beats a long one at half of it. The container
- * is the ticket's field row, declared inline on the host element.
+ * Narrow screens are handled by shortening the PHRASE, not the glyph: a brief
+ * word at the field scale beats a long one at half of it. That choice is made in
+ * StatusBoard, which measures the field row and mounts exactly ONE board, so no
+ * hidden variant keeps animating. This component therefore has no notion of
+ * viewport or container width, and no variant classes.
  */
-.split-flap-text--full{display:inline-flex}
-.split-flap-text--short{display:none}
-
-@container board (max-width: 300px){
-  .split-flap-text--full{display:none}
-  .split-flap-text--short{display:inline-flex}
-}
 /* Every tile is the SAME width, fixed in px, and the row never wraps. An
    em-based width makes each tile as wide as its own character, so a fixed-length
    board jitters as it cycles and wraps mid-phrase on a narrow phone. A real
