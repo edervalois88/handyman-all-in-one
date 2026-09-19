@@ -156,26 +156,35 @@ business detail.
 ### Motion
 
 There is **one animation authority**: [`motion`](https://motion.dev) (the library formerly called
-Framer Motion). Nothing animates from CSS keyframes and no second animation runtime is loaded —
-scattered effects from several runtimes is exactly the failure this design refuses, and a
-reviewer already sent an earlier build back for it.
+Framer Motion). Nothing animates from CSS keyframes and no second animation runtime is loaded.
 
-All of it lives in [`src/components/motion/primitives.tsx`](src/components/motion/primitives.tsx):
+**Three authored moments, and no fourth:**
 
-| Export | What it does |
-|---|---|
-| `Reveal` | Reveals a band once, when it enters view |
-| `RevealList` / `RevealItem` | A list that settles item by item, with a small stagger |
-| `TicketNumber` | A zero-padded form line number that counts up once |
-| `EASE_OUT`, `riseTransition`, `settleTransition` | The house curve and its two durations |
+1. The job ticket feeds into the panel and its APPROVED stamp strikes — the page's narrator.
+2. Each commitment in the promise band is **pinned to the board** in turn. This is the site's only
+   scroll response, and it is made of the world's own action rather than a generic rise.
+3. The `STATUS` board cycles the states a job passes through.
+
+`TicketNumber` counts the services line numbers up once, which is a fourth small one-shot — a work
+order numbering its own lines, on one page only.
+
+Mechanics live in [`src/components/motion/primitives.tsx`](src/components/motion/primitives.tsx):
+`useArrival`, `PinToBoard`, `TicketNumber`, and the house curve `cubic-bezier(0.16, 1, 0.3, 1)`.
+
+**There is deliberately no generic `Reveal`.** An earlier version of this layer wrapped every
+heading and every list in the same fade-and-rise: roughly forty identical entrances across five
+routes. A reviewer sent that back twice, correctly — a uniform entrance is not motion, it is a
+texture, and it diluted the one moment that was doing work. If you want to animate a new section,
+author its moment from the world's materials, or let it stay still. The comment at the top of
+`primitives.tsx` says the same thing where you will actually see it.
 
 **The safety rule, and why it exists.** An entrance must never be able to strand content. A pure
 `whileInView` reveal leaves an element at `opacity: 0` forever if the observer never fires —
-skipping to an anchor, find-in-page, a very fast scroll, or printing all do that. The first
-build of this layer shipped that bug and six comparison cards were caught permanently invisible.
-Every reveal now fires on **whichever comes first**: the element entering view, or a 1.4s
-failsafe after mount. The worst case is a reveal that arrives early; content is never invisible.
-Under `prefers-reduced-motion` nothing animates at all and everything renders in its final state.
+skipping to an anchor, find-in-page, a very fast scroll, or printing all do that. The first build
+of this layer shipped that bug and six comparison cards were caught permanently invisible. Every
+animated element now fires on **whichever comes first**: entering view, or a 1.4s failsafe after
+mount. The worst case is an arrival that happens early; content is never invisible. Under
+`prefers-reduced-motion` nothing animates and everything renders in its final state.
 
 ### Vendored components from React Bits
 
@@ -188,7 +197,16 @@ distributed as source you copy in rather than as an npm package. Read
   actually have on the wall, cycling through the states a job passes through. Its logic is
   upstream's; its stylesheet is rewritten, because upstream draws the tiles with gradients, inset
   shadows and 3D perspective — simulated physicality, which this project refuses. The local
-  version is flat paper: cream stock, navy ink, one hairline across the fold, `--lift-1` for depth.
+  version is flat paper: navy ink on cream stock, one hairline across the fold, `--lift-1` for
+  depth.
+
+  **The board never drops below the field scale.** The first attempt at narrow screens scaled the
+  type down by a viewport width query, and a review rejected it: at 390px the ticket's field row
+  stacks label-over-value, so the board has the ticket's whole inner width and the longest Spanish
+  state needs only ~261px of it — the scale was spending a ~100px margin to shrink the one field
+  that carries state. Instead the row is a **container**, and a narrow container gets *shorter
+  states at the same size* (`ticketStatusCycleShort`): a brief word at the field scale beats a
+  long one at half of it.
 - **`CountUp`** is vendored unmodified. It already depends only on `motion/react`.
 
 Components from the wider catalogue were **rejected on evidence**, not on taste: `SplitText` and

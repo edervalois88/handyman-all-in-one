@@ -63,8 +63,21 @@ export const es: Dict = {
       "Cotización aprobada",
       "Agendado",
       "Equipo en sitio",
-      "Trabajo terminado",
+      "Terminado",
       "Garantía activa",
+    ] as const,
+    /**
+     * Los mismos estados, cortos, para cuando la fila es estrecha.
+     * Son más cortos que los ingleses a propósito: el español ocupa más y en un
+     * contenedor de 240px es preferible un estado breve a tipografía diminuta.
+     * La fila de Estado nunca baja de la escala del campo.
+     */
+    ticketStatusCycleShort: [
+      "Aprobada",
+      "Agendado",
+      "En sitio",
+      "Terminado",
+      "Garantía",
     ] as const,
     ticketStamp: "Aprobado",
   },

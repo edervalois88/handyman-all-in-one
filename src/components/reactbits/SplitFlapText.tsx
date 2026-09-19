@@ -93,27 +93,29 @@ const styles = `
   gap:var(--split-flap-gap,2px);
   flex-wrap:nowrap;
   max-width:100%;
-  /*
-   * LOCAL MODIFICATION 5 - the board scales down on narrow screens.
-   * A fixed tile size cannot serve both a 1440px ticket and a 320px one: the
-   * longest phrase measures ~275px, which fits the value column at every width
-   * above ~360px and overflows it below that. The font size is the one knob that
-   * changes the board's whole footprint, so the container scales it and the
-   * caller sets the base size. The nowrap above guarantees it degrades by getting
-   * smaller, never by wrapping mid-phrase.
-   */
   font-size:var(--split-flap-font-size,1rem);
 }
-@media (max-width:400px){
-  .split-flap-text{font-size:calc(var(--split-flap-font-size,1rem) * .78)}
-}
+
 /*
- * The binding case at the narrowest width is SPANISH, not English: its longest
- * state ("Cotización aprobada", 19 characters) is 3 characters wider than the
- * English one, and at a 205px value column that is the whole margin.
+ * LOCAL MODIFICATION 5 — the board never drops below the value it carries.
+ *
+ * The first attempt at narrow screens scaled the TYPE down by a viewport width
+ * query. A review rejected it, correctly: at 390px the ticket's field row stacks
+ * label-over-value, so the board has the ticket's whole inner width (~310px) and
+ * the longest Spanish state needs only ~261px of it — the scale was spending a
+ * ~100px margin to shrink the one field that carries state, down to ~7px glyphs.
+ *
+ * So the type no longer scales at all. Instead the phrase set is chosen by the
+ * CONTAINER's width, and a narrow container gets shorter states of the same size:
+ * a brief word at the field scale beats a long one at half of it. The container
+ * is the ticket's field row, declared inline on the host element.
  */
-@media (max-width:340px){
-  .split-flap-text{font-size:calc(var(--split-flap-font-size,1rem) * .62)}
+.split-flap-text--full{display:inline-flex}
+.split-flap-text--short{display:none}
+
+@container board (max-width: 300px){
+  .split-flap-text--full{display:none}
+  .split-flap-text--short{display:inline-flex}
 }
 /* Every tile is the SAME width, fixed in px, and the row never wraps. An
    em-based width makes each tile as wide as its own character, so a fixed-length

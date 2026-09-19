@@ -84,6 +84,17 @@ export const en = {
       "Work complete",
       "Warranty active",
     ] as List,
+    /**
+     * The same states, short, for when the row is narrow. The board never drops
+     * below the ticket's field scale; it shortens the state instead.
+     */
+    ticketStatusCycleShort: [
+      "Approved",
+      "Scheduled",
+      "On site",
+      "Complete",
+      "Warranty",
+    ] as List,
     ticketStamp: "Approved",
   },
 
