@@ -15,8 +15,13 @@
   --red: #c74732;
   --red-deep: #a83a28;
   --gold: #d69a3a;
+  /* Utility Gold is a fill/accent value: at #D69A3A on Warm Cream it is only
+     ~2.1:1. Any gold TEXT on a light ground uses this darker ink instead. */
+  --gold-ink: #8a6014;
   --sage: #8a9a83;
   --sage-deep: #6f7f69;
+  /* secondary ink that still clears 4.5:1 on Warm Cream */
+  --ink-soft: #55607c;
 
   --paper: var(--cream);
   --ink: var(--navy);
@@ -40,6 +45,8 @@
   --color-red: var(--red);
   --color-red-deep: var(--red-deep);
   --color-gold: var(--gold);
+  --color-gold-ink: var(--gold-ink);
+  --color-ink-soft: var(--ink-soft);
   --color-sage: var(--sage);
   --color-sage-deep: var(--sage-deep);
   --color-paper: var(--paper);
@@ -331,36 +338,37 @@ body {
   letter-spacing: 0.18em;
   font-size: 0.66rem;
   line-height: 1;
-  padding: 0.42rem 0.6rem 0.36rem;
-  border: 2px solid currentColor;
+  padding: 0.62rem 0.85rem 0.56rem;
+  border: 0;
   border-radius: 3px;
   transform: rotate(-1.4deg);
   white-space: nowrap;
 }
 
 /*
- * Ink impression: a rubber stamp never prints perfectly flat. A second, offset
- * copy of the same border prints slightly heavier on one corner, which is what
- * real overprint looks like, and costs no asset.
+ * Ink impression. A rubber stamp never prints a clean outline: density swings
+ * with hand pressure, worn rubber drops out, and the rock doubles the edge.
+ * The border is therefore painted as a filled box showing only through an
+ * authored impression mask (`assets/build-stamp-impression.py`), so the ink is
+ * genuinely uneven while the type colour and geometry stay exact.
  */
 .stamp::before {
   content: "";
   position: absolute;
-  inset: -1px;
-  border: 2px solid currentColor;
+  inset: 0;
+  background: currentColor;
   border-radius: 3px;
-  opacity: 0.45;
-  transform: translate(1px, 1px) rotate(0.5deg);
-  clip-path: polygon(0 0, 58% 0, 44% 100%, 0 100%);
+  -webkit-mask-image: url("/brand/stamp-impression.png");
+  mask-image: url("/brand/stamp-impression.png");
+  -webkit-mask-size: 100% 100%;
+  mask-size: 100% 100%;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
   pointer-events: none;
 }
 
 .stamp-flat {
   transform: none;
-}
-
-.stamp-flat::before {
-  transform: translate(1px, 1px);
 }
 
 /* checkbox in the brand's own grammar */
@@ -499,13 +507,8 @@ body {
 @keyframes hm-stamp-press {
   0% {
     opacity: 0;
-    transform: rotate(-1.4deg) scale(1.5);
-    filter: blur(4px);
-  }
-  62% {
-    opacity: 1;
-    transform: rotate(-1.4deg) scale(0.97);
-    filter: blur(0);
+    transform: rotate(-1.4deg) scale(1.45);
+    filter: blur(5px);
   }
   100% {
     opacity: 1;
@@ -518,9 +521,9 @@ body {
   animation: hm-ticket-in 0.72s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
 
-/* the stamp strikes just after the ticket lands */
+/* the stamp strikes just after the ticket lands: down hard, settle, stop */
 .reveal-stamp {
-  animation: hm-stamp-press 0.42s cubic-bezier(0.34, 1.56, 0.64, 1) 0.5s both;
+  animation: hm-stamp-press 0.34s cubic-bezier(0.16, 1, 0.3, 1) 0.5s both;
 }
 
 .live-dot {

@@ -28,11 +28,11 @@ export function Problem({ locale, t }: { locale: Locale; t: Dict }) {
           <ul className="grid gap-5 self-start">
             {t.problem.alt.map((a, i) => (
               <li key={a.label} className="sheet flex gap-5 p-5 sm:p-6">
-                <div className="shrink-0 border-r border-navy/15 pr-4 text-center">
-                  <span className="display block text-[2.2rem] leading-none text-navy/25">
+                <div className="shrink-0 border-r border-ink-soft/50 pr-4 text-center">
+                  <span className="display block text-[2.2rem] leading-none text-ink-soft">
                     {String(i + 1).padStart(2, "0")}
                   </span>
-                  <span className="label mt-2 block text-navy/45">{a.label}</span>
+                  <span className="label mt-2 block text-ink-soft">{a.label}</span>
                 </div>
                 <div className="min-w-0">
                   <h3 className="display text-[1.35rem] text-navy">{a.title}</h3>
@@ -65,7 +65,7 @@ export function Solution({ locale, t }: { locale: Locale; t: Dict }) {
         <ul className="mt-12 grid gap-px md:grid-cols-3">
           {t.solution.points.map((p, i) => (
             <li key={p.title} className="flex gap-4 border-t-2 border-navy pt-6 md:pr-8">
-              <span className="label shrink-0 border-r border-navy/15 pr-4 pt-1.5 text-navy/45">
+              <span className="label shrink-0 border-r border-ink-soft/50 pr-4 pt-1.5 text-ink-soft">
                 {String(i + 1).padStart(2, "0")}
               </span>
               <div className="min-w-0">
@@ -127,7 +127,7 @@ export function ServiceGrid({ locale, t }: { locale: Locale; t: Dict }) {
                 </ul>
                 <div className="mt-auto pt-5">
                   {c.items.length > 4 ? (
-                    <p className="label mb-3 text-navy/45">
+                    <p className="label mb-3 text-ink-soft">
                       +{c.items.length - 4} {locale === "es" ? "más" : "more"}
                     </p>
                   ) : null}
@@ -183,7 +183,7 @@ export function Process({ locale, t }: { locale: Locale; t: Dict }) {
                   {s.body}
                 </p>
               </div>
-              <span className="label justify-self-start border border-cream/30 px-2.5 py-1.5 text-gold sm:justify-self-end">
+              <span className="label justify-self-start border border-cream/30 px-2.5 py-1.5 text-gold-ink sm:justify-self-end">
                 {s.meta} <span aria-hidden="true">*</span>
               </span>
             </li>
@@ -201,7 +201,7 @@ export function Process({ locale, t }: { locale: Locale; t: Dict }) {
             <span className="tnum">{site.contact.phone}</span>
           </a>
         </div>
-        <p className="mt-5 text-[0.78rem] leading-relaxed text-gold">
+        <p className="mt-5 text-[0.78rem] leading-relaxed text-gold-ink">
           * {locale === "es"
             ? "Plazos de ejemplo — reemplazar por los compromisos reales antes de publicar."
             : "Example timelines — replace with the real commitments before launch."}
@@ -288,7 +288,7 @@ export function Compare({ locale, t }: { locale: Locale; t: Dict }) {
             <li key={row[0]} className="sheet-stack">
               <div className="sheet flex h-full flex-col">
                 <div className="flex items-baseline gap-3 border-b-2 border-navy/20 px-5 py-3.5">
-                  <span className="label tnum text-navy/35">
+                  <span className="label tnum text-ink-soft">
                     {String(ri + 1).padStart(2, "0")}
                   </span>
                   <h3 className="label text-navy">{row[0]}</h3>
@@ -304,11 +304,11 @@ export function Compare({ locale, t }: { locale: Locale; t: Dict }) {
 
                 <dl className="mt-auto divide-y divide-dashed divide-rule-strong px-5">
                   <div className="flex items-baseline justify-between gap-4 py-3">
-                    <dt className="label text-navy/50">{t.compare.cols[2]}</dt>
+                    <dt className="label text-ink-soft">{t.compare.cols[2]}</dt>
                     <dd className="text-right text-[0.92rem] text-navy/75">{row[2]}</dd>
                   </div>
                   <div className="flex items-baseline justify-between gap-4 py-3">
-                    <dt className="label text-navy/50">{t.compare.cols[3]}</dt>
+                    <dt className="label text-ink-soft">{t.compare.cols[3]}</dt>
                     <dd className="text-right text-[0.92rem] text-navy/75">{row[3]}</dd>
                   </div>
                 </dl>
@@ -340,7 +340,7 @@ export function AreasTeaser({ locale, t }: { locale: Locale; t: Dict }) {
               </li>
             ))}
           </ul>
-          <p className="label mt-4 text-gold">* {t.areas.note}</p>
+          <p className="label mt-4 text-gold-ink">* {t.areas.note}</p>
 
           <div className="sheet mt-8 p-5 sm:p-6">
             <h3 className="display text-[1.35rem] text-navy">{t.areas.findTitle}</h3>
@@ -460,7 +460,7 @@ export function ClosingCta({ locale, t }: { locale: Locale; t: Dict }) {
                   </li>
                 ))}
               </ul>
-              <p className="mt-3 text-[0.78rem] leading-relaxed text-gold">
+              <p className="mt-3 text-[0.78rem] leading-relaxed text-gold-ink">
                 * {locale === "es"
                   ? "Cifras y plazos de ejemplo — reemplazar por los reales antes de publicar."
                   : "Example figures and timelines — replace with the real ones before launch."}

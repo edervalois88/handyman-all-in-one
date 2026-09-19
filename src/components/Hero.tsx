@@ -63,7 +63,7 @@ export function Hero({ locale, t }: { locale: Locale; t: Dict }) {
             <div className="sheet-raised relative">
               <div className="flex items-center justify-between gap-4 border-b-2 border-navy/20 px-5 py-4 sm:px-7">
                 <h2 className="display text-[1.5rem] text-navy">{t.hero.ticketTitle}</h2>
-                <span className="label text-navy/50">{t.hero.ticketNo}</span>
+                <span className="label text-ink-soft">{t.hero.ticketNo}</span>
               </div>
 
               <div className="px-5 sm:px-7">
@@ -76,13 +76,13 @@ export function Hero({ locale, t }: { locale: Locale; t: Dict }) {
                 <Stamp tone="red" className="reveal-stamp">
                   {t.hero.ticketStamp}
                 </Stamp>
-                <p className="label text-navy/50">
+                <p className="label text-ink-soft">
                   {locale === "es" ? "Precio aprobado antes de empezar" : "Priced before we start"}
                 </p>
               </div>
 
               {/* the ticket is authored demonstration data, and says so */}
-              <p className="border-t border-dashed border-rule-strong px-5 py-3 text-[0.75rem] leading-relaxed text-gold sm:px-7">
+              <p className="border-t border-dashed border-rule-strong px-5 py-3 text-[0.75rem] leading-relaxed text-gold-ink sm:px-7">
                 * {t.common.syntheticNote} — {locale === "es"
                   ? "no es un cliente real ni precios reales."
                   : "not a real customer and not real pricing."}

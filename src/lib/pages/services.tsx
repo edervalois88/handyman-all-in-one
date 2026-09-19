@@ -35,7 +35,7 @@ export function ServicesPage({ locale, t }: { locale: Locale; t: ReturnType<type
               href={`#${c.id}`}
               className="label-lg text-[0.92rem] text-navy hover:text-red"
             >
-              <span className="tnum text-navy/40">{String(i + 1).padStart(2, "0")}</span>{" "}
+              <span className="tnum text-ink-soft">{String(i + 1).padStart(2, "0")}</span>{" "}
               {c.name}
             </a>
           ))}
@@ -95,7 +95,7 @@ export function ServicesPage({ locale, t }: { locale: Locale; t: ReturnType<type
                       <ul className="space-y-2">
                         {c.boundary.map((b) => (
                           <li key={b} className="flex gap-2.5 leading-snug">
-                            <span aria-hidden="true" className="mt-[0.1rem] font-bold text-gold">
+                            <span aria-hidden="true" className="mt-[0.1rem] font-bold text-gold-ink">
                               →
                             </span>
                             {b}

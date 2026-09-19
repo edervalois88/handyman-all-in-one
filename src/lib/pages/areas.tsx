@@ -41,7 +41,7 @@ export function AreasPage({ locale, t }: { locale: Locale; t: ReturnType<typeof 
                   className="flex items-baseline justify-between gap-4 border-b border-dashed border-rule-strong py-3.5"
                 >
                   <span className="flex items-baseline gap-3">
-                    <span className="label tnum text-navy/35">
+                    <span className="label tnum text-ink-soft">
                       {String((i + 1) * 10).padStart(3, "0")}
                     </span>
                     <span className="display text-[1.2rem] text-navy">{a}</span>
@@ -52,7 +52,7 @@ export function AreasPage({ locale, t }: { locale: Locale; t: ReturnType<typeof 
                 </li>
               ))}
             </ul>
-            <p className="label mt-4 text-gold">* {t.areas.note}</p>
+            <p className="label mt-4 text-gold-ink">* {t.areas.note}</p>
 
             <RuleNote lane={t.areas.findTitle} className="mt-10">
               <p className="max-w-[56ch]">{t.areas.findBody}</p>
@@ -82,7 +82,7 @@ export function AreasPage({ locale, t }: { locale: Locale; t: ReturnType<typeof 
                   </li>
                 ))}
               </ul>
-              <p className="label mt-4 text-gold">* {t.common.placeholderNote}</p>
+              <p className="label mt-4 text-gold-ink">* {t.common.placeholderNote}</p>
             </div>
 
             <div className="sheet p-6">
@@ -106,7 +106,7 @@ export function AreasPage({ locale, t }: { locale: Locale; t: ReturnType<typeof 
                   {site.contact.city}, {site.contact.state} {site.contact.zip}
                 </p>
               </address>
-              <p className="label mt-4 text-gold">* {t.common.placeholderNote}</p>
+              <p className="label mt-4 text-gold-ink">* {t.common.placeholderNote}</p>
             </div>
           </aside>
         </div>

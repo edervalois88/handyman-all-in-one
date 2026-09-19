@@ -82,7 +82,7 @@ export function QuoteForm({ locale, t }: { locale: Locale; t: Dict }) {
         <h3 id="form-title" className="display text-[1.65rem] text-navy">
           {t.contact.formTitle}
         </h3>
-        <span className="label text-navy/50">{t.contact.formNo}</span>
+        <span className="label text-ink-soft">{t.contact.formNo}</span>
       </div>
 
       {status === "error" ? (
@@ -242,7 +242,7 @@ export function QuoteForm({ locale, t }: { locale: Locale; t: Dict }) {
       <input type="hidden" name="locale" value={locale} />
       <input type="hidden" name="page" value={pathname} />
 
-      <div className="mt-7 flex flex-col gap-3 border-t-2 border-navy/15 pt-6 sm:flex-row sm:items-center sm:justify-between">
+      <div className="mt-7 flex flex-col gap-3 border-t-2 border-ink-soft/50 pt-6 sm:flex-row sm:items-center sm:justify-between">
         <button type="submit" className="btn btn-primary" disabled={status === "sending"}>
           {status === "sending" ? f.submitting : f.submit}
         </button>
@@ -258,7 +258,7 @@ export function QuoteForm({ locale, t }: { locale: Locale; t: Dict }) {
 }
 
 const inputCls =
-  "w-full rounded-sm border-2 border-navy/25 bg-cream px-3.5 py-2.5 text-[1rem] text-navy placeholder:text-navy/40 focus:border-navy focus:outline-none focus-visible:outline-3 focus-visible:outline-red";
+  "w-full rounded-sm border-2 border-navy/25 bg-cream px-3.5 py-2.5 text-[1rem] text-navy placeholder:text-ink-soft focus:border-navy focus:outline-none focus-visible:outline-3 focus-visible:outline-red";
 
 function Field({
   label,

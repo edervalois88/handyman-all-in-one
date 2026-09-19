@@ -17,7 +17,7 @@ export function Stamp({
     red: "text-red",
     navy: "text-navy",
     sage: "text-sage-deep",
-    gold: "text-gold",
+    gold: "text-gold-ink",
     cream: "text-cream",
   }[tone];
   return (
@@ -51,8 +51,7 @@ export function SectionHead({
 }) {
   const head = tone === "ink" ? "text-navy" : "text-cream";
   const muted = tone === "ink" ? "text-navy/75" : "text-cream/80";
-  const lane = tone === "ink" ? "text-navy/45" : "text-cream/50";
-  const laneRule = tone === "ink" ? "border-navy/20" : "border-cream/25";
+  const lane = tone === "ink" ? "text-ink-soft" : "text-cream/70";
 
   const heading = (
     <h2 className={`display whitespace-pre-line text-[clamp(2.1rem,5.4vw,4.1rem)] ${head}`}>
@@ -62,35 +61,19 @@ export function SectionHead({
 
   return (
     <div className={`${align === "center" ? "mx-auto text-center" : ""} ${className}`}>
-      {index ? (
-        <div className="flex items-stretch gap-4">
-          <p
-            className={`label hidden shrink-0 border-r ${laneRule} pr-4 pt-1.5 sm:block ${lane}`}
-            aria-hidden="true"
-          >
+      <div className="flex items-stretch gap-3 sm:gap-4">
+        {index ? (
+          <p className={`label shrink-0 border-ink-soft/40 pr-3 pt-1.5 text-ink-soft sm:border-r sm:pr-4 ${lane}`}>
             {index}
           </p>
-          <div className="min-w-0">
-            {heading}
-            {body ? (
-              <p className={`mt-5 max-w-[52ch] text-[1.02rem] leading-relaxed ${muted}`}>{body}</p>
-            ) : null}
-          </div>
-        </div>
-      ) : (
-        <>
+        ) : null}
+        <div className="min-w-0">
           {heading}
           {body ? (
-            <p
-              className={`mt-5 max-w-[52ch] text-[1.02rem] leading-relaxed ${muted} ${
-                align === "center" ? "mx-auto" : ""
-              }`}
-            >
-              {body}
-            </p>
+            <p className={`mt-5 max-w-[52ch] text-[1.02rem] leading-relaxed ${muted}`}>{body}</p>
           ) : null}
-        </>
-      )}
+        </div>
+      </div>
     </div>
   );
 }
@@ -137,7 +120,7 @@ export function RuleNote({
   className?: string;
   children: React.ReactNode;
 }) {
-  const laneColor = tone === "gold" ? "text-gold" : "text-navy/70";
+  const laneColor = tone === "gold" ? "text-gold-ink" : "text-navy/70";
   return (
     <div
       className={`margin-rule ${tone === "gold" ? "margin-rule--gold" : "margin-rule--navy"} ${className}`}
@@ -169,7 +152,7 @@ export function Placeholder({
       <span className="underline decoration-gold decoration-2 decoration-dotted underline-offset-4">
         {children}
       </span>
-      <span className="label text-gold" aria-hidden="true">
+      <span className="label text-gold-ink" aria-hidden="true">
         *
       </span>
       <span className="sr-only">{note}</span>

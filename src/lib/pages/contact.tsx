@@ -31,6 +31,10 @@ export function ContactPage({ locale, t }: { locale: Locale; t: ReturnType<typeo
               <h2 className="display text-[1.6rem] text-navy">{t.contact.asideTitle}</h2>
               <p className="mt-2 text-[0.96rem] leading-relaxed text-navy/75">
                 {t.contact.asideBody}
+                <span className="text-gold-ink" aria-hidden="true">
+                  {" "}
+                  *
+                </span>
               </p>
               <a href={telHref} className="btn btn-primary mt-5 w-full">
                 <span className="tnum">{site.contact.phone}</span>
@@ -41,7 +45,12 @@ export function ContactPage({ locale, t }: { locale: Locale; t: ReturnType<typeo
               >
                 {site.contact.email}
               </a>
-              <p className="label mt-4 text-gold">* {t.common.placeholderNote}</p>
+              <p className="label mt-4 leading-relaxed text-gold-ink">
+                * {t.common.placeholderNote} —{" "}
+                {locale === "es"
+                  ? "incluye el tiempo de respuesta prometido."
+                  : "includes the promised response time."}
+              </p>
             </div>
 
             <div className="sheet p-6">
@@ -58,7 +67,7 @@ export function ContactPage({ locale, t }: { locale: Locale; t: ReturnType<typeo
                   </li>
                 ))}
               </ul>
-              <p className="label mt-4 text-gold">* {t.common.placeholderNote}</p>
+              <p className="label mt-4 text-gold-ink">* {t.common.placeholderNote}</p>
             </div>
 
             <div className="sheet p-6">
@@ -78,7 +87,7 @@ export function ContactPage({ locale, t }: { locale: Locale; t: ReturnType<typeo
                   </li>
                 ))}
               </ul>
-              <p className="label mt-4 text-gold">* {t.common.placeholderNote}</p>
+              <p className="label mt-4 text-gold-ink">* {t.common.placeholderNote}</p>
             </div>
 
             <RuleNote lane={t.footer.contactTitle}>
@@ -87,7 +96,7 @@ export function ContactPage({ locale, t }: { locale: Locale; t: ReturnType<typeo
                 <br />
                 {site.contact.city}, {site.contact.state} {site.contact.zip}
               </address>
-              <p className="label mt-3 text-gold">
+              <p className="label mt-3 text-gold-ink">
                 {site.credentials.license} · * {t.common.placeholderNote}
               </p>
             </RuleNote>

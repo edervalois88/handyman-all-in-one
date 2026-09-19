@@ -124,7 +124,7 @@ export function Header({ locale, t }: { locale: Locale; t: Dict }) {
         </div>
 
         {open ? (
-          <div id="mobile-nav" className="border-t-2 border-navy/15 bg-cream lg:hidden">
+          <div id="mobile-nav" className="border-t-2 border-ink-soft/50 bg-cream lg:hidden">
             <nav
               aria-label={locale === "es" ? "Principal" : "Primary"}
               className="shell py-3"
