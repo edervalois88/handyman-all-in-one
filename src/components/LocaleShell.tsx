@@ -1,4 +1,5 @@
 import { Header } from "./Header";
+import { Preloader } from "./Preloader";
 import { Footer } from "./Footer";
 import { getDict } from "@/lib/i18n";
 import { site, type Locale } from "@/lib/site";
@@ -58,6 +59,7 @@ export function LocaleShell({
         // Structured data must be raw JSON in the document, not an escaped string.
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
+      <Preloader />
       <Header locale={locale} t={t} />
       <main id="main" className="flex-1">
         {children}

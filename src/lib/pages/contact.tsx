@@ -1,8 +1,9 @@
 import type { Metadata } from "next";
 import { QuoteForm } from "@/components/QuoteForm";
 import { RuleNote, SectionHead } from "@/components/ui";
+import { SiteIcon } from "@/components/SiteIcons";
 import { getDict } from "@/lib/i18n";
-import { site, telHref, type Locale } from "@/lib/site";
+import { mailHref, site, telHref, type Locale } from "@/lib/site";
 
 export function contactMetadata(locale: Locale): Metadata {
   const t = getDict(locale);
@@ -36,15 +37,38 @@ export function ContactPage({ locale, t }: { locale: Locale; t: ReturnType<typeo
                   *
                 </span>
               </p>
-              <a href={telHref} className="btn btn-primary mt-5 w-full">
-                <span className="tnum">{site.contact.phone}</span>
-              </a>
-              <a
-                href={`mailto:${site.contact.email}`}
-                className="btn btn-line mt-2.5 w-full break-all"
-              >
-                {site.contact.email}
-              </a>
+              {/*
+               * Icons earn their place here and almost nowhere else on the site:
+               * this is the block people scan for one specific detail, and a glyph
+               * in front of each one turns four lines of text into four findable
+               * things. They are hidden from assistive tech because the label
+               * beside them already says it.
+               */}
+              <ul className="mt-5 space-y-3">
+                <li className="flex items-center gap-3 border-t border-rule pt-3">
+                  <SiteIcon name="phone" className="shrink-0 text-red" />
+                  <a
+                    href={telHref}
+                    className="tnum text-[1.05rem] font-bold text-navy hover:text-red"
+                  >
+                    {site.contact.phone}
+                  </a>
+                </li>
+                <li className="flex items-center gap-3 border-t border-rule pt-3">
+                  <SiteIcon name="mail" className="shrink-0 text-red" />
+                  <a href={mailHref} className="break-all text-[1rem] text-navy hover:text-red">
+                    {site.contact.email}
+                  </a>
+                </li>
+                <li className="flex items-start gap-3 border-t border-rule pt-3">
+                  <SiteIcon name="pin" className="mt-0.5 shrink-0 text-red" />
+                  <span className="text-[0.96rem] leading-relaxed text-navy/85">
+                    {site.contact.addressLine}
+                    <br />
+                    {site.contact.city}, {site.contact.state} {site.contact.zip}
+                  </span>
+                </li>
+              </ul>
               <p className="label mt-4 leading-relaxed text-gold-ink">
                 * {t.common.placeholderNote} —{" "}
                 {locale === "es"
@@ -54,7 +78,8 @@ export function ContactPage({ locale, t }: { locale: Locale; t: ReturnType<typeo
             </div>
 
             <div className="sheet p-6">
-              <h2 className="label border-b-2 border-navy/25 pb-2 text-ink-soft">
+              <h2 className="label flex items-center gap-2.5 border-b-2 border-navy/25 pb-2 text-ink-soft">
+                <SiteIcon name="clock" size={17} className="text-navy" />
                 {t.contact.hoursTitle}
               </h2>
               <ul className="mt-4 space-y-2 text-[0.96rem] text-navy/85">
@@ -71,7 +96,8 @@ export function ContactPage({ locale, t }: { locale: Locale; t: ReturnType<typeo
             </div>
 
             <div className="sheet p-6">
-              <h2 className="label border-b-2 border-navy/25 pb-2 text-ink-soft">
+              <h2 className="label flex items-center gap-2.5 border-b-2 border-navy/25 pb-2 text-ink-soft">
+                <SiteIcon name="house" size={17} className="text-navy" />
                 {t.contact.areasTitle}
               </h2>
               <p className="mt-3 text-[0.95rem] leading-relaxed text-navy/75">

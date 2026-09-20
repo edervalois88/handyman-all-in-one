@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { RuleNote, SectionHead, Stamp } from "@/components/ui";
 import { TicketNumber } from "@/components/motion/primitives";
+import { SiteIcon } from "@/components/SiteIcons";
 import { ClosingCta } from "@/components/sections";
 import { getDict } from "@/lib/i18n";
 import { route, site, telHref, type Locale } from "@/lib/site";
@@ -124,9 +125,18 @@ export function ServicesPage({ locale, t }: { locale: Locale; t: ReturnType<type
             <ul className="mt-10 grid gap-px sm:grid-cols-2 lg:grid-cols-3">
               {t.services.licensedItems.map((li) => (
                 <li key={li.name} className="border-t-2 border-navy/25 pt-5 sm:pr-6">
-                  <Stamp tone="gold" flat>
-                    {li.who}
-                  </Stamp>
+                  {/*
+                   * The shield marks the whole block as "someone else does this,
+                   * and we arrange it" — the one idea this section exists to land.
+                   * It is a state marker, which is one of the four cases the icon
+                   * set is allowed to serve.
+                   */}
+                  <span className="mb-3 flex items-center gap-2.5 text-navy">
+                    <SiteIcon name="licensed" size={22} />
+                    <Stamp tone="gold" flat>
+                      {li.who}
+                    </Stamp>
+                  </span>
                   <h3 className="display mt-3 text-[1.3rem] leading-tight text-navy">{li.name}</h3>
                   <p className="mt-2 text-[0.95rem] leading-relaxed text-navy/75">{li.body}</p>
                 </li>

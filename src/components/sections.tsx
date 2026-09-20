@@ -28,7 +28,24 @@ export function Problem({ locale, t }: { locale: Locale; t: Dict }) {
             </RuleNote>
           </div>
 
-<ul className="grid gap-5 self-start">
+          {/*
+           * Three cards that have to read as ONE stack, so their symmetry is
+           * forced by the grid rather than left to their own content.
+           *
+           * Left alone the row heights drift: the English body wraps to three
+           * lines on the first card and two on the others, the Spanish differs
+           * again, and both change at every width. Editing the copy to even them
+           * out was the wrong instrument — it is unwinnable across two languages
+           * and five breakpoints, and it cost natural phrasing to buy a layout
+           * property. `auto-rows-fr` makes the symmetry structural instead:
+           * every row takes the tallest card's height at whatever width is
+           * rendering, so the cards stay level and the copy says what it should.
+           *
+           * Note there is no `self-start` here. That was the thing defeating the
+           * first attempt: on a grid item it stops the item stretching, so the
+           * rows fell back to their own content height and nothing changed.
+           */}
+          <ul className="grid auto-rows-fr gap-5">
             {t.problem.alt.map((a, i) => (
               <li key={a.label} className="sheet flex gap-5 p-5 sm:p-6">
                 <div className="shrink-0 border-r border-ink-soft/50 pr-4 text-center">
@@ -45,7 +62,7 @@ export function Problem({ locale, t }: { locale: Locale; t: Dict }) {
                 </div>
               </li>
             ))}
-</ul>
+          </ul>
         </div>
       </div>
     </section>

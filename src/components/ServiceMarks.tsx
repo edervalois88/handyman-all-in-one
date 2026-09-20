@@ -44,7 +44,15 @@ type IconProps = {
 
 const EASE = [0.16, 1, 0.3, 1] as const;
 
-function Svg({
+/**
+ * The shared drawing surface for every icon on the site.
+ *
+ * Exported so the utility set in SiteIcons.tsx draws on the same grid, at the
+ * same stroke weight, with the same joins — one family, not two. `strokeWidth` is
+ * overridable because a 2.4-unit stroke that reads correctly at 48px is too thin
+ * at 16-20px, which is where the utility glyphs live.
+ */
+export function Svg({
   size = 48,
   className = "",
   children,
