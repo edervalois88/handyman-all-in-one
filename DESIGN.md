@@ -118,7 +118,45 @@ everything renders in its final state.
 components from React Bits, vendored and attributed (MIT + Commons Clause, © 2026 David Haz).
 `SplitFlapText` renders the ticket's `STATUS` field as the office's mechanical board, cycling the
 states a job passes through — upstream's logic with this world's surface, because upstream's
-tiles are gradients, inset shadows and 3D, which §6 refuses. `CountUp` is vendored as-is.
+tiles are gradients, inset shadows and 3D, which §6 refuses. `CountUp` was vendored and then
+deleted as unused.
+
+### The service marks
+
+[`src/components/ServiceMarks.tsx`](src/components/ServiceMarks.tsx) holds six hand-drawn SVGs,
+one per service category. They are **not** pictograms: no rounded glyph in a soft tinted square.
+Each is a flat, single-weight line drawing of the *work* the service does, on the same technical
+register as the field rules and perforations elsewhere on the page — a door in its frame, a pipe
+run with a handwheel, a handsaw, a paint roller, a ladder against a house, a grab bar through its
+studs.
+
+Three rules govern them, and the first draft broke all three:
+
+1. **One dominant silhouette each, and no two alike.** The first draft drew abstract diagrams, and
+   at 40px four of the six were indistinguishable. Each now leads with a shape nobody could
+   confuse for another.
+2. **Fill the frame.** Each primary shape spans roughly 36 of the 48 units.
+3. **Survive 16px.** If the silhouette does not read at 16px it is an illustration, not an icon.
+
+Each mark carries exactly **one moving part**, and that part performs the action the service
+performs: the door swings, the handwheel turns, the saw runs, the roller rolls, the hand climbs,
+the bolt drives home. The motion is the meaning, so it is an **interaction, not decoration** — the
+mark animates on hover or keyboard focus and is still otherwise. That is what keeps it outside the
+page's rule of three authored *moments*: an interaction is not a fourth entrance, and a visitor
+who never points at a mark is never distracted by one. Under `prefers-reduced-motion` nothing
+moves, which took an explicit gate — Motion does not honour the preference on its own.
+
+### Saying what the company does
+
+Above the fold the page leans on the tagline, which is evocative rather than descriptive. A
+first-time visitor skimming has to be able to answer "what is this and what can it do for me", so
+[`WhatWeDo.tsx`](src/components/WhatWeDo.tsx) sits directly under the hero and does two things:
+one plain sentence with no brand language in it, and a six-entry **legend** of the categories.
+
+The legend is deliberately not six equal icon cards — the category default, and one the craft
+floor refuses. It is a single ruled index: six entries on one line, hairline rules doing the
+separating, and pointing at or tabbing to an entry names what that category actually covers. That
+reveal is the information a visitor is looking for, and the reason the marks exist at all.
 
 **Browser surfaces.** `::selection` is red on cream, `:focus-visible` is a 3px red ring, `<html>`
 carries `scroll-behavior: smooth` (reverted under reduced motion), tabular numerals ship on every

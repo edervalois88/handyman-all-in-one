@@ -29,6 +29,21 @@ export const en = {
   /** Brand essence, straight from the brand book. */
   tagline: "Your home, handled.",
 
+  /**
+   * The plain answer to "what does this company do", in one sentence and with no
+   * brand language in it. Everything above the fold leans on the tagline, which
+   * is evocative rather than descriptive — this is the line that has to be
+   * understood by someone who has never heard of the company and is skimming.
+   */
+  whatWeDo: {
+    label: "What we do",
+    line:
+      "We repair, maintain and improve homes — the whole list, from a sticking door to repainting a floor. One company, one quote, one crew.",
+    /** The fastest possible read of the offer, as a legend. */
+    glanceTitle: "Six things off your list",
+    glanceHint: "Point at one to see what it covers.",
+  },
+
   nav: {
     home: "Home",
     services: "Services",
@@ -161,7 +176,7 @@ export const en = {
   services: {
     title: "What we take\ncare of.",
     body:
-      "Everyday repairs, the projects that have been sitting on your list, and the seasonal work that keeps a house ahead of itself. Grouped by what you actually need done — not by which trade we have to call.",
+      "Six categories, and between them they cover the whole list — the small repairs, the projects you have been putting off, and the seasonal work that keeps a house ahead of itself. Grouped by what you need done, not by which trade we have to call.",
     cta: "Request a quote",
     boundaryTitle: "Where the line is",
     boundaryBody:
@@ -170,6 +185,9 @@ export const en = {
       {
         id: "repairs",
         name: "Everyday repairs",
+        short: "Everyday repairs",
+        covers:
+          "The running list of small jobs — doors, drywall, caulking, shelving, screens — done in one visit instead of six.",
         blurb:
           "The running list. Small jobs that never quite justify a specialist on their own, done in one visit.",
         inHouse: true,
@@ -188,6 +206,9 @@ export const en = {
       {
         id: "plumbing-electrical",
         name: "Plumbing & electrical (handyman scope)",
+        short: "Plumbing & electrical",
+        covers:
+          "Faucets, toilets, disposals, light fixtures, switches and outlets — the work a handyman may legally do. Anything past that line goes to a licensed partner we bring ourselves.",
         blurb:
           "The work a handyman can legally do, done properly. Anything past that line goes to a licensed partner — we tell you which, and we still schedule it.",
         inHouse: true,
@@ -209,6 +230,9 @@ export const en = {
       {
         id: "carpentry",
         name: "Carpentry & doors",
+        short: "Carpentry & doors",
+        covers:
+          "Doors hung and re-hung, trim, baseboard, closet systems, deck boards — measured, fitted and finished on site.",
         blurb:
           "Doors, trim and the woodwork that makes a house feel cared for. Measured, fitted, and finished on site.",
         inHouse: true,
@@ -227,6 +251,9 @@ export const en = {
       {
         id: "paint",
         name: "Paint & wall finish",
+        short: "Paint & wall finish",
+        covers:
+          "Interior and exterior painting, drywall repair before it, and the prep that decides whether the job lasts.",
         blurb:
           "Interior and exterior painting with the prep done first — because prep is what makes a paint job last.",
         inHouse: true,
@@ -245,6 +272,9 @@ export const en = {
       {
         id: "exterior",
         name: "Exterior & seasonal",
+        short: "Exterior & seasonal",
+        covers:
+          "Gutters, pressure washing, fences, storm prep and winterizing — booked in blocks while the weather holds.",
         blurb:
           "The work that keeps water out and a house ahead of the season. Booked in blocks while the weather holds.",
         inHouse: true,
@@ -266,6 +296,9 @@ export const en = {
       {
         id: "safety",
         name: "Safety & accessibility",
+        short: "Safety & accessibility",
+        covers:
+          "Grab bars anchored into studs, handrails, non-slip treads and detector swaps — the small installations that make a house safer to live in.",
         blurb:
           "Small installations that make a house safer for the people living in it. Often the reason someone calls us.",
         inHouse: true,

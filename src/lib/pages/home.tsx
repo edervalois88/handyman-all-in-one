@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Hero, PromiseBand } from "@/components/Hero";
+import { WhatWeDo } from "@/components/WhatWeDo";
 import {
   AreasTeaser,
   ClosingCta,
@@ -39,6 +40,12 @@ export function HomePage({ locale }: { locale: Locale }) {
   return (
     <>
       <Hero locale={locale} t={t} />
+      {/*
+       * The order past the hero answers the two questions a first-time visitor
+       * actually has, in the order they have them: "what is this company" comes
+       * before "why should I believe it".
+       */}
+      <WhatWeDo locale={locale} t={t} />
       <PromiseBand t={t} />
       <Problem locale={locale} t={t} />
       <Solution locale={locale} t={t} />

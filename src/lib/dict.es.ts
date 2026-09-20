@@ -12,6 +12,21 @@ export const es: Dict = {
 
   tagline: "Su casa, resuelta.",
 
+  /**
+   * La respuesta llana a "a qué se dedica esta empresa", en una frase y sin
+   * lenguaje de marca. Todo lo de arriba se apoya en el eslogan, que es evocador
+   * más que descriptivo: esta es la línea que tiene que entender alguien que
+   * nunca oyó hablar de la empresa y solo está pasando la vista.
+   */
+  whatWeDo: {
+    label: "A qué nos dedicamos",
+    line:
+      "Reparamos, mantenemos y mejoramos casas — la lista completa, desde una puerta que no cierra hasta repintar un piso. Una empresa, una cotización, un equipo.",
+    /** La lectura más rápida posible de la oferta, como leyenda. */
+    glanceTitle: "Seis cosas menos en su lista",
+    glanceHint: "Señale una para ver qué cubre.",
+  },
+
   nav: {
     home: "Inicio",
     services: "Servicios",
@@ -147,7 +162,7 @@ export const es: Dict = {
   services: {
     title: "De qué nos\nencargamos.",
     body:
-      "Reparaciones del día a día, los proyectos que llevan meses en su lista y el trabajo de temporada que mantiene una casa adelantada. Agrupado por lo que usted necesita resolver, no por el oficio que tengamos que llamar.",
+      "Seis categorías, y entre todas cubren la lista completa: las reparaciones pequeñas, los proyectos que lleva meses posponiendo y el trabajo de temporada que mantiene una casa adelantada. Agrupado por lo que usted necesita resolver, no por el oficio que tengamos que llamar.",
     cta: "Solicitar cotización",
     boundaryTitle: "Dónde está la línea",
     boundaryBody:
@@ -156,6 +171,9 @@ export const es: Dict = {
       {
         id: "repairs",
         name: "Reparaciones del día a día",
+        short: "Reparaciones",
+        covers:
+          "La lista que va creciendo: puertas, tablaroca, sellado, repisas, mosquiteros — resuelta en una visita en vez de en seis.",
         blurb:
           "La lista que va creciendo. Trabajos pequeños que por sí solos no justifican un especialista, resueltos en una visita.",
         inHouse: true,
@@ -174,6 +192,9 @@ export const es: Dict = {
       {
         id: "plumbing-electrical",
         name: "Plomería y electricidad (alcance de handyman)",
+        short: "Plomería y luz",
+        covers:
+          "Llaves, inodoros, trituradores, lámparas, apagadores y contactos — lo que un handyman puede hacer legalmente. Lo que pasa de esa línea va a un socio licenciado que traemos nosotros.",
         blurb:
           "Lo que un handyman puede hacer legalmente, bien hecho. Lo que pasa de esa línea va a un socio licenciado: se lo decimos cuál, y nosotros lo agendamos.",
         inHouse: true,
@@ -195,6 +216,9 @@ export const es: Dict = {
       {
         id: "carpentry",
         name: "Carpintería y puertas",
+        short: "Carpintería",
+        covers:
+          "Puertas colgadas y recolocadas, molduras, zócalos, clósets, tablones de terraza — medido, ajustado y terminado en sitio.",
         blurb:
           "Puertas, molduras y la madera que hace que una casa se sienta cuidada. Medido, ajustado y terminado en sitio.",
         inHouse: true,
@@ -215,6 +239,9 @@ export const es: Dict = {
       {
         id: "paint",
         name: "Pintura y acabado de muros",
+        short: "Pintura",
+        covers:
+          "Pintura interior y exterior, resane de tablaroca antes de pintar, y la preparación que decide si el trabajo dura.",
         blurb:
           "Pintura interior y exterior con la preparación hecha primero, porque la preparación es lo que hace que un trabajo dure.",
         inHouse: true,
@@ -233,6 +260,9 @@ export const es: Dict = {
       {
         id: "exterior",
         name: "Exterior y temporada",
+        short: "Exterior",
+        covers:
+          "Canaletas, lavado a presión, cercas, preparación de tormentas e invernalización — agendado en bloques mientras el clima aguanta.",
         blurb:
           "El trabajo que mantiene el agua afuera y la casa adelantada a la temporada. Se agenda en bloques mientras el clima aguanta.",
         inHouse: true,
@@ -254,6 +284,9 @@ export const es: Dict = {
       {
         id: "safety",
         name: "Seguridad y accesibilidad",
+        short: "Seguridad",
+        covers:
+          "Barras de apoyo ancladas a postes, pasamanos, bandas antiderrapantes y cambio de detectores — instalaciones pequeñas que hacen una casa más segura para vivir.",
         blurb:
           "Instalaciones pequeñas que hacen una casa más segura para quien vive en ella. Muchas veces es la razón por la que alguien nos llama.",
         inHouse: true,

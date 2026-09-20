@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { RuleNote, SectionHead, Stamp } from "./ui";
+import { ServiceMark } from "./ServiceMarks";
 import { route, site, telHref, type Locale } from "@/lib/site";
 import type { Dict } from "@/lib/i18n";
 
@@ -112,13 +113,30 @@ export function ServiceGrid({ locale, t }: { locale: Locale; t: Dict }) {
           {t.services.categories.map((c) => (
             <li key={c.id} className="sheet-stack">
               <div className="sheet stub-b flex h-full flex-col p-6">
-                <div className="flex items-start justify-between gap-3">
-                  <h3 className="display text-[1.4rem] leading-tight text-navy">{c.name}</h3>
+                {/*
+                 * The mark sits on the same baseline row as the heading rather
+                 * than centred above it. A centred glyph over a centred heading
+                 * over centred text is the icon-card template this build refuses;
+                 * a mark set beside its heading reads as a field on a form.
+                 *
+                 * It is static here. The page's moving parts are the ticket, the
+                 * promise tokens and the status board; a third of a page of
+                 * animated marks would be noise, so the legend above carries the
+                 * interaction and this grid stays still.
+                 */}
+                <div className="flex items-start gap-3.5">
+                  <span className="mt-0.5 shrink-0 text-navy">
+                    <ServiceMark id={c.id} size={32} />
+                  </span>
+                  <h3 className="display text-[1.3rem] leading-tight text-navy">{c.short}</h3>
                 </div>
-                <Stamp tone={c.inHouse ? "navy" : "sage"} flat className="mt-3 self-start">
+
+                <Stamp tone={c.inHouse ? "navy" : "sage"} flat className="mt-3.5 self-start">
                   {c.inHouse ? t.common.inHouse : t.common.partner}
                 </Stamp>
-                <p className="mt-4 text-[0.96rem] leading-relaxed text-navy/75">{c.blurb}</p>
+
+                <p className="mt-4 text-[0.96rem] leading-relaxed text-navy/75">{c.covers}</p>
+
                 <ul className="mt-5 space-y-2 border-t border-dashed border-rule-strong pt-5">
                   {c.items.slice(0, 4).map((item) => (
                     <li key={item} className="flex gap-2.5 text-[0.93rem] leading-snug text-navy/85">

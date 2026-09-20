@@ -37,7 +37,7 @@ export function ServicesPage({ locale, t }: { locale: Locale; t: ReturnType<type
               className="label-lg text-[0.92rem] text-navy hover:text-red"
             >
               <span className="tnum text-ink-soft">{String(i + 1).padStart(2, "0")}</span>{" "}
-              {c.name}
+              {c.short}
             </a>
           ))}
         </div>
@@ -61,7 +61,7 @@ export function ServicesPage({ locale, t }: { locale: Locale; t: ReturnType<type
                     </Stamp>
                   </div>
                   <h2 className="display mt-4 text-[clamp(1.9rem,4.4vw,2.9rem)] text-navy">
-                    {c.name}
+                    {c.short}
                   </h2>
                   <p className="mt-4 max-w-[46ch] text-[1rem] leading-relaxed text-navy/75">
                     {c.blurb}
