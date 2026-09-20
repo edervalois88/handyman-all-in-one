@@ -54,9 +54,27 @@ export function Problem({ locale, t }: { locale: Locale; t: Dict }) {
                   </span>
                   <span className="label mt-2 block text-ink-soft">{a.label}</span>
                 </div>
+                {/*
+                 * Stacked from the top, with the BODY given a minimum height that
+                 * matches the longest of the three at every breakpoint.
+                 *
+                 * The arithmetic, since it is not guesswork: `auto-rows-fr` sizes
+                 * every row to the tallest card. At 390px one body breaks to six
+                 * lines and the others to four and five, so the two shorter cards
+                 * were stretched and left 51px of blank space under their text —
+                 * against 1px on the tall one. Giving all three bodies the same
+                 * minimum means the rows agree by construction and the slack
+                 * under the text is identical in every card.
+                 *
+                 * 6lh / 5lh / 4lh, measured rather than guessed. The 5lh band
+                 * runs all the way to `lg` because at 1024 the first card's column
+                 * is at its narrowest and its body needs five lines, while
+                 * Spanish needs four at 1440 where the columns are widest. The
+                 * bands follow the line counts, not the breakpoint names.
+                 */}
                 <div className="min-w-0">
                   <h3 className="display text-[1.35rem] text-navy">{a.title}</h3>
-                  <p className="mt-2 max-w-[46ch] text-[0.97rem] leading-relaxed text-navy/75">
+                  <p className="mt-2 min-h-[6lh] max-w-[46ch] text-[0.97rem] leading-relaxed text-navy/75 sm:min-h-[5lh] lg:min-h-[4lh]">
                     {a.body}
                   </p>
                 </div>

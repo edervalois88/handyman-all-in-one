@@ -128,13 +128,13 @@ export const en = {
         label: "Waiting",
         title: "Thursday becomes never",
         body:
-          "A window gets promised, then moves, then quietly disappears. Nobody calls to say so.",
+          "A window gets promised, then moves, then quietly disappears. Nobody calls to say it moved.",
       },
       {
         label: "Managing",
         title: "You become the general contractor",
         body:
-          "Chasing three people, comparing three prices, and holding the whole list together yourself.",
+          "Chasing three people, comparing three prices, and holding the whole list together by yourself.",
       },
     ],
     close:
