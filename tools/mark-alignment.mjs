@@ -26,7 +26,7 @@ for (const path of ["/concise", "/es/concise"]) {
   await page.waitForTimeout(300);
 
   const m = await page.evaluate(() => {
-    const lis = [...document.querySelectorAll("main > section:nth-of-type(2) li")];
+    const lis = [...document.querySelectorAll('main > section[data-section="services"] li')];
     return lis.map((li) => {
       /*
        * Each tile holds TWO svgs: the 10px tick inside the selection box and the

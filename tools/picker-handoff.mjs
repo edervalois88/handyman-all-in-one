@@ -35,9 +35,9 @@ for (const [concise, contact] of [
   });
   const page = await ctx.newPage();
 
-  const tiles = () => page.locator("main > section:nth-of-type(2) li button");
-  const cta = () => page.locator("main > section:nth-of-type(2) a.btn-primary");
-  const count = () => page.locator('main > section:nth-of-type(2) [aria-live="polite"]');
+  const tiles = () => page.locator('main > section[data-section="services"] li button');
+  const cta = () => page.locator('main > section[data-section="services"] a.btn-primary');
+  const count = () => page.locator('main > section[data-section="services"] [aria-live="polite"]');
   const pressed = () =>
     tiles().evaluateAll((els) => els.map((e) => e.getAttribute("aria-pressed")));
 

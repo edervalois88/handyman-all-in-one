@@ -22,7 +22,7 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { ServiceMark } from "./ServiceMarks";
-import { Stamp, TicketField } from "./ui";
+import { Stamp } from "./ui";
 import { StatusBoard } from "./StatusBoard";
 import { useMotionOk } from "./motion/primitives";
 import { route, site, telHref, type Locale } from "@/lib/site";
@@ -51,7 +51,7 @@ export function ServiceTiles({
   onToggle: (id: string) => void;
 }) {
   return (
-    <section className="border-b-2 border-navy bg-cream py-10 sm:py-12">
+    <section data-section="services" className="border-b-2 border-navy bg-cream py-10 sm:py-12">
       <div className="shell">
         <div className="flex flex-wrap items-baseline justify-between gap-x-8 gap-y-2">
           <h2 className="display text-[clamp(1.5rem,3.2vw,2.2rem)] text-navy">
@@ -178,7 +178,7 @@ export function ServiceTiles({
 
 export function ProblemLine({ t }: { t: Dict }) {
   return (
-    <section className="border-b border-rule bg-cream-warm/60 py-10 sm:py-12">
+    <section data-section="problem" className="border-b border-rule bg-cream-warm/60 py-10 sm:py-12">
       <div className="shell grid gap-6 lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:items-center lg:gap-14">
         <p className="display text-balance text-[clamp(1.25rem,2.6vw,1.9rem)] leading-snug text-navy">
           {t.concise.problem}
@@ -209,7 +209,7 @@ export function ProblemLine({ t }: { t: Dict }) {
 
 export function StepsRow({ locale, t }: { locale: Locale; t: Dict }) {
   return (
-    <section className="bg-navy py-12 text-cream sm:py-14">
+    <section data-section="steps" className="bg-navy py-12 text-cream sm:py-14">
       <div className="shell">
         <div className="flex flex-wrap items-baseline justify-between gap-x-8 gap-y-2">
           <h2 className="display text-[clamp(1.5rem,3.2vw,2.2rem)] text-cream">
@@ -248,7 +248,7 @@ export function StepsRow({ locale, t }: { locale: Locale; t: Dict }) {
 
 export function PromiseStamps({ t }: { t: Dict }) {
   return (
-    <section className="border-b-2 border-navy bg-cream py-10 sm:py-12">
+    <section data-section="promise" className="border-b-2 border-navy bg-cream py-10 sm:py-12">
       <div className="shell">
         <h2 className="display text-[clamp(1.4rem,3vw,2rem)] text-navy">
           {t.concise.promise}
@@ -277,7 +277,7 @@ export function PromiseStamps({ t }: { t: Dict }) {
 
 export function FaqShort({ locale, t }: { locale: Locale; t: Dict }) {
   return (
-    <section className="ground py-10 sm:py-12">
+    <section data-section="faq" className="ground py-10 sm:py-12">
       <div className="shell grid gap-8 lg:grid-cols-[minmax(0,0.7fr)_minmax(0,1.3fr)] lg:gap-14">
         <div>
           <h2 className="display text-[clamp(1.4rem,3vw,2rem)] text-navy">
@@ -329,7 +329,7 @@ export function FaqShort({ locale, t }: { locale: Locale; t: Dict }) {
 
 export function AreasAndClose({ locale, t }: { locale: Locale; t: Dict }) {
   return (
-    <section className="border-t-2 border-navy bg-cream py-10 sm:py-12">
+    <section data-section="areas" className="border-t-2 border-navy bg-cream py-10 sm:py-12">
       <div className="shell">
         <div className="flex flex-wrap items-baseline justify-between gap-x-8 gap-y-2">
           <h2 className="display text-[clamp(1.4rem,3vw,2rem)] text-navy">
@@ -408,6 +408,7 @@ export function ConciseHome({ locale, t }: { locale: Locale; t: Dict }) {
   return (
     <>
       <ConciseHero locale={locale} t={t} />
+      <WorkOrderStrip locale={locale} t={t} />
       <ServiceTiles locale={locale} t={t} selected={selected} onToggle={onToggle} />
       <PromiseStamps t={t} />
       <ProblemLine t={t} />
@@ -419,37 +420,31 @@ export function ConciseHome({ locale, t }: { locale: Locale; t: Dict }) {
 }
 
 /* ─────────────────────────────────────────────────────────────────────────────
-   THE PLATE — the client's own footage, framed as a work-order plate.
+   THE FOOTAGE, AND THE TWO THINGS ABOUT IT THAT ARE NOT OBVIOUS.
 
-   WHAT IT IS FOR. Everything else in this hero is drawn: the ticket, the status
-   board, the stamps. This is the one piece of evidence on the page that the
+   One component, used twice: the hero uses it as its ground, and the services
+   band uses it as a framed plate. It exists as a single component because the
+   loading and motion rules below are the same at both call sites and must not
+   drift apart.
+
+   WHAT IT IS FOR. Everything else on this page is drawn — the ticket, the status
+   board, the stamps, the six service marks. This is the only evidence that the
    company exists outside the browser, and the truck in it carries the real
-   livery — the walker mark, the wordmark, the tagline, the four service lines.
-   It answers the question a drawing cannot.
-
-   WHY IT IS PRESENTED, NOT EMBEDDED. The world is "The Work Order": cream stock,
-   navy ink, hairline rules, no gradients. A full-bleed autoplaying video behind
-   the hero would be the one thing on the site from a different design language —
-   and worse, it would put 5.8 MB of decoded video under a text overlay, which
-   costs legibility on exactly the screens least able to afford it. So the footage
-   is treated as a plate: a ruled frame, a caption in the label register, and the
-   accepted depth cue from this world rather than a soft shadow.
-
-   MOTION, AND WHY THIS ONE IS ALLOWED. The site's rule is that an entrance must
-   never be a fourth moving thing. This is not an entrance — it is content that
-   happens to move, and it is the only visual asset on the page that carries the
-   real brand. It is muted, looped, has no controls, and is NOT rendered at all
-   under `prefers-reduced-motion`: those readers get the poster frame, which is
-   the same composition held still.
+   livery: the walker mark, the wordmark, the tagline, the four service lines.
    ───────────────────────────────────────────────────────────────────────────── */
 
-export function HeroPlate({ t }: { t: Dict }) {
+function HeroFootage({
+  className = "",
+  objectPosition = "object-center",
+}: {
+  className?: string;
+  objectPosition?: string;
+}) {
   const motionOk = useMotionOk();
   const ref = useRef<HTMLVideoElement>(null);
 
   /*
-   * WHY THE SOURCE IS ATTACHED BY HAND, AND WHY `preload="metadata"` WAS NOT
-   * ENOUGH.
+   * DEFERRED LOADING, AND WHY `preload="metadata"` WAS NOT ENOUGH.
    *
    * The clip is 5.78 MB. `preload="metadata"` is the obvious way to keep that off
    * the critical path and it does nothing here: Next serves the file from
@@ -457,17 +452,11 @@ export function HeroPlate({ t }: { t: Dict }) {
    * measured, not assumed. With the video on it the page transferred 6.03 MB, of
    * which 96% was the video, against a page whose entire text is 89 words.
    *
-   * So the element ships with no source and the source is attached when the plate
-   * comes within 200px of the viewport. The source is set through the ref rather
-   * than React state deliberately: `setState` in an effect body is a lint error in
-   * this project and would be a real one, re-rendering the whole hero to change an
-   * attribute on one node.
-   *
-   * HONEST ABOUT WHAT THIS DOES NOT BUY: at every width the plate is inside the
-   * first screen, so in practice the source attaches on load anyway and the
-   * deferral changes nothing today. It is here because the placement may move —
-   * and because it makes the cost explicit in the one place a future change would
-   * have to notice it.
+   * So the element ships with no source and the source is attached when the
+   * footage comes within 200px of the viewport. The source is set through the ref
+   * rather than React state deliberately: `setState` in an effect body is a lint
+   * error in this project and would be a real one, re-rendering the section to
+   * change an attribute on one node.
    */
   useEffect(() => {
     const el = ref.current;
@@ -502,7 +491,7 @@ export function HeroPlate({ t }: { t: Dict }) {
    * hydration mismatch. Measured with the prop in place, the video still played.
    *
    * Neither does `if (!motionOk) return`. Skipping the `play()` call does not stop
-   * anything, because attaching the source to an element carrying `autoPlay` is
+   * anything, because attaching a source to an element carrying `autoPlay` is
    * itself what starts playback — you cannot decline to start something you never
    * started. Measured: still playing under reduced motion.
    *
@@ -535,31 +524,40 @@ export function HeroPlate({ t }: { t: Dict }) {
   }, [motionOk]);
 
   return (
+    <video
+      ref={ref}
+      className={`${className} ${objectPosition}`.trim()}
+      poster="/video/hero-poster.jpg"
+      muted
+      loop
+      playsInline
+      autoPlay
+      preload="none"
+      /*
+       * Decorative in the accessibility tree on purpose. It has no audio track, so
+       * there is nothing to caption, and what it shows is said in words beside it.
+       */
+      aria-hidden="true"
+    />
+  );
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   THE PLATE — the same footage, framed as a work-order plate.
+
+   Used where the hero is not. A ruled 16:9 frame on the company's navy, a caption
+   in the label register, and the offset hard-edged lift this world uses instead of
+   a soft shadow. Background video is the right treatment for a hero; a framed
+   plate is the right one anywhere the footage is supporting evidence rather than
+   the ground.
+   ───────────────────────────────────────────────────────────────────────────── */
+
+export function HeroPlate({ t }: { t: Dict }) {
+  return (
     <figure className="relative">
       <div className="border-2 border-navy/20 bg-navy">
-        {/*
-         * The frame is a plate, so its proportions are declared rather than
-         * inherited: 16/9 holds whatever the source happens to be, and
-         * object-cover keeps the truck centred if the source changes.
-         */}
         <div className="relative aspect-[16/9] overflow-hidden">
-          <video
-            ref={ref}
-            className="absolute inset-0 h-full w-full object-cover object-center"
-            poster="/video/hero-poster.jpg"
-            muted
-            loop
-            playsInline
-            autoPlay
-            preload="none"
-            /*
-             * Decorative in the accessibility tree on purpose. It has no audio
-             * track, so there is nothing to caption, and the caption below says
-             * in words what the footage shows — which is what a screen reader
-             * should get instead of "video".
-             */
-            aria-hidden="true"
-          />
+          <HeroFootage className="absolute inset-0 h-full w-full object-cover" />
           {/*
            * THE STATUS TAG, AND WHAT IT IS ACTUALLY FOR.
            *
@@ -572,19 +570,15 @@ export function HeroPlate({ t }: { t: Dict }) {
            * the truck. All four were tried and measured.
            *
            * So it is covered, with a piece of the brand rather than a redaction:
-           * navy ground, cream hairline, and the red stamp the ticket above
-           * already uses for state. It reads as a work-order tag sitting on the
-           * footage, which is what this world does with anything that needs
-           * marking.
+           * navy ground, cream hairline, and the red stamp the ticket uses for
+           * state. It reads as a work-order tag sitting on the footage, which is
+           * what this world does with anything that needs marking.
            *
            * SIZED TO COVER, NOT TO LOOK RIGHT. `min-h` and `min-w` in `em`, where
            * the em is the clamp-controlled type size, so the tag grows with the
-           * plate and keeps the same proportions at every width. The mark needs
-           * roughly its last 12% of width and height covered at 390px, and its
-           * last 12% of width and 8% of height at 1440px; 8em x 3.2em clears both
-           * with margin, and stays a small corner tag rather than a banner. If the
-           * footage is ever replaced with a clean export, this can shrink to a
-           * plain label — or go.
+           * plate. The mark needs roughly its last 12% of width and height covered
+           * at 390px, and its last 12% of width and 8% of height at 1440px; 8em x
+           * 3.2em clears both, and stays a corner tag rather than a banner.
            */}
           <span className="absolute bottom-0 right-0 grid min-h-[3.2em] min-w-[8em] place-items-center border-l-2 border-t-2 border-cream/25 bg-navy px-[0.75em] py-[0.5em] text-[clamp(0.62rem,1.15vw,0.8rem)]">
             <span className="label !text-[0.85em] leading-none text-cream/90">
@@ -595,27 +589,16 @@ export function HeroPlate({ t }: { t: Dict }) {
 
         {/*
          * Two lines below `lg`, one line above it. The first version wrapped at
-         * every width and the second caption ran under the screenshot's cut, so
-         * a phone showed "ON THE WAY TO" and nothing else — the note simply
-         * disappeared. `flex-1` gives the long caption the room and the browser
-         * breaks between the two labels rather than inside one.
+         * every width and the second caption ran under the cut, so a phone showed
+         * "ON THE WAY TO" and the rest of the note vanished. `flex-1` gives the
+         * long caption room and the browser breaks between the two labels rather
+         * than inside one.
          */}
         <figcaption className="flex flex-wrap items-center justify-between gap-x-4 gap-y-1 border-t-2 border-cream/20 px-4 py-2.5 sm:px-5">
           <span className="label flex-1 text-cream/85">{t.concise.plateCaption}</span>
           <span className="label whitespace-nowrap text-cream/55">{t.concise.plateNote}</span>
         </figcaption>
       </div>
-
-      {/*
-       * The plate sits on the panel, so it takes the world's depth cue — the
-       * same hard-edged, offset lift the ticket uses, not a soft drop shadow,
-       * which this build does not have anywhere. Hidden below `lg` because at
-       * phone widths it reads as a printing mistake rather than as paper.
-       */}
-      <div
-        aria-hidden="true"
-        className="absolute -bottom-1.5 -right-1.5 -z-10 hidden h-full w-full border-2 border-cream/20 lg:block"
-      />
     </figure>
   );
 }
@@ -630,33 +613,119 @@ export function HeroPlate({ t }: { t: Dict }) {
    ───────────────────────────────────────────────────────────────────────────── */
 
 function ConciseHero({ locale, t }: { locale: Locale; t: Dict }) {
-  const statusIndex = t.hero.ticketFields.findIndex(
-    ([, value]) => value === t.hero.ticketStatus,
-  );
-
   return (
-    <section className="relative overflow-hidden bg-navy">
-      <div className="shell relative pb-12 pt-12 sm:pb-16 sm:pt-16">
-        <div className="grid items-center gap-10 lg:grid-cols-[minmax(0,1.02fr)_minmax(0,0.98fr)] lg:gap-14">
-          <div>
+    <section data-section="hero" className="relative min-h-[92svh] overflow-hidden bg-navy lg:min-h-[74svh]">
+      {/*
+       * THE FOOTAGE IS THE GROUND NOW, AND THE TEXT SITS ON ITS OWN SURFACE.
+       *
+       * The first version framed the video as a plate beside the copy. This makes
+       * it the whole hero. The thing that decides the layout is not taste, it is
+       * the footage: it is a sunlit afternoon, the truck is near-white, and the
+       * brightest part of the frame is behind the top-right of the headline. Cream
+       * or navy type straight onto it fails contrast in exactly the region the
+       * first word occupies, and the fix cannot be a scrim — this world has no
+       * gradients anywhere, so a soft dark wash would be the one element here
+       * built from a different vocabulary.
+       *
+       * So the text gets an OPAQUE navy panel with a hard edge, and the video is
+       * composed around it. That is also what the world already does: the site is
+       * navy panels on cream stock. The panel simply has footage behind the part
+       * of it that is not panel.
+       *
+       * The truck is the reason the footage is here, so the frame is positioned to
+       * keep it: the panel covers the left, and `object-position` pushes the frame
+       * left-of-centre at narrow widths so the house, not the truck, is what gets
+       * covered.
+       */}
+      {/*
+       * THE CHECKER WAS THE PROBLEM, SO THE CHECKER IS GONE.
+       *
+       * The footage stopped 24px short of the bottom of the hero and nothing in the
+       * markup looked wrong. The hero is a section holding this footage box PLUS a
+       * `checker` strip below it for the tear edge, so the section's height was
+       * "the box" + 48px, while every child inside the box is positioned against
+       * the BOX — the video filled its parent faithfully and still left a stripe of
+       * bare navy above the checker.
+       *
+       * Chasing it with `h-full` did nothing, correctly: a percentage height
+       * resolves against the parent's own height, and that height is
+       * content-driven here. Making the section `min-h` as well only moved the
+       * discrepancy around.
+       *
+       * So the box IS the hero and the checker is no longer a sibling below it. The
+       * tear edge is drawn by the section's own bottom border instead of by an
+       * element that steals 48px from the footage. Same look, one less thing that
+       * can disagree about how tall the hero is.
+       */}
+      <div className="relative h-full min-h-[92svh] w-full overflow-hidden lg:min-h-[74svh]">
+        {/*
+         * THE FOOTAGE IS THE GROUND, AND THE TEXT SITS ON THE PART OF IT THAT IS
+         * NOT THE TRUCK.
+         *
+         * The first version laid a centred, full-width video behind the panel,
+         * which put the panel straight across the cab and left the frame showing a
+         * truck with no front. Narrowing the panel did not fix it, because the
+         * problem was not the panel's width — it was that the panel and the
+         * subject were competing for the same pixels.
+         *
+         * So the hero is two tracks. The panel owns a share of the width; the
+         * footage fills only what is left and is anchored RIGHT, so what gets
+         * cropped is the house and the empty driveway — which is exactly what the
+         * panel is sitting on. What stays visible is the truck, whole, which is the
+         * only reason the footage is here at all.
+         *
+         * `object-position` is a single constant shared by the video and by the
+         * overlays below, and that is load-bearing rather than tidy: the watermark
+         * the status tag covers is positioned relative to the FOOTAGE, so anything
+         * laid over it has to use the same two numbers or it drifts off the mark as
+         * the viewport changes.
+         */}
+        <div className="absolute inset-0 lg:right-[46%]">
+          <HeroFootage
+            className="absolute inset-0 h-full w-full object-cover"
+            /*
+             * Two framings, because the two layouts crop on different axes. Below
+             * `lg` the footage is a landscape strip read through a vertical slot, so
+             * the interesting middle — the cab, the driver, the walker mark on the
+             * door — has to sit in the centre of that slot or the band is a wall of
+             * white box. Above `lg` the slot is wide and the panel has taken the
+             * left, so the frame is pushed right and the whole truck reads.
+             */
+            objectPosition="object-[60%_center] lg:object-[74%_center]"
+          />
+        </div>
+
+        {/*
+         * The text panel. Bottom-anchored on a phone and the last 46% of the width
+         * from `lg`, so it is the FOOTAGE that shrinks around the copy rather than
+         * the copy that sits on top of the picture.
+         *
+         * The vertical rhythm is tighter below `lg` than above it on purpose. On a
+         * phone the panel does not sit beside the footage, it covers it, so every
+         * pixel of panel is a pixel of truck the reader never sees — the first
+         * version left 249px of a 715px hero showing picture, which is a sliver.
+         * The copy is identical; only the leading around it is tighter.
+         */}
+        <div className="absolute inset-x-0 bottom-0 lg:inset-y-0 lg:left-auto lg:right-0 lg:flex lg:w-[46%] lg:items-center">
+          <div className="w-full bg-navy px-5 pb-6 pt-6 sm:px-8 sm:pb-8 sm:pt-7 lg:px-10 lg:py-14 xl:px-14 xl:py-16">
             <Stamp tone="red" flat>
               {t.hero.ticketNo} · {t.common.inHouse}
             </Stamp>
 
-            <h1 className="display mt-6 whitespace-pre-line text-[clamp(2.55rem,8.6vw,5.6rem)] text-cream">
+            <h1 className="display mt-4 whitespace-pre-line text-[clamp(2.05rem,6.2vw,3.8rem)] text-cream sm:mt-5">
               {t.hero.title}
             </h1>
 
-            <p className="label-lg mt-5 text-[1.17rem] font-bold text-red sm:text-[1.4rem]">
+            <p className="label-lg mt-3 text-[1.02rem] font-bold text-red sm:mt-4 sm:text-[1.22rem]">
               {t.hero.sub}
             </p>
 
             {/* one line, where the long home spent a paragraph */}
-            <p className="mt-6 max-w-[42ch] text-[1.02rem] leading-relaxed text-cream/85">
+            <p className="mt-4 max-w-[40ch] text-[0.98rem] leading-relaxed text-cream/85 sm:mt-5 sm:text-[1rem]">
               {t.concise.heroLine}
             </p>
 
-            <div className="mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
+            <div className="mt-5 flex flex-col gap-3 sm:mt-7 sm:flex-row sm:items-center">
               <Link href={route("contact", locale)} className="btn btn-primary">
                 {t.hero.ctaPrimary}
               </Link>
@@ -667,65 +736,110 @@ function ConciseHero({ locale, t }: { locale: Locale; t: Dict }) {
                 <span className="tnum">{site.contact.phone}</span>
               </a>
             </div>
-          </div>
 
-          <div className="lg:-mb-8">
             {/*
-             * The plate sits above the ticket rather than replacing it, and the
-             * order is the argument: the video answers "are these people real" in
-             * one glance, the ticket answers "what happens if I call" in one
-             * glance. Proof first, then process.
+             * The caption lives HERE, inside the panel, and not on the footage.
+             *
+             * It was on the footage for the reason captions exist: a background
+             * video loses the one thing a viewer needs, which is what they are
+             * looking at. But the only place it could sit was the driveway, which
+             * in this footage is sunlit concrete, and light-on-light at 0.7rem is
+             * unreadable — a caption nobody can read is not a caption. The panel is
+             * navy and opaque, so it costs nothing to put the words there, and the
+             * tag on the footage already tells the same story: ON SITE.
              */}
-            <HeroPlate t={t} />
-
-            <div className="relative mt-6">
-              <div
-                aria-hidden="true"
-                className="sheet absolute -left-3 -top-3 hidden h-full w-full rotate-[-1.1deg] opacity-50 lg:block"
-              />
-              <div className="sheet-raised relative">
-                <div className="flex items-center justify-between gap-4 border-b-2 border-navy/20 px-5 py-4 sm:px-7">
-                  <h2 className="display text-[1.5rem] text-navy">{t.hero.ticketTitle}</h2>
-                  <span className="label text-ink-soft">{t.hero.ticketNo}</span>
-                </div>
-
-                <div className="px-5 sm:px-7">
-                  {t.hero.ticketFields.map(([label, value], i) =>
-                    i === statusIndex ? (
-                      <div
-                        key={label}
-                        className="field-row"
-                        style={{ containerType: "inline-size", containerName: "board" }}
-                      >
-                        <span className="label text-ink-soft">{label}</span>
-                        <StatusBoard
-                          full={t.hero.ticketStatusCycle}
-                          short={t.hero.ticketStatusCycleShort}
-                        />
-                      </div>
-                    ) : (
-                      <TicketField key={label} label={label} value={value} />
-                    ),
-                  )}
-                </div>
-
-                <div className="flex flex-wrap items-center justify-between gap-4 border-t-2 border-navy/20 px-5 py-5 sm:px-7">
-                  <Stamp tone="red">{t.hero.ticketStamp}</Stamp>
-                  <p className="label text-ink-soft">
-                    {locale === "es" ? "Precio aprobado antes de empezar" : "Priced before we start"}
-                  </p>
-                </div>
-
-                <p className="border-t border-dashed border-rule-strong px-5 py-3 text-[0.75rem] leading-relaxed text-gold-ink sm:px-7">
-                  * {t.common.syntheticNote}
-                </p>
-              </div>
-            </div>
+            <p className="mt-6 border-t border-cream/20 pt-4 text-[0.7rem] leading-relaxed tracking-[0.14em] text-cream/60 uppercase">
+              {t.concise.plateCaption}
+            </p>
           </div>
         </div>
-      </div>
 
-      <div aria-hidden="true" className="checker h-10 w-full opacity-25 sm:h-12" />
+        {/*
+         * The status tag, on the footage, in the footage's own bottom-right corner
+         * — which is where the watermark it covers lives. It is placed in a track
+         * constrained to the same region as the video so the two cannot drift
+         * apart; see the note on the shared object-position above.
+         *
+         * `lg`-only: below that the panel reaches the bottom of the frame and the
+         * tag would sit on the panel rather than on the picture.
+         */}
+        <div className="pointer-events-none absolute inset-0 lg:right-[46%]">
+          <span className="absolute bottom-0 right-0 hidden min-h-[3.2em] min-w-[8em] place-items-center border-l-2 border-t-2 border-cream/25 bg-navy px-[0.75em] py-[0.5em] text-[clamp(0.62rem,1.15vw,0.8rem)] lg:grid">
+            <span className="label !text-[0.85em] leading-none text-cream/90">
+              {t.concise.plateTag}
+            </span>
+          </span>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
+   THE WORK ORDER, AS A RULED STRIP.
+
+   The ticket was a cream card inside the hero. With the footage now filling the
+   hero there is nowhere for a card to sit that does not either cover the truck or
+   get covered by the panel, so it moves out and down, and changes shape: the same
+   five fields as a ruled strip on cream, which is how this world records a job
+   anyway.
+
+   The split-flap STATUS board moved with it. It is one of the site's authored
+   motion moments and a status field is exactly what it is for, so it stays — but
+   it needs a wide lane, and a strip has one where a stacked card did not.
+   ───────────────────────────────────────────────────────────────────────────── */
+
+function WorkOrderStrip({ locale, t }: { locale: Locale; t: Dict }) {
+  const statusIndex = t.hero.ticketFields.findIndex(
+    ([, value]) => value === t.hero.ticketStatus,
+  );
+
+  return (
+    <section data-section="work-order" className="border-b-2 border-navy bg-cream">
+      <div className="shell py-8 sm:py-10">
+        <div className="flex flex-wrap items-baseline justify-between gap-x-8 gap-y-2 border-b-2 border-navy pb-3">
+          <h2 className="display text-[1.4rem] text-navy sm:text-[1.6rem]">
+            {t.hero.ticketTitle}
+          </h2>
+          <span className="label text-ink-soft">{t.hero.ticketNo}</span>
+        </div>
+
+        <dl className="grid gap-x-8 gap-y-4 pt-4 sm:grid-cols-2 lg:grid-cols-5 lg:gap-x-6">
+          {t.hero.ticketFields.map(([label, value], i) =>
+            i === statusIndex ? (
+              <div key={label}>
+                <dt className="label text-ink-soft">{label}</dt>
+                <dd
+                  className="mt-1"
+                  style={{ containerType: "inline-size", containerName: "board" }}
+                >
+                  <StatusBoard
+                    full={t.hero.ticketStatusCycle}
+                    short={t.hero.ticketStatusCycleShort}
+                  />
+                </dd>
+              </div>
+            ) : (
+              <div key={label}>
+                <dt className="label text-ink-soft">{label}</dt>
+                <dd className="mt-1 text-[0.98rem] text-navy">{value}</dd>
+              </div>
+            ),
+          )}
+        </dl>
+
+        <div className="mt-5 flex flex-wrap items-center justify-between gap-x-6 gap-y-3 border-t border-dashed border-rule-strong pt-4">
+          <div className="flex flex-wrap items-baseline gap-4">
+            <Stamp tone="red">{t.hero.ticketStamp}</Stamp>
+            <p className="label text-ink-soft">
+              {locale === "es" ? "Precio aprobado antes de empezar" : "Priced before we start"}
+            </p>
+          </div>
+          <p className="text-[0.75rem] leading-relaxed text-gold-ink">
+            * {t.common.syntheticNote}
+          </p>
+        </div>
+      </div>
     </section>
   );
 }
