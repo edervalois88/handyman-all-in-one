@@ -1,13 +1,20 @@
 import type { Metadata, Viewport } from "next";
 import { Oswald, Barlow_Condensed, Courier_Prime } from "next/font/google";
+import { LangSync } from "@/components/LangSync";
 import { site } from "@/lib/site";
 import "./globals.css";
 
 /* Type system, chosen as the closest open equivalents of the brand book's faces:
    the logotype is a heavy condensed workwear grotesk, and this world is
    mid-century service paperwork — so the display face is condensed and the text
-   face is a typewriter. Acumin Pro Condensed and Lato (the book's picks) are not
-   licensable for web; these carry the same character. */
+   face is a typewriter.
+
+   The book names two options, and the README covers the trade in full. In short:
+   Option 1 is Acumin Pro Condensed, a commercial Adobe family that would need a
+   licence; Option 2 is Lato, which is free under the SIL OFL and is NOT what the
+   site uses. Lato has no condensed cut, so adopting it would fix the body face
+   and leave the display face — the one carrying the logotype — still substituted.
+   That is a decision for the client, not a default. */
 const oswald = Oswald({
   variable: "--font-oswald",
   subsets: ["latin"],
@@ -88,7 +95,15 @@ const DIRECTION_CONTRACT_ID = "direction-contract";
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
+    /*
+     * `lang="en"` is the default for this route tree, and it is NOT sufficient on
+     * its own: Spanish pages live under /es and were shipping with no lang at all,
+     * which WCAG 3.1.1 requires. `<LangSync>` corrects the element per route. See
+     * the note in that file for why the fix is a client component rather than a
+     * second root layout.
+     */
     <html
+      lang="en"
       className={`${oswald.variable} ${barlowCond.variable} ${courier.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col">
@@ -105,6 +120,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           suppressHydrationWarning
           dangerouslySetInnerHTML={{ __html: `<!--\n${DIRECTION_CONTRACT}\n-->` }}
         />
+        <LangSync />
         {children}
       </body>
     </html>

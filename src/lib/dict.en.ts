@@ -44,6 +44,87 @@ export const en = {
     glanceHint: "Point at one to see what it covers.",
   },
 
+  /**
+   * The concise home page.
+   *
+   * Measured target: the whole page reads in under 30 seconds. At ~200 words
+   * per minute of body copy that allows about 200 words for the ENTIRE page,
+   * including labels and buttons. The long-form home ran to 1,411 words over
+   * 8,960px, which is roughly seven minutes of reading — the reason this exists.
+   *
+   * The rule applied here: the home page ANSWERS, the inner pages EXPLAIN. Every
+   * block that was doing explanatory work has moved to the page that owns it, and
+   * what remains is the shortest true statement of each idea.
+   */
+  concise: {
+    /**
+     * The hero's own answer to "what does this company do" — 12 words where the
+     * long home spends 23.
+     *
+     * It replaces `whatWeDo.line` on this page rather than shadowing it, and the
+     * trade is deliberate: the long version spends its second half on a concrete
+     * example ("from a sticking door to repainting a floor") which is worth its
+     * words when the reader is settling in, and is not worth them in a hero that
+     * has to land in one glance. `whatWeDo.line` is untouched for the long home.
+     */
+    heroLine: "Repairs, maintenance and improvements. One list, one price, one crew.",
+    promise: "Four things, every job.",
+    /** Service tiles: short name + one line. Rewritten, not truncated. */
+    tilesTitle: "What we do",
+    /**
+     * "Point at one" was wrong on every touch device, where there is nothing to
+     * point with. The tiles are buttons — they are tapped — so the hint names both.
+     */
+    tilesHint: "Tap or point at one to see what it covers.",
+    tilesCta: "Services",
+    /** Three steps, not five: the two that moved out were process detail. */
+    stepsTitle: "How it works",
+    stepsCta: "Process",
+    faqTitle: "Common questions",
+    faqAll: "All questions",
+    areasTitle: "Areas",
+    areasCta: "My address",
+    /** The interactive selector. */
+    pickerTitle: "What's on your list?",
+    pickerHint: "Tap what you need. We will quote the whole list in one price.",
+    pickerSelected: "selected",
+    pickerCta: "Quote these {n}",
+    pickerEmpty: "Quote my list",
+    pickerClear: "Clear",
+
+    /**
+     * The problem, said once. The long home spent 138 words on it across three
+     * cards; on a page that has to read in 30 seconds it gets one line and three
+     * labels, because the reader already knows they are tired of chasing people —
+     * they do not need to be told they are.
+     */
+    problem: "Finding someone reliable is the hard part. Not finding someone.",
+    problemTags: ["Nobody answers", "Nobody shows", "You end up managing it"],
+
+    /** Three steps, not five. Steps 2 and 5 of the long version were detail. */
+    steps: [
+      { n: "1", title: "Send the list", body: "Call or send the form. Photos help." },
+      { n: "2", title: "Get one written price", body: "Fixed, before anything starts." },
+      { n: "3", title: "We arrive and finish it", body: "Then we walk it with you." },
+    ],
+
+    /** Three questions, answered in a line each. The other five live on /contact. */
+    faq: [
+      {
+        q: "What does it cost?",
+        a: "Placeholder — publish your call-out fee and minimum job.",
+      },
+      {
+        q: "Are you insured?",
+        a: "Yes, and licensed work goes to a licensed partner we bring.",
+      },
+      {
+        q: "How fast can you come?",
+        a: "Placeholder — publish your real response time.",
+      },
+    ],
+  },
+
   nav: {
     home: "Home",
     services: "Services",
@@ -565,9 +646,17 @@ export const en = {
     areasBody: "We cover these towns and the surrounding area:",
   },
 
+  /**
+   * The footer.
+   *
+   * It carries no blurb and no second tagline. Both used to sit here and both
+   * were repetitions: the blurb restated the hero's own sub-line almost word for
+   * word, and the tagline ran a third time at the bottom of the page on a site
+   * whose logo lockup already spells it out. Cutting them took 15 words off every
+   * one of the 13 routes without removing a single fact, and the footer keeps
+   * every link, address, hour and disclaimer it had.
+   */
   footer: {
-    blurb:
-      "One company. One standard. One point of contact for your entire home.",
     servicesTitle: "Services",
     companyTitle: "Company",
     contactTitle: "Contact",

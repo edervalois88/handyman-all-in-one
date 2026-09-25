@@ -81,8 +81,13 @@ reserved for calls to action, stamps and small graphic details.
 
 ### Typography
 
-The book names **Acumin Pro Condensed** and **Lato**; neither is licensable for the web. The
-closest open equivalents carry the same character:
+The book names two options, and they are not equivalent in cost. **Option 1** is *Acumin Pro
+Condensed*, with *Acumin Pro Regular* for subtitles and *Acumin Pro Thin* for text — a commercial
+Adobe Fonts family, so using it on the web means buying a licence. **Option 2** is *Lato*
+(Bold / Medium / Regular), which is **free under the SIL Open Font License** and could be adopted
+at no cost today.
+
+The site currently ships neither. It runs on three open faces chosen to carry the same character:
 
 | Role | Face | Why |
 |---|---|---|
@@ -91,6 +96,14 @@ closest open equivalents carry the same character:
 | Body / data | **Courier Prime** | The world is mid-century service paperwork |
 
 All three are self-hosted at build time by `next/font/google` — no runtime request to Google.
+
+**This is a substitution, and it is the client's decision to reverse.** Acumin Pro Condensed has no
+free equivalent — condensed grotesks at that weight are the whole reason the family is licensed —
+so Oswald and Barlow Condensed are the closest open stand-ins, not the book's faces. Lato is the
+cheaper half of the question: it is free, and swapping the body face to Lato would take one line in
+`src/app/layout.tsx` plus the `--font-*` tokens in `globals.css`. It has no condensed cut, though,
+so it cannot replace the display face without giving up the logotype's proportions. The option that
+matches the book exactly is Acumin, and that one needs a licence purchase.
 
 ### Logo assets
 
@@ -230,7 +243,9 @@ distributed as source you copy in rather than as an npm package. Read
 
   The full state is used at **every** width in both languages. The short set remains as the
   fallback for a genuinely narrower column.
-- **`CountUp`** is vendored unmodified. It already depends only on `motion/react`.
+
+> `CountUp` was vendored here and has since been **deleted as unused** — nothing imported it. It is
+> not present in this build.
 
 Components from the wider catalogue were **rejected on evidence**, not on taste: `SplitText` and
 `Shuffle` import `gsap/SplitText`, a Club GreenSock plugin that is not in the free `gsap` package,
@@ -240,6 +255,83 @@ motion runtime.
 > Note on naming: the npm package literally called `react-bits` is **not** this library. It is an
 > unrelated 2017 React Native helper (`dmiller9911/react-bits`) that depends on
 > `create-react-class`. The official React Bits installs through `jsrepo` or `shadcn`.
+
+---
+
+## The concise home — `/concise`, `/es/concise`
+
+The client asked for a home page that reads in **under 30 seconds**, is friendlier on first contact,
+and leans on interaction and iconography instead of paragraphs — without losing the look and feel.
+
+Rather than replace the home page, the answer lives beside it. **`/concise` is a second front door
+that is deliberately absent from the header, the footer and the sitemap**, so the long home can be
+compared against it on the same phone and the client decides which one becomes `/`. Delete the
+loser's route files and move the winner's component into `home.tsx` when that is settled.
+
+Where the words went:
+
+| | long home `/` | concise `/concise` |
+|---|---|---|
+| **prose — the reading path** | **448** | **71** |
+| scanned data (ticket values, towns, questions) | 824 | 109 |
+| chrome (nav, buttons, footer) | 76 | 38 |
+| everything in `<main>` | 1,679 | 243 |
+| **prose reading time at 200 wpm** | **2m14s** | **21s** |
+| whole page read line by line | 6m44s | 1m05s |
+| desktop height | 8,960px (10 screens) | 2,197px (2.4 screens) |
+| phone height | 15,800px (17.6 screens) | 3,627px (4 screens) |
+| footer words (all 13 routes) | 96 → **85** | 85 |
+
+**The 30-second figure is about prose, and that is the only reading of it that survives contact with
+a real page.** A ticket's field values, a list of eight town names and three table rows of questions
+are scanned, not read in order; the nav is not read at all. Of the concise page's 243 words in
+`<main>`, 71 are sentences. The four longest prose runs on the entire page are 8, 10, 10 and 10
+words — there is no paragraph to get lost in.
+
+The rule the block list follows: **the home page answers, the inner pages explain.** Service detail
+went to `/services`, the process to `/about`, and the remaining questions to `/contact`, which is
+where the answers already were.
+
+Two things worth knowing before editing it:
+
+- **It carries its own headline line.** `concise.heroLine` replaces `whatWeDo.line` here. The long
+  version spends its second half on a concrete example — *"from a sticking door to repainting a
+  floor"* — which earns its words on a page a reader is settling into and does not earn them in a
+  hero that has to land in one glance. `whatWeDo.line` is untouched for the long home.
+- **The service tile hint says "tap or point at one".** It said *"point at one"*, which is wrong on
+  every touch device, where there is nothing to point with. The tiles are buttons.
+
+### Measuring it
+
+The numbers above were taken with Playwright against a production build, not estimated:
+
+```bash
+npm run build && npx next start -p 4177   # serve the real build
+# then drive it with Playwright: count words in <main>, measure its height
+```
+
+If you re-measure, **count text nodes, not elements.** Summing `main a` + `main span` + `main li`
+double- and triple-counts every word nested inside another of those selectors and reports a total
+about 40% too high. An earlier version of that script also read `<style>` text — `SplitFlapText`
+ships an inline stylesheet — which added 518 phantom "words" to the hero. And a shut `<details>` is
+not part of the reading path: Chrome hides it with `content-visibility`, which leaves the box
+non-zero, so a naive visibility test counts three collapsed answers as prose the reader has read.
+All three mistakes produced a confident, wrong number.
+
+### Motion today: four authored moments
+
+The README has claimed "three, and no fourth" since the first build. What is actually in the tree is
+four, and the honest list is:
+
+1. The job ticket feeds into the panel and its APPROVED stamp strikes — the page's narrator.
+2. Each promise-band commitment is **pinned to the board** in turn — the only scroll response.
+3. The `STATUS` board cycles the states a job passes through.
+4. `Preloader` walks the walker mark across the screen, once per session, with a hard failsafe and a
+   `prefers-reduced-motion` bypass.
+
+That is still far from one identical entrance per section, which is the thing the rule was written
+to prevent. The service marks and the `PinToBoard` band are **interactions**, not entrances, and do
+not count against it.
 
 ---
 
@@ -262,6 +354,8 @@ src/
     layout.tsx              root document, fonts, metadata
     page.tsx                /            (EN home)
     es/page.tsx             /es          (ES home)
+    concise/page.tsx        /concise     (EN concise home — comparison route)
+    es/concise/page.tsx     /es/concise  (ES concise home — comparison route)
     services/, service-areas/, about/, contact/                 EN routes
     es/services/, es/service-areas/, es/about/, es/contact/     ES routes
     not-found.tsx, robots.ts, sitemap.ts
@@ -269,6 +363,12 @@ src/
     Header.tsx              sticky nav, mobile drawer, EN/ES toggle
     Footer.tsx              contact, hours, coverage, placeholder notice
     Hero.tsx                first viewport + the promise band
+    WhatWeDo.tsx            the offer as a ruled legend of six marked entries
+    ServiceMarks.tsx        the six service drawings + the shared icon frame
+    SiteIcons.tsx           the utility glyph set, and the rule for using it
+    ConciseBlocks.tsx       the concise home's blocks
+    Preloader.tsx           the walker, once per session
+    StatusBoard.tsx         the split-flap status field
     sections.tsx            problem, solution, services, process, compare, areas, FAQ, CTA
     QuoteForm.tsx           the conversion surface
     Logo.tsx, ui.tsx, LocaleShell.tsx, NotFoundPage.tsx
@@ -279,12 +379,35 @@ src/
     i18n.ts                 dictionary accessor
     pages/
       make.tsx              per-language page factories
-      home.tsx, services.tsx, areas.tsx, about.tsx, contact.tsx
+      home.tsx, concise.tsx, services.tsx, areas.tsx, about.tsx, contact.tsx
       routes.ts
 assets/
   brand-book/               the source PDF, extracted pages and artwork
   build-assets.py           regenerates public/brand/ from that artwork
 ```
+
+### The icon frame, and why the marks have numbers in them
+
+[`ServiceMarks.tsx`](src/components/ServiceMarks.tsx) draws six marks in a shared 48-unit `viewBox`
+and normalises each one inside an `IconFrame` group. The numbers in its `INK` table are measurements
+of each drawing's painted bounding box, including half a stroke on every side, and they exist
+because **a shared viewBox is not a shared silhouette.**
+
+Measured on the drawings as authored, the six marks' ink started at y=4, 4, 16, 6, 12 and 6 and
+ended at y=44, 40, 43, 37, 43 and 42 — a 12-unit variance. In a row of six equal tiles that reads as
+a crooked row: the handsaw floats, the door and the ladder hang low. Every mark was individually
+fine and the set was wrong. Mapping each ink box onto one shared box took the misalignment from
+**7.3px to 2.7px** as measured against the labels they sit above.
+
+Two notes for anyone changing a drawing:
+
+- **Recompute its `INK` row**, or the row goes crooked again in a way that is easy to see and hard
+  to attribute.
+- **`vectorEffect="non-scaling-stroke"` on the frame group is load-bearing.** A group `transform`
+  scales the stroke with everything else, so normalising would otherwise also thin the heavier
+  marks — the exterior at scale 0.815 would render its 2.8 weight at 2.28px next to the door's
+  2.51px, and the set would read as a family with one member drawn in a lighter pen. With
+  non-scaling strokes every mark renders the weight it declares.
 
 ### Bilingual by construction
 

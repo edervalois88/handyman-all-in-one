@@ -1,0 +1,6 @@
+{
+  "name": "handyman-site-tools",
+  "private": true,
+  "type": "module",
+  "description": "Verification scripts for the site. Not part of the build."
+}

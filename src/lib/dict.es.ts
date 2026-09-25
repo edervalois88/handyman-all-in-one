@@ -27,6 +27,81 @@ export const es: Dict = {
     glanceHint: "Señale una para ver qué cubre.",
   },
 
+  /**
+   * La home concisa.
+   *
+   * Objetivo medido: la página completa se lee en menos de 30 segundos. A ~200
+   * palabras por minuto eso deja unas 200 palabras para TODA la página, etiquetas
+   * y botones incluidos. La home larga llegaba a 1.411 palabras en 8.960px: unos
+   * siete minutos de lectura, y por eso existe esto.
+   *
+   * La regla: la home RESPONDE, las páginas interiores EXPLICAN. Cada bloque que
+   * hacía trabajo explicativo se movió a la página que le corresponde, y lo que
+   * queda es la versión más corta y verdadera de cada idea.
+   */
+  concise: {
+    /**
+     * La respuesta propia del héroe a "a qué se dedica esta empresa": 9 palabras
+     * donde la home larga gasta 24.
+     *
+     * Reemplaza a `whatWeDo.line` en esta página en vez de repetirla. La versión
+     * larga dedica su segunda mitad a un ejemplo concreto ("desde una puerta que
+     * no cierra hasta repintar un piso"), que vale sus palabras cuando el lector
+     * se está instalando y no las vale en un héroe que tiene que entrar de un
+     * vistazo. `whatWeDo.line` queda intacta para la home larga.
+     */
+    heroLine: "Reparaciones, mantenimiento y mejoras. Una lista, un precio, un equipo.",
+    promise: "Cuatro cosas, en cada trabajo.",
+    tilesTitle: "Qué hacemos",
+    /** "Señale una" no servía en pantalla táctil: los recuadros se tocan. */
+    tilesHint: "Toque o señale una para ver qué cubre.",
+    tilesCta: "Servicios",
+    stepsTitle: "Cómo funciona",
+    stepsCta: "Proceso",
+    faqTitle: "Preguntas frecuentes",
+    faqAll: "Todas las preguntas",
+    areasTitle: "Zonas",
+    areasCta: "Mi dirección",
+    pickerTitle: "¿Qué tiene pendiente?",
+    pickerHint: "Marque lo que necesita. Cotizamos toda la lista en un solo precio.",
+    pickerSelected: "seleccionados",
+    pickerCta: "Cotizar estos {n}",
+    pickerEmpty: "Cotizar mi lista",
+    pickerClear: "Limpiar",
+
+    /**
+     * El problema, dicho una vez. La home larga le dedicaba 138 palabras en tres
+     * tarjetas; en una página que debe leerse en 30 segundos va una línea y tres
+     * etiquetas, porque el lector ya sabe que está cansado de perseguir gente: no
+     * hace falta decírselo.
+     */
+    problem: "Lo difícil es encontrar a alguien confiable. No encontrar a alguien.",
+    problemTags: ["Nadie contesta", "Nadie llega", "Usted termina coordinando"],
+
+    /** Tres pasos, no cinco. Los pasos 2 y 5 de la versión larga eran detalle. */
+    steps: [
+      { n: "1", title: "Mande la lista", body: "Llame o mande el formulario. Las fotos ayudan." },
+      { n: "2", title: "Reciba un precio por escrito", body: "Fijo, antes de empezar nada." },
+      { n: "3", title: "Llegamos y lo terminamos", body: "Después lo revisamos con usted." },
+    ],
+
+    /** Tres preguntas, respondidas en una línea. Las otras cinco viven en /contacto. */
+    faq: [
+      {
+        q: "¿Cuánto cuesta?",
+        a: "Ejemplo — publique su costo de visita y el mínimo de trabajo.",
+      },
+      {
+        q: "¿Están asegurados?",
+        a: "Sí, y el trabajo con licencia va a un socio licenciado que traemos nosotros.",
+      },
+      {
+        q: "¿Qué tan pronto pueden venir?",
+        a: "Ejemplo — publique su tiempo de respuesta real.",
+      },
+    ],
+  },
+
   nav: {
     home: "Inicio",
     services: "Servicios",
@@ -554,9 +629,17 @@ export const es: Dict = {
     areasBody: "Cubrimos estas ciudades y sus alrededores:",
   },
 
+  /**
+   * El pie.
+   *
+   * No lleva reseña ni segundo eslogan. Los dos estaban aquí y los dos eran
+   * repeticiones: la reseña repetía casi palabra por palabra la línea del héroe, y
+   * el eslogan aparecía por tercera vez al final de la página en un sitio cuyo
+   * logotipo ya lo dice. Quitarlos restó 15 palabras a cada una de las 13 rutas
+   * sin eliminar un solo dato, y el pie conserva todos sus enlaces, dirección,
+   * horario y avisos.
+   */
   footer: {
-    blurb:
-      "Una empresa. Un estándar. Un solo contacto para toda su casa.",
     servicesTitle: "Servicios",
     companyTitle: "Empresa",
     contactTitle: "Contacto",

@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { QuoteForm } from "@/components/QuoteForm";
+import { QuoteFormHost } from "@/components/QuoteFormHost";
 import { RuleNote, SectionHead } from "@/components/ui";
 import { SiteIcon } from "@/components/SiteIcons";
 import { getDict } from "@/lib/i18n";
@@ -25,7 +25,7 @@ export function ContactPage({ locale, t }: { locale: Locale; t: ReturnType<typeo
 
       <div className="ground py-14 sm:py-16">
         <div className="shell grid gap-12 lg:grid-cols-[minmax(0,1.35fr)_minmax(0,0.65fr)] lg:gap-14">
-          <QuoteForm locale={locale} t={t} />
+          <QuoteFormHost locale={locale} />
 
           <aside className="space-y-6 self-start">
             <div className="sheet p-6">

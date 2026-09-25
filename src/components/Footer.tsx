@@ -17,9 +17,11 @@ export function Footer({ locale, t }: { locale: Locale; t: Dict }) {
         <div className="grid gap-12 lg:grid-cols-[1.35fr_1fr_1fr_1.15fr]">
           <div>
             <Logo locale={locale} tone="cream" size="md" />
-            <p className="mt-5 max-w-[34ch] text-[0.98rem] leading-relaxed text-cream/80">
-              {t.footer.blurb}
-            </p>
+            {/*
+             * The blurb that used to sit here restated the hero's own sub-line
+             * almost word for word. What is left is the display tagline the logo
+             * is built around, and the one action the footer exists to offer.
+             */}
             <p className="display mt-6 text-[1.35rem] leading-snug text-cream/90">
               {t.tagline}
             </p>
@@ -58,9 +60,13 @@ export function Footer({ locale, t }: { locale: Locale; t: Dict }) {
                 <li key={a}>{a}</li>
               ))}
             </ul>
-            <p className="label mt-3 max-w-[24ch] leading-relaxed text-gold">
-              * {t.areas.note}
-            </p>
+            {/*
+             * The asterisk note that used to sit here said the same thing as the
+             * launch note below the columns, in a different sentence. The note
+             * below is the one that covers every figure on the site, so the
+             * footnote count is now one, and the asterisk on the areas list has
+             * nothing left to point at.
+             */}
           </div>
 
           <div>
@@ -109,9 +115,7 @@ export function Footer({ locale, t }: { locale: Locale; t: Dict }) {
             <p>
               © {year} {site.nameFull}. {t.footer.rights}
             </p>
-            <p className="label text-cream/60">
-              {t.tagline} · {site.credentials.license}
-            </p>
+            <p className="label text-cream/60">{site.credentials.license}</p>
           </div>
         </div>
       </div>

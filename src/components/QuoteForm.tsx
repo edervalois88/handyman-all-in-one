@@ -11,12 +11,44 @@ type Status = "idle" | "sending" | "sent" | "error";
  * The conversion surface. No backend is wired yet: the submit handler validates,
  * then reports exactly what would be sent so the owner can connect it to their
  * real inbox / CRM. See README for the one-line hook-up.
+ *
+ * `initialServices` is how the concise home's tile picker hands its work over.
+ * A visitor who taps three tiles and presses the button should arrive at a form
+ * that already knows which three, otherwise the interaction is decoration: it
+ * makes them do the same choosing twice, on the page where abandoning costs the
+ * most. The ids are the service CATEGORY ids, and the values are matched through
+ * the dictionary so the handoff survives translation.
  */
-export function QuoteForm({ locale, t }: { locale: Locale; t: Dict }) {
+export function QuoteForm({
+  locale,
+  t,
+  initialServices,
+}: {
+  locale: Locale;
+  t: Dict;
+  initialServices?: string[];
+}) {
   const pathname = usePathname();
   const [status, setStatus] = useState<Status>("idle");
   const [ref, setRef] = useState("");
   const f = t.contact.fields;
+
+  const svcOptions = t.services.categories.map((c) => ({
+    id: c.id,
+    name: c.name,
+  }));
+
+  /*
+   * An unknown id is dropped rather than trusted, and a query string that names
+   * nothing valid falls back to the default single tick. Both matter: the ids
+   * arrive from a URL a visitor can edit, and the fallback is what keeps
+   * `/contact` on its own behaving exactly as it did before this existed.
+   */
+  const prechecked = (() => {
+    const asked = new Set(initialServices ?? []);
+    const hits = svcOptions.filter((o) => asked.has(o.id)).map((o) => o.name);
+    return hits.length ? hits : [svcOptions[0]?.name].filter(Boolean);
+  })();
 
   async function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -68,8 +100,6 @@ export function QuoteForm({ locale, t }: { locale: Locale; t: Dict }) {
       </div>
     );
   }
-
-  const svcOptions = t.services.categories.map((c) => c.name);
 
   return (
     <form
@@ -157,14 +187,14 @@ export function QuoteForm({ locale, t }: { locale: Locale; t: Dict }) {
         <legend className="label text-navy">{f.services}</legend>
         <p className="mt-1 text-[0.85rem] text-ink-soft">{f.servicesHint}</p>
         <ul className="mt-3 grid gap-2.5 sm:grid-cols-2">
-          {svcOptions.map((name, i) => (
+          {svcOptions.map(({ name }) => (
             <li key={name}>
               <label className="flex cursor-pointer items-start gap-3 text-[0.95rem] text-navy">
                 <input
                   type="checkbox"
                   name="services"
                   value={name}
-                  defaultChecked={i === 0}
+                  defaultChecked={prechecked.includes(name)}
                   className="peer sr-only"
                 />
                 <span className="box peer-checked:border-red peer-checked:bg-red peer-checked:text-cream">
