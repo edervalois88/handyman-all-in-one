@@ -20,11 +20,11 @@
  *     with `content-visibility`, which leaves the box non-zero — so a naive
  *     visibility test says "visible" and counts answers nobody has opened.
  */
-import { chromium, BASE, ROUTES, VISIBLE_FN, COUNT_WORDS_FN } from "./harness.mjs";
+import { chromium, launchArgs, BASE, ROUTES, VISIBLE_FN, COUNT_WORDS_FN } from "./harness.mjs";
 
 const WPM = 200; // the low end of adult silent reading: the seconds reported are pessimistic
 
-const browser = await chromium.launch({ executablePath: process.env.CHROME_PATH });
+const browser = await chromium.launch({ executablePath: process.env.CHROME_PATH, args: launchArgs() });
 const rows = [];
 
 for (const path of ROUTES) {
@@ -33,7 +33,7 @@ for (const path of ROUTES) {
     reducedMotion: "reduce",
   });
   const page = await ctx.newPage();
-  await page.goto(BASE + path, { waitUntil: "networkidle" });
+  await page.goto(BASE + path, { waitUntil: "load" });
   await page.waitForTimeout(200);
 
   const m = await page.evaluate(

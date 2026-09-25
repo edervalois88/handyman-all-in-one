@@ -6,9 +6,9 @@
  * languages, so a mark added without a note — or a note deleted out from under a
  * mark — fails here instead of shipping.
  */
-import { chromium, BASE, ROUTES } from "./harness.mjs";
+import { chromium, launchArgs, BASE, ROUTES } from "./harness.mjs";
 
-const browser = await chromium.launch({ executablePath: process.env.CHROME_PATH });
+const browser = await chromium.launch({ executablePath: process.env.CHROME_PATH, args: launchArgs() });
 let orphaned = 0;
 
 for (const path of ROUTES) {
@@ -17,7 +17,7 @@ for (const path of ROUTES) {
     reducedMotion: "reduce",
   });
   const page = await ctx.newPage();
-  await page.goto(BASE + path, { waitUntil: "networkidle" });
+  await page.goto(BASE + path, { waitUntil: "load" });
   await page.waitForTimeout(150);
 
   const m = await page.evaluate(() => {

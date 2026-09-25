@@ -26,6 +26,24 @@ const { chromium } = require(process.env.PW_PATH || "playwright-core");
 
 export const BASE = process.env.BASE || "http://127.0.0.1:4177";
 
+/**
+ * Optional host pin, for when local DNS is unreliable.
+ *
+ * Running these checks against the deployment is the point of having them, and a
+ * flaky resolver makes that impossible: `ERR_NAME_NOT_RESOLVED` looks exactly
+ * like a broken deployment and is not one. Set `HOST_RESOLVE` to skip DNS:
+ *
+ *   BASE=https://example.vercel.app HOST_RESOLVE=example.vercel.app:216.198.79.195 \
+ *     node tools/overflow-audit.mjs
+ *
+ * Playwright's `--host-resolver-rules` maps the name to the address for the
+ * browser only, so the certificate and the Host header are still the real ones.
+ */
+export function launchArgs() {
+  const pin = process.env.HOST_RESOLVE;
+  return pin ? [`--host-resolver-rules=MAP ${pin.replace(":", " ")}`] : [];
+}
+
 /** Every page, both languages. */
 export const ROUTES = [
   "/",
@@ -54,16 +72,25 @@ export { chromium };
  * and a tile caught mid-flip has a scaleY near zero — which moves its bounding
  * box by half its height and invents a phantom second row. Measuring a moving
  * page measures the animation, not the layout.
+ *
+ * AND NOT `networkidle`. These scripts used it until a looping background video
+ * was added to the hero, at which point every one of them began timing out
+ * against production: a muted looping video holds a request open forever, so the
+ * network is never idle. `load` plus a settle delay is what these checks actually
+ * want, and it works against a video that never stops downloading.
  */
 export async function open(path, { width = 1440, height = 900, base = BASE } = {}) {
-  const browser = await chromium.launch({ executablePath: process.env.CHROME_PATH });
+  const browser = await chromium.launch({
+    executablePath: process.env.CHROME_PATH,
+    args: launchArgs(),
+  });
   const ctx = await browser.newContext({
     viewport: { width, height },
     reducedMotion: "reduce",
   });
   const page = await ctx.newPage();
-  await page.goto(base + path, { waitUntil: "networkidle" });
-  await page.waitForTimeout(200);
+  await page.goto(base + path, { waitUntil: "load" });
+  await page.waitForTimeout(400);
   return { browser, ctx, page };
 }
 

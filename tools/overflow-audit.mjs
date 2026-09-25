@@ -11,10 +11,13 @@
  *  · The split-flap STATUS board wrapping to two rows. It switches by DISPLAY, so
  *    the live variant is found by measuring which one has a non-zero box, not by
  *    reading a class list.
+ *
+ * `load`, not `networkidle`: the hero carries a looping video, so the network is
+ * never idle and `networkidle` times out against production.
  */
-import { chromium, BASE, ROUTES, WIDTHS } from "./harness.mjs";
+import { chromium, launchArgs, BASE, ROUTES, WIDTHS } from "./harness.mjs";
 
-const browser = await chromium.launch({ executablePath: process.env.CHROME_PATH });
+const browser = await chromium.launch({ executablePath: process.env.CHROME_PATH, args: launchArgs() });
 let bad = 0;
 let n = 0;
 
@@ -26,8 +29,8 @@ for (const path of ROUTES) {
       reducedMotion: "reduce",
     });
     const page = await ctx.newPage();
-    await page.goto(BASE + path, { waitUntil: "networkidle" });
-    await page.waitForTimeout(150);
+    await page.goto(BASE + path, { waitUntil: "load" });
+    await page.waitForTimeout(400);
 
     const m = await page.evaluate(() => {
       const boxed = (e) => {

@@ -12,9 +12,9 @@
  * describes what a person sees: where each mark's ink CENTRE sits relative to the
  * label underneath it. If those agree, the row is straight.
  */
-import { chromium, BASE } from "./harness.mjs";
+import { chromium, launchArgs, BASE } from "./harness.mjs";
 
-const browser = await chromium.launch({ executablePath: process.env.CHROME_PATH });
+const browser = await chromium.launch({ executablePath: process.env.CHROME_PATH, args: launchArgs() });
 
 for (const path of ["/concise", "/es/concise"]) {
   const ctx = await browser.newContext({
@@ -22,7 +22,7 @@ for (const path of ["/concise", "/es/concise"]) {
     reducedMotion: "reduce",
   });
   const page = await ctx.newPage();
-  await page.goto(BASE + path, { waitUntil: "networkidle" });
+  await page.goto(BASE + path, { waitUntil: "load" });
   await page.waitForTimeout(300);
 
   const m = await page.evaluate(() => {

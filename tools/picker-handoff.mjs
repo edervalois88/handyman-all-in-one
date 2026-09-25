@@ -7,9 +7,9 @@
  * `?jobs=` parameter for a while with nothing on the other end reading it, and
  * nothing failed. A dead parameter looks exactly like a working one.
  */
-import { chromium, BASE } from "./harness.mjs";
+import { chromium, launchArgs, BASE } from "./harness.mjs";
 
-const browser = await chromium.launch({ executablePath: process.env.CHROME_PATH });
+const browser = await chromium.launch({ executablePath: process.env.CHROME_PATH, args: launchArgs() });
 let fails = 0;
 
 function check(name, got, want) {
@@ -41,7 +41,7 @@ for (const [concise, contact] of [
   const pressed = () =>
     tiles().evaluateAll((els) => els.map((e) => e.getAttribute("aria-pressed")));
 
-  await page.goto(BASE + concise, { waitUntil: "networkidle" });
+  await page.goto(BASE + concise, { waitUntil: "load" });
 
   check("six tiles render", await tiles().count(), 6);
   check(
@@ -94,7 +94,7 @@ for (const [concise, contact] of [
   check("and it is the one that was chosen", /everyday repairs|reparaciones/i.test(got[0] || ""), true);
 
   // all six
-  await page.goto(BASE + concise, { waitUntil: "networkidle" });
+  await page.goto(BASE + concise, { waitUntil: "load" });
   for (let i = 0; i < 6; i++) await tiles().nth(i).click();
   check(
     "all six pressed",
@@ -107,11 +107,11 @@ for (const [concise, contact] of [
   check("all six ticked on the form", (await ticked(page)).length, 6);
 
   // the route on its own, and a hand-edited URL
-  await page.goto(BASE + contact, { waitUntil: "networkidle" });
+  await page.goto(BASE + contact, { waitUntil: "load" });
   await page.waitForTimeout(400);
   check("plain contact still ticks exactly the first option", (await ticked(page)).length, 1);
 
-  await page.goto(BASE + contact + "?jobs=not-a-real-service", { waitUntil: "networkidle" });
+  await page.goto(BASE + contact + "?jobs=not-a-real-service", { waitUntil: "load" });
   await page.waitForTimeout(400);
   check("unknown id falls back to the default tick", (await ticked(page)).length, 1);
 
