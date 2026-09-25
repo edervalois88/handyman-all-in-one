@@ -298,50 +298,67 @@ where the answers already were.
 
 ### The hero video
 
-`public/video/hero.mp4` — 6.04s, 1284x716, 5.78 MB — is the client's own footage of the
-truck, and it is in the concise hero as a **plate**: a ruled 16:9 frame with the company's navy
-ground, a caption in the label register, and the offset hard-edged lift the ticket uses. It is not
-a full-bleed background video, for two reasons. The world is cream stock and navy ink with no
-gradients, and a video bleeding behind the headline would be the one element here from a different
-design language; and it would put five megabytes of decoded video under live text, on exactly the
-screens least able to carry it.
+`public/video/hero.mp4` — 6.04s, 1284x716, 5.78 MB — is the client's own footage of the truck, and it
+is the **ground of the concise hero**: full-bleed, with the copy on its own opaque navy panel and the
+work-order ticket as a ruled strip below.
 
-Three things about it are deliberate and all three were arrived at by measuring rather than by
-reasoning:
+**Why a panel and not a text scrim.** The footage is a sunlit afternoon and the truck is near-white,
+so cream or navy type straight onto it fails contrast in exactly the region the headline occupies.
+The fix cannot be a dark wash, because this world has no gradients anywhere. So the text gets an
+opaque panel with a hard edge — which is also what the site already is: navy panels on cream stock.
 
-- **The plate answers what a drawing cannot.** Everything else in the hero is drawn — the ticket,
-  the status board, the stamps. This is the only evidence on the page that the company exists
-  outside the browser, and the truck carries the real livery.
+**The composition rule, and the first version got it wrong.** The panel was laid over a centred,
+full-width video, which put it straight across the cab and left the frame showing a truck with no
+front. Narrowing the panel did not fix it, because the problem was not the panel's width — the panel
+and the subject were competing for the same pixels. The hero is now two tracks: the panel owns 46% of
+the width, and the footage fills only what is left and is anchored right, so what gets cropped is the
+house and the empty driveway the panel is sitting on. The truck stays whole.
+
+**`object-position` is one constant shared by the video and by the status tag laid over it**, and that
+is load-bearing rather than tidy. The watermark the tag covers is positioned relative to the footage,
+so anything covering it has to use the same two numbers or it drifts off the mark as the viewport
+changes.
+
+Three more things were measured rather than reasoned, and two were wrong first:
+
+- **The footage stopped 24px short of the bottom of the hero.** The cause was not the video: the hero
+  section held the footage box PLUS a `checker` tear-edge strip below it, so the section was 48px
+  taller than the box every child inside it was positioned against. `h-full` could not fix it, because
+  a percentage height resolves against a content-driven parent. The box is now the whole hero and the
+  tear edge is a border.
+- **The caption moved off the footage and into the panel.** It was sitting on sunlit concrete, and
+  light-on-light at 0.7rem is unreadable; a caption nobody can read is not a caption. The `ON SITE`
+  tag on the footage says the same thing in the register the world uses.
 - **Motion is gated, and the obvious gate does not work.** `autoPlay={motionOk}` fails, because
-  `autoPlay` is a boolean attribute: the server renders it, and by the time the client could remove
-  it the browser has already started. Skipping the `play()` call fails too — attaching a source to
-  an element carrying `autoPlay` is itself what starts playback, so declining to start something
-  you never started does nothing. The element is therefore explicitly **paused**, on the media event
-  as well as the effect. Verified paused under `prefers-reduced-motion` and playing without it.
-- **The video is deferred, and the win is currently zero.** `preload="metadata"` does not limit the
-  fetch here: Chrome asks for `bytes=0-` and Next returns all 5.78 MB. The source is attached by an
-  `IntersectionObserver` instead. But at every width the plate is inside the first screen, so it
-  attaches on load anyway and the deferral changes nothing today. It is kept because the placement
-  may move, and because it puts the cost where a future change has to see it.
+  `autoPlay` is a boolean attribute: the server renders it, and by the time the client could remove it
+  the browser has already started. Skipping the `play()` call fails too — attaching a source to an
+  element carrying `autoPlay` is itself what starts playback, so declining to start something you never
+  started does nothing. The element is **paused** explicitly, on the media event as well as the effect.
+  Verified paused under `prefers-reduced-motion` and playing without it.
 
-**Page weight went from 0.25 MB to 6.03 MB**, 96% of it this one file. That is the price of the
-footage and it is the client's call. Two ways down if it matters: re-encode the clip at 960px and
-a higher CRF (a 6-second loop of a truck does not need 1280px), or move the plate below the fold
-where the deferral starts working.
+**The loading deferral buys nothing today, and that is recorded, not hidden.** `preload="metadata"`
+does not limit the fetch — Chrome asks for `bytes=0-` and Next returns all 5.78 MB — so the source is
+attached by an `IntersectionObserver`. But the hero is on the first screen at every width, so it
+attaches on load anyway. The observer stays because the placement may move, and because it puts the
+cost where a future change has to see it.
+
+**Page weight is 6.03 MB, 96% of it this one file.** That is the price of the footage and it is the
+client's accepted call. Two ways down if it matters: re-encode at 960px and a higher CRF (a 6-second
+loop of a truck does not need 1280px), or move the footage below the fold where the deferral starts
+working.
 
 > **The footage carries a visible "KlingAI 3.0" watermark**, bottom-right, 30px from the right edge
-> and 23px from the bottom of the frame. It could not be removed in CSS — it is inside the video's
-> own frame, and `object-fit: cover`, an oversized element, `transform: scale()` about the corner,
-> and `clip-path` insets were all tried and measured; every inset deep enough to take the mark also
-> took the back of the truck. The file's own metadata also declares it generated: the `udta/meta`
-> atom carries `AIGC` with `"ContentProducer":"kling"`.
+> and 23px from the bottom of the frame. It could not be removed in CSS — it is inside the video's own
+> frame, and `object-fit: cover`, an oversized element, `transform: scale()` about the corner, and
+> `clip-path` insets were all tried and measured; every inset deep enough to take the mark also took
+> the back of the truck. The file's own metadata also declares it generated: the `udta/meta` atom
+> carries `AIGC` with `"ContentProducer":"kling"`.
 >
-> **It is covered, on the client's instruction, by the `ON SITE` tag** in the plate's bottom-right
+> **It is covered, on the client's instruction, by the `ON SITE` tag** in the footage's bottom-right
 > corner — a piece of the brand rather than a redaction. The tag is a navy ground with a cream
-> hairline, the same state register as the `APPROVED` stamp on the ticket above, and it is sized by
-> `min-w`/`min-h` in `em` so it keeps covering the mark at every width: 102x41px on a 549px-wide
-> plate and 79x32px on a 350px one, against a mark needing roughly the last 12% covered. If the
-> client supplies a clean export, the tag can shrink to a plain label — or be deleted.
+> hairline, the same state register as the `APPROVED` stamp on the ticket, sized by `min-w`/`min-h` in
+> `em` so it keeps covering the mark: 102x41px on the desktop footage track, against a mark needing roughly
+> the last 12% covered. If the client supplies a clean export, the tag can go.
 
 ### What is still open on this page
 
@@ -359,7 +376,7 @@ Three things the page does not yet do, all recorded rather than quietly left:
   and minimum job. That is the owner's number to supply, not one to invent, so it stays a
   placeholder; it is the single highest-value piece of copy missing from the page.
 - **The hero footage carries a visible KlingAI watermark** and the file is 5.78 MB. The mark is
-  covered by the plate's `ON SITE` tag (see *The hero video*); the right fix is a clean export from
+  covered by the hero's `ON SITE` tag (see *The hero video*); the right fix is a clean export from
   Kling, after which the tag can go. The weight is a deliberate accepted cost, on the client's call.
 
 Two things worth knowing before editing the copy:
@@ -469,8 +486,8 @@ assets/
   build-assets.py           regenerates public/brand/ from that artwork
 public/
   brand/                    supplied logo artwork, recoloured to brand values
-  video/hero.mp4            the client's own footage, used as the concise hero plate
-  video/hero-poster.jpg     its first frame, so the plate is never an empty box
+  video/hero.mp4            the client's own footage, the ground of the concise hero
+  video/hero-poster.jpg     its first frame, so the hero is never an empty box
 tools/                      verification scripts, run against a production build
   harness.mjs               shared Playwright setup
   overflow-audit.mjs        every route at 8 widths
