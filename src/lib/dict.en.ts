@@ -132,6 +132,15 @@ export const en = {
      */
     plateCaption: "Our own truck, our own crew.",
     plateNote: "On the way to a job",
+    /**
+     * The status tag sitting in the plate's bottom-right corner.
+     *
+     * It says what the footage shows and nothing more — a truck on its way to a
+     * job is on site, or about to be, and that is the one claim the picture
+     * supports. It is the same register as the APPROVED stamp on the ticket
+     * above: a state, not a boast.
+     */
+    plateTag: "On site",
 
     /**
      * The problem, said once. The long home spent 138 words on it across three

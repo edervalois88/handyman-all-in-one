@@ -90,6 +90,7 @@ export const es: Dict = {
     closeBody: "Un precio por escrito. Sin compromiso y sin costo la conversación.",
     plateCaption: "Nuestra camioneta, nuestro equipo.",
     plateNote: "Camino a un trabajo",
+    plateTag: "En sitio",
 
     /**
      * El problema, dicho una vez. La home larga le dedicaba 138 palabras en tres

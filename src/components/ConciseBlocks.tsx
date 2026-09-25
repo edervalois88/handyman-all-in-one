@@ -560,6 +560,37 @@ export function HeroPlate({ t }: { t: Dict }) {
              */
             aria-hidden="true"
           />
+          {/*
+           * THE STATUS TAG, AND WHAT IT IS ACTUALLY FOR.
+           *
+           * The supplied footage carries a "KlingAI 3.0" watermark burnt into its
+           * own frame, 30px from the right edge and 23px from the bottom. It could
+           * not be cropped away: the mark sits inside the video's frame, so
+           * `object-fit: cover` never reaches it, an oversized element does not
+           * move it, `transform: scale()` about the corner does not move it, and
+           * every `clip-path` inset deep enough to take it also takes the back of
+           * the truck. All four were tried and measured.
+           *
+           * So it is covered, with a piece of the brand rather than a redaction:
+           * navy ground, cream hairline, and the red stamp the ticket above
+           * already uses for state. It reads as a work-order tag sitting on the
+           * footage, which is what this world does with anything that needs
+           * marking.
+           *
+           * SIZED TO COVER, NOT TO LOOK RIGHT. `min-h` and `min-w` in `em`, where
+           * the em is the clamp-controlled type size, so the tag grows with the
+           * plate and keeps the same proportions at every width. The mark needs
+           * roughly its last 12% of width and height covered at 390px, and its
+           * last 12% of width and 8% of height at 1440px; 8em x 3.2em clears both
+           * with margin, and stays a small corner tag rather than a banner. If the
+           * footage is ever replaced with a clean export, this can shrink to a
+           * plain label — or go.
+           */}
+          <span className="absolute bottom-0 right-0 grid min-h-[3.2em] min-w-[8em] place-items-center border-l-2 border-t-2 border-cream/25 bg-navy px-[0.75em] py-[0.5em] text-[clamp(0.62rem,1.15vw,0.8rem)]">
+            <span className="label !text-[0.85em] leading-none text-cream/90">
+              {t.concise.plateTag}
+            </span>
+          </span>
         </div>
 
         {/*

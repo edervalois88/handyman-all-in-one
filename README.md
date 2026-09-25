@@ -331,10 +331,17 @@ where the deferral starts working.
 
 > **The footage carries a visible "KlingAI 3.0" watermark**, bottom-right, 30px from the right edge
 > and 23px from the bottom of the frame. It could not be removed in CSS — it is inside the video's
-> own frame, and neither `object-fit: cover`, an oversized element, `transform: scale()`, nor
-> `clip-path` insets move it out without cutting the truck. The file's own metadata also declares it
-> as generated: the `udta/meta` atom carries `AIGC` with `"ContentProducer":"kling"`. A clean export
-> from Kling is the fix, and until then the mark is visible on the page.
+> own frame, and `object-fit: cover`, an oversized element, `transform: scale()` about the corner,
+> and `clip-path` insets were all tried and measured; every inset deep enough to take the mark also
+> took the back of the truck. The file's own metadata also declares it generated: the `udta/meta`
+> atom carries `AIGC` with `"ContentProducer":"kling"`.
+>
+> **It is covered, on the client's instruction, by the `ON SITE` tag** in the plate's bottom-right
+> corner — a piece of the brand rather than a redaction. The tag is a navy ground with a cream
+> hairline, the same state register as the `APPROVED` stamp on the ticket above, and it is sized by
+> `min-w`/`min-h` in `em` so it keeps covering the mark at every width: 102x41px on a 549px-wide
+> plate and 79x32px on a 350px one, against a mark needing roughly the last 12% covered. If the
+> client supplies a clean export, the tag can shrink to a plain label — or be deleted.
 
 ### What is still open on this page
 
@@ -351,8 +358,9 @@ Three things the page does not yet do, all recorded rather than quietly left:
   price" — but `concise.faq[0]` is still the placeholder asking the owner to publish a call-out fee
   and minimum job. That is the owner's number to supply, not one to invent, so it stays a
   placeholder; it is the single highest-value piece of copy missing from the page.
-- **The hero footage carries a visible KlingAI watermark**, and the file is 5.78 MB. Both need the
-  client: a clean export, and a decision about the weight. See *The hero video* above.
+- **The hero footage carries a visible KlingAI watermark** and the file is 5.78 MB. The mark is
+  covered by the plate's `ON SITE` tag (see *The hero video*); the right fix is a clean export from
+  Kling, after which the tag can go. The weight is a deliberate accepted cost, on the client's call.
 
 Two things worth knowing before editing the copy:
 
