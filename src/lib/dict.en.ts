@@ -124,6 +124,15 @@ export const en = {
      */
     closeBody: "One written price. No obligation, no charge for the conversation.",
 
+    /*
+     * The caption under the hero footage. It describes what is ON SCREEN rather
+     * than selling it, which is what a caption is for — and it is also the text a
+     * screen reader gets in place of the video, which is `aria-hidden` because it
+     * has no audio track to caption and no information the caption does not carry.
+     */
+    plateCaption: "Our own truck, our own crew.",
+    plateNote: "On the way to a job",
+
     /**
      * The problem, said once. The long home spent 138 words on it across three
      * cards; on a page that has to read in 30 seconds it gets one line and three

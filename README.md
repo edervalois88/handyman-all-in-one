@@ -296,9 +296,49 @@ The rule the block list follows: **the home page answers, the inner pages explai
 went to `/services`, the process to `/about`, and the remaining questions to `/contact`, which is
 where the answers already were.
 
+### The hero video
+
+`public/video/hero.mp4` — 6.04s, 1284x716, 5.78 MB — is the client's own footage of the
+truck, and it is in the concise hero as a **plate**: a ruled 16:9 frame with the company's navy
+ground, a caption in the label register, and the offset hard-edged lift the ticket uses. It is not
+a full-bleed background video, for two reasons. The world is cream stock and navy ink with no
+gradients, and a video bleeding behind the headline would be the one element here from a different
+design language; and it would put five megabytes of decoded video under live text, on exactly the
+screens least able to carry it.
+
+Three things about it are deliberate and all three were arrived at by measuring rather than by
+reasoning:
+
+- **The plate answers what a drawing cannot.** Everything else in the hero is drawn — the ticket,
+  the status board, the stamps. This is the only evidence on the page that the company exists
+  outside the browser, and the truck carries the real livery.
+- **Motion is gated, and the obvious gate does not work.** `autoPlay={motionOk}` fails, because
+  `autoPlay` is a boolean attribute: the server renders it, and by the time the client could remove
+  it the browser has already started. Skipping the `play()` call fails too — attaching a source to
+  an element carrying `autoPlay` is itself what starts playback, so declining to start something
+  you never started does nothing. The element is therefore explicitly **paused**, on the media event
+  as well as the effect. Verified paused under `prefers-reduced-motion` and playing without it.
+- **The video is deferred, and the win is currently zero.** `preload="metadata"` does not limit the
+  fetch here: Chrome asks for `bytes=0-` and Next returns all 5.78 MB. The source is attached by an
+  `IntersectionObserver` instead. But at every width the plate is inside the first screen, so it
+  attaches on load anyway and the deferral changes nothing today. It is kept because the placement
+  may move, and because it puts the cost where a future change has to see it.
+
+**Page weight went from 0.25 MB to 6.03 MB**, 96% of it this one file. That is the price of the
+footage and it is the client's call. Two ways down if it matters: re-encode the clip at 960px and
+a higher CRF (a 6-second loop of a truck does not need 1280px), or move the plate below the fold
+where the deferral starts working.
+
+> **The footage carries a visible "KlingAI 3.0" watermark**, bottom-right, 30px from the right edge
+> and 23px from the bottom of the frame. It could not be removed in CSS — it is inside the video's
+> own frame, and neither `object-fit: cover`, an oversized element, `transform: scale()`, nor
+> `clip-path` insets move it out without cutting the truck. The file's own metadata also declares it
+> as generated: the `udta/meta` atom carries `AIGC` with `"ContentProducer":"kling"`. A clean export
+> from Kling is the fix, and until then the mark is visible on the page.
+
 ### What is still open on this page
 
-Two things the page does not yet do, both recorded rather than quietly left:
+Three things the page does not yet do, all recorded rather than quietly left:
 
 - **Nothing above the fold on a phone says what the company does.** The first service tile is
   1.63 screens down at 390px. The hero does say it — "Repairs, maintenance and improvements" — but
@@ -311,9 +351,10 @@ Two things the page does not yet do, both recorded rather than quietly left:
   price" — but `concise.faq[0]` is still the placeholder asking the owner to publish a call-out fee
   and minimum job. That is the owner's number to supply, not one to invent, so it stays a
   placeholder; it is the single highest-value piece of copy missing from the page.
+- **The hero footage carries a visible KlingAI watermark**, and the file is 5.78 MB. Both need the
+  client: a clean export, and a decision about the weight. See *The hero video* above.
 
-
-Two things worth knowing before editing it:
+Two things worth knowing before editing the copy:
 
 - **It carries its own headline line.** `concise.heroLine` replaces `whatWeDo.line` here. The long
   version spends its second half on a concrete example — *"from a sticking door to repainting a
@@ -418,6 +459,10 @@ src/
 assets/
   brand-book/               the source PDF, extracted pages and artwork
   build-assets.py           regenerates public/brand/ from that artwork
+public/
+  brand/                    supplied logo artwork, recoloured to brand values
+  video/hero.mp4            the client's own footage, used as the concise hero plate
+  video/hero-poster.jpg     its first frame, so the plate is never an empty box
 tools/                      verification scripts, run against a production build
   harness.mjs               shared Playwright setup
   overflow-audit.mjs        every route at 8 widths

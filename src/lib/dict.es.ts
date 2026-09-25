@@ -88,6 +88,8 @@ export const es: Dict = {
     pickerEmpty: "Cotizar mi lista",
     pickerClear: "Limpiar",
     closeBody: "Un precio por escrito. Sin compromiso y sin costo la conversación.",
+    plateCaption: "Nuestra camioneta, nuestro equipo.",
+    plateNote: "Camino a un trabajo",
 
     /**
      * El problema, dicho una vez. La home larga le dedicaba 138 palabras en tres

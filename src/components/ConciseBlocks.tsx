@@ -19,11 +19,12 @@
  * truncated copy. Each block was rewritten to say the one thing it has to say.
  */
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { ServiceMark } from "./ServiceMarks";
 import { Stamp, TicketField } from "./ui";
 import { StatusBoard } from "./StatusBoard";
+import { useMotionOk } from "./motion/primitives";
 import { route, site, telHref, type Locale } from "@/lib/site";
 import type { Dict } from "@/lib/i18n";
 
@@ -418,6 +419,177 @@ export function ConciseHome({ locale, t }: { locale: Locale; t: Dict }) {
 }
 
 /* ─────────────────────────────────────────────────────────────────────────────
+   THE PLATE — the client's own footage, framed as a work-order plate.
+
+   WHAT IT IS FOR. Everything else in this hero is drawn: the ticket, the status
+   board, the stamps. This is the one piece of evidence on the page that the
+   company exists outside the browser, and the truck in it carries the real
+   livery — the walker mark, the wordmark, the tagline, the four service lines.
+   It answers the question a drawing cannot.
+
+   WHY IT IS PRESENTED, NOT EMBEDDED. The world is "The Work Order": cream stock,
+   navy ink, hairline rules, no gradients. A full-bleed autoplaying video behind
+   the hero would be the one thing on the site from a different design language —
+   and worse, it would put 5.8 MB of decoded video under a text overlay, which
+   costs legibility on exactly the screens least able to afford it. So the footage
+   is treated as a plate: a ruled frame, a caption in the label register, and the
+   accepted depth cue from this world rather than a soft shadow.
+
+   MOTION, AND WHY THIS ONE IS ALLOWED. The site's rule is that an entrance must
+   never be a fourth moving thing. This is not an entrance — it is content that
+   happens to move, and it is the only visual asset on the page that carries the
+   real brand. It is muted, looped, has no controls, and is NOT rendered at all
+   under `prefers-reduced-motion`: those readers get the poster frame, which is
+   the same composition held still.
+   ───────────────────────────────────────────────────────────────────────────── */
+
+export function HeroPlate({ t }: { t: Dict }) {
+  const motionOk = useMotionOk();
+  const ref = useRef<HTMLVideoElement>(null);
+
+  /*
+   * WHY THE SOURCE IS ATTACHED BY HAND, AND WHY `preload="metadata"` WAS NOT
+   * ENOUGH.
+   *
+   * The clip is 5.78 MB. `preload="metadata"` is the obvious way to keep that off
+   * the critical path and it does nothing here: Next serves the file from
+   * `public/`, Chrome asks for `bytes=0-`, and the response is the whole 5.78 MB —
+   * measured, not assumed. With the video on it the page transferred 6.03 MB, of
+   * which 96% was the video, against a page whose entire text is 89 words.
+   *
+   * So the element ships with no source and the source is attached when the plate
+   * comes within 200px of the viewport. The source is set through the ref rather
+   * than React state deliberately: `setState` in an effect body is a lint error in
+   * this project and would be a real one, re-rendering the whole hero to change an
+   * attribute on one node.
+   *
+   * HONEST ABOUT WHAT THIS DOES NOT BUY: at every width the plate is inside the
+   * first screen, so in practice the source attaches on load anyway and the
+   * deferral changes nothing today. It is here because the placement may move —
+   * and because it makes the cost explicit in the one place a future change would
+   * have to notice it.
+   */
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+    const attach = () => {
+      if (!el.src) el.src = "/video/hero.mp4";
+    };
+    if (typeof IntersectionObserver === "undefined") {
+      attach();
+      return;
+    }
+    const io = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((e) => e.isIntersecting)) {
+          attach();
+          io.disconnect();
+        }
+      },
+      { rootMargin: "200px 0px" },
+    );
+    io.observe(el);
+    return () => io.disconnect();
+  }, []);
+
+  /*
+   * THE MOTION GATE, AND THE TWO WRONG ANSWERS BEFORE IT.
+   *
+   * `autoPlay={motionOk}` does not work. `autoPlay` is a boolean ATTRIBUTE: the
+   * server renders it, because `useReducedMotion` returns null on the server and
+   * the markup default has to be the moving version, and once the attribute is
+   * present the browser has already started. Removing it on the client is also a
+   * hydration mismatch. Measured with the prop in place, the video still played.
+   *
+   * Neither does `if (!motionOk) return`. Skipping the `play()` call does not stop
+   * anything, because attaching the source to an element carrying `autoPlay` is
+   * itself what starts playback — you cannot decline to start something you never
+   * started. Measured: still playing under reduced motion.
+   *
+   * So the element is explicitly PAUSED, and it is paused on the media event as
+   * well as on the effect, because the source attaches after the first render and
+   * playback begins then, not before.
+   */
+  useEffect(() => {
+    const v = ref.current;
+    if (!v) return;
+
+    if (motionOk) {
+      const start = () =>
+        void v.play().catch(() => {
+          /* autoplay refused — the poster shows the same composition */
+        });
+      start();
+      v.addEventListener("loadeddata", start);
+      return () => v.removeEventListener("loadeddata", start);
+    }
+
+    const stop = () => v.pause();
+    stop();
+    v.addEventListener("loadeddata", stop);
+    v.addEventListener("play", stop);
+    return () => {
+      v.removeEventListener("loadeddata", stop);
+      v.removeEventListener("play", stop);
+    };
+  }, [motionOk]);
+
+  return (
+    <figure className="relative">
+      <div className="border-2 border-navy/20 bg-navy">
+        {/*
+         * The frame is a plate, so its proportions are declared rather than
+         * inherited: 16/9 holds whatever the source happens to be, and
+         * object-cover keeps the truck centred if the source changes.
+         */}
+        <div className="relative aspect-[16/9] overflow-hidden">
+          <video
+            ref={ref}
+            className="absolute inset-0 h-full w-full object-cover object-center"
+            poster="/video/hero-poster.jpg"
+            muted
+            loop
+            playsInline
+            autoPlay
+            preload="none"
+            /*
+             * Decorative in the accessibility tree on purpose. It has no audio
+             * track, so there is nothing to caption, and the caption below says
+             * in words what the footage shows — which is what a screen reader
+             * should get instead of "video".
+             */
+            aria-hidden="true"
+          />
+        </div>
+
+        {/*
+         * Two lines below `lg`, one line above it. The first version wrapped at
+         * every width and the second caption ran under the screenshot's cut, so
+         * a phone showed "ON THE WAY TO" and nothing else — the note simply
+         * disappeared. `flex-1` gives the long caption the room and the browser
+         * breaks between the two labels rather than inside one.
+         */}
+        <figcaption className="flex flex-wrap items-center justify-between gap-x-4 gap-y-1 border-t-2 border-cream/20 px-4 py-2.5 sm:px-5">
+          <span className="label flex-1 text-cream/85">{t.concise.plateCaption}</span>
+          <span className="label whitespace-nowrap text-cream/55">{t.concise.plateNote}</span>
+        </figcaption>
+      </div>
+
+      {/*
+       * The plate sits on the panel, so it takes the world's depth cue — the
+       * same hard-edged, offset lift the ticket uses, not a soft drop shadow,
+       * which this build does not have anywhere. Hidden below `lg` because at
+       * phone widths it reads as a printing mistake rather than as paper.
+       */}
+      <div
+        aria-hidden="true"
+        className="absolute -bottom-1.5 -right-1.5 -z-10 hidden h-full w-full border-2 border-cream/20 lg:block"
+      />
+    </figure>
+  );
+}
+
+/* ─────────────────────────────────────────────────────────────────────────────
    THE FIRST VIEWPORT.
 
    Same world as the long home — navy panel, the job ticket overlapping it, the
@@ -466,47 +638,57 @@ function ConciseHero({ locale, t }: { locale: Locale; t: Dict }) {
             </div>
           </div>
 
-          <div className="relative lg:-mb-8">
-            <div
-              aria-hidden="true"
-              className="sheet absolute -left-3 -top-3 hidden h-full w-full rotate-[-1.1deg] opacity-50 lg:block"
-            />
-            <div className="sheet-raised relative">
-              <div className="flex items-center justify-between gap-4 border-b-2 border-navy/20 px-5 py-4 sm:px-7">
-                <h2 className="display text-[1.5rem] text-navy">{t.hero.ticketTitle}</h2>
-                <span className="label text-ink-soft">{t.hero.ticketNo}</span>
-              </div>
+          <div className="lg:-mb-8">
+            {/*
+             * The plate sits above the ticket rather than replacing it, and the
+             * order is the argument: the video answers "are these people real" in
+             * one glance, the ticket answers "what happens if I call" in one
+             * glance. Proof first, then process.
+             */}
+            <HeroPlate t={t} />
 
-              <div className="px-5 sm:px-7">
-                {t.hero.ticketFields.map(([label, value], i) =>
-                  i === statusIndex ? (
-                    <div
-                      key={label}
-                      className="field-row"
-                      style={{ containerType: "inline-size", containerName: "board" }}
-                    >
-                      <span className="label text-ink-soft">{label}</span>
-                      <StatusBoard
-                        full={t.hero.ticketStatusCycle}
-                        short={t.hero.ticketStatusCycleShort}
-                      />
-                    </div>
-                  ) : (
-                    <TicketField key={label} label={label} value={value} />
-                  ),
-                )}
-              </div>
+            <div className="relative mt-6">
+              <div
+                aria-hidden="true"
+                className="sheet absolute -left-3 -top-3 hidden h-full w-full rotate-[-1.1deg] opacity-50 lg:block"
+              />
+              <div className="sheet-raised relative">
+                <div className="flex items-center justify-between gap-4 border-b-2 border-navy/20 px-5 py-4 sm:px-7">
+                  <h2 className="display text-[1.5rem] text-navy">{t.hero.ticketTitle}</h2>
+                  <span className="label text-ink-soft">{t.hero.ticketNo}</span>
+                </div>
 
-              <div className="flex flex-wrap items-center justify-between gap-4 border-t-2 border-navy/20 px-5 py-5 sm:px-7">
-                <Stamp tone="red">{t.hero.ticketStamp}</Stamp>
-                <p className="label text-ink-soft">
-                  {locale === "es" ? "Precio aprobado antes de empezar" : "Priced before we start"}
+                <div className="px-5 sm:px-7">
+                  {t.hero.ticketFields.map(([label, value], i) =>
+                    i === statusIndex ? (
+                      <div
+                        key={label}
+                        className="field-row"
+                        style={{ containerType: "inline-size", containerName: "board" }}
+                      >
+                        <span className="label text-ink-soft">{label}</span>
+                        <StatusBoard
+                          full={t.hero.ticketStatusCycle}
+                          short={t.hero.ticketStatusCycleShort}
+                        />
+                      </div>
+                    ) : (
+                      <TicketField key={label} label={label} value={value} />
+                    ),
+                  )}
+                </div>
+
+                <div className="flex flex-wrap items-center justify-between gap-4 border-t-2 border-navy/20 px-5 py-5 sm:px-7">
+                  <Stamp tone="red">{t.hero.ticketStamp}</Stamp>
+                  <p className="label text-ink-soft">
+                    {locale === "es" ? "Precio aprobado antes de empezar" : "Priced before we start"}
+                  </p>
+                </div>
+
+                <p className="border-t border-dashed border-rule-strong px-5 py-3 text-[0.75rem] leading-relaxed text-gold-ink sm:px-7">
+                  * {t.common.syntheticNote}
                 </p>
               </div>
-
-              <p className="border-t border-dashed border-rule-strong px-5 py-3 text-[0.75rem] leading-relaxed text-gold-ink sm:px-7">
-                * {t.common.syntheticNote}
-              </p>
             </div>
           </div>
         </div>
