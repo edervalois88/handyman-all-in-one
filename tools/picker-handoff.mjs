@@ -37,6 +37,7 @@ for (const [concise, contact] of [
 
   const tiles = () => page.locator("main > section:nth-of-type(2) li button");
   const cta = () => page.locator("main > section:nth-of-type(2) a.btn-primary");
+  const count = () => page.locator('main > section:nth-of-type(2) [aria-live="polite"]');
   const pressed = () =>
     tiles().evaluateAll((els) => els.map((e) => e.getAttribute("aria-pressed")));
 
@@ -63,7 +64,23 @@ for (const [concise, contact] of [
   check("aria-pressed after deselect", await pressed(), [
     "true", "false", "false", "false", "false", "false",
   ]);
-  check("CTA carries the count 1", /1/.test(await cta().innerText()), true);
+  /*
+   * At n=1 the CTA does NOT carry a digit, and that is the fix rather than a
+   * regression: "Quote these 1" and "Cotizar estos 1" are both ungrammatical, so
+   * the singular reads "Quote this one" / "Cotizar esta lista". Asserting a digit
+   * here is what an earlier version of this check did, and it would now fail on a
+   * correct page.
+   */
+  check(
+    "CTA at n=1 is the singular form",
+    /quote this one|cotizar esta lista/i.test(await cta().innerText()),
+    true,
+  );
+  check(
+    "count label at n=1 is singular in Spanish",
+    /1\s+(selected|seleccionado)$/i.test((await count().innerText()).trim()),
+    true,
+  );
 
   const href = await cta().getAttribute("href");
   console.log(`  link: ${href}`);

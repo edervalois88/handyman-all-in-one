@@ -68,7 +68,15 @@ export const en = {
      * has to land in one glance. `whatWeDo.line` is untouched for the long home.
      */
     heroLine: "Repairs, maintenance and improvements. One list, one price, one crew.",
-    promise: "Four things, every job.",
+    /**
+     * The four commitments.
+     *
+     * The heading used to read "Four things, every job." above WE ANSWER / WE
+     * ARRIVE / WE QUOTE FIRST / WE STAND BEHIND IT — which are four promises, not
+     * four things, and the mismatch was the kind of small wrongness that makes a
+     * reader trust the rest of the page slightly less without knowing why.
+     */
+    promise: "Four promises, every job.",
     /** Service tiles: short name + one line. Rewritten, not truncated. */
     tilesTitle: "What we do",
     /**
@@ -83,14 +91,38 @@ export const en = {
     faqTitle: "Common questions",
     faqAll: "All questions",
     areasTitle: "Areas",
-    areasCta: "My address",
+    /**
+     * "See my address", not "My address". Cutting label words for brevity dropped
+     * the verb and left a form-field caption where a link belongs — nothing about
+     * "My address" says it can be pressed.
+     */
+    areasCta: "See my address",
     /** The interactive selector. */
     pickerTitle: "What's on your list?",
     pickerHint: "Tap what you need. We will quote the whole list in one price.",
+    /*
+     * The count is only ever a digit beside this word, so "1 selected" and
+     * "3 selected" are both correct and no plural form is needed in English. The
+     * CTA is the case that needs two forms: "Quote these 1" is not English, and
+     * n=1 is the state a first-time visitor is most likely to be in.
+     */
     pickerSelected: "selected",
+    pickerSelectedOne: "selected",
     pickerCta: "Quote these {n}",
+    pickerCtaOne: "Quote this one",
     pickerEmpty: "Quote my list",
     pickerClear: "Clear",
+
+    /**
+     * The close, and the two objections it exists to answer.
+     *
+     * The long home's CTA carries "No obligation, no pressure, and no charge for
+     * the conversation." The concise page rendered only the title and the
+     * tagline, which dropped the three most valuable words on the page for a
+     * stranger deciding whether asking costs them anything. One short line puts
+     * them back without putting the paragraph back.
+     */
+    closeBody: "One written price. No obligation, no charge for the conversation.",
 
     /**
      * The problem, said once. The long home spent 138 words on it across three

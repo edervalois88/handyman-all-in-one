@@ -19,19 +19,33 @@ import { site, type Locale } from "@/lib/site";
 export function conciseMetadata(locale: Locale): Metadata {
   const t = getDict(locale);
   /*
-   * `whatWeDo.line` was the obvious source for this and is no longer the right
-   * one: the concise hero carries a shorter line of its own, and a description
-   * should describe the page it is attached to. Composed from the tagline plus
-   * the category names instead, which is what the page actually shows and what
-   * somebody searching for one of those trades would match on.
+   * A FIT-TO-LENGTH JOIN, not a `.slice(0, 158)`.
+   *
+   * The first version appended all six category names and then hard-cut the
+   * string at 158 characters. English reached 158 mid-phrase and shipped a
+   * description ending "…Exterior & seasonal, Safety" — cut inside "Safety &
+   * accessibility", with no ellipsis, reading as a seventh category called
+   * "Safety". Spanish happened to land at 116 characters and ended cleanly on
+   * "Seguridad.", so the defect was invisible in the language anyone would check
+   * first, and the two languages described the page unequally by 42 characters.
+   *
+   * This adds whole categories while they fit and stops, so neither language can
+   * be cut mid-word and neither is padded to a quota.
    */
-  const services = t.services.categories.map((c) => c.short).join(", ");
+  const parts = [t.hero.sub];
+  for (const c of t.services.categories) {
+    const next = `${parts.join(" ")} ${c.short},`;
+    if (next.length > 155) break;
+    parts.push(`${c.short},`);
+  }
+  const description = `${parts.join(" ").replace(/,$/, "")}.`;
+
   return {
     title:
       locale === "es"
         ? "Reparación del hogar, en corto — una sola empresa"
         : "Home repair, in short — one company, one standard",
-    description: `${t.hero.sub} ${services}.`.slice(0, 158),
+    description,
     alternates: {
       canonical: locale === "es" ? "/es/concise" : "/concise",
       languages: { en: "/concise", es: "/es/concise" },

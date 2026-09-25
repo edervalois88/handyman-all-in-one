@@ -188,7 +188,7 @@ export function ServiceGrid({ locale, t }: { locale: Locale; t: Dict }) {
                   ) : null}
                   <Link
                     href={`${route("services", locale)}#${c.id}`}
-                    className="label-lg inline-block border-b-2 border-red pb-1 text-navy hover:text-red"
+                    className="label-lg link-rule text-navy"
                   >
                     {t.common.learnMore}
                   </Link>

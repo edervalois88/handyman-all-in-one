@@ -488,6 +488,34 @@ body {
   color: var(--red);
 }
 
+/*
+ * The ruled action link — a label sitting on a red hairline.
+ *
+ * It was written out as `label-lg border-b-2 border-red pb-1` in four places, and
+ * measured 24px tall in all of them. The rest of the site meets the touch-target
+ * floor (the primary buttons are 51px) and these were the one class of control
+ * below it: on a phone, "PROCESS", "ALL QUESTIONS" and "SEE MY ADDRESS" were each
+ * a 24px strip to hit.
+ *
+ * The link is now a flex box that is 44px TALL whatever its label does, rather
+ * than a text run with padding tuned to reach it. The first fix used a transparent
+ * pseudo-element overlay, which does enlarge the hit area — but it is invisible to
+ * every automated check and to `getBoundingClientRect`, so the next person
+ * measuring this page would conclude the link was still 24px and "fix" it again.
+ * Padding + a line-height that happens to add up is the same trap in slower
+ * motion: change the label size and the target silently drops below the floor.
+ */
+.link-rule {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  border-bottom: 2px solid var(--red);
+}
+
+.link-rule:hover {
+  color: var(--red);
+}
+
 /* the open-for-business dot. Static by design: see components/Header.tsx. */
 .live-dot {
   width: 0.5rem;

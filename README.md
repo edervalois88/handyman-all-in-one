@@ -272,25 +272,46 @@ Where the words went:
 
 | | long home `/` | concise `/concise` |
 |---|---|---|
-| **prose — the reading path** | **448** | **71** |
-| scanned data (ticket values, towns, questions) | 824 | 109 |
-| chrome (nav, buttons, footer) | 76 | 38 |
-| everything in `<main>` | 1,679 | 243 |
-| **prose reading time at 200 wpm** | **2m14s** | **21s** |
-| whole page read line by line | 6m44s | 1m05s |
-| desktop height | 8,960px (10 screens) | 2,197px (2.4 screens) |
-| phone height | 15,800px (17.6 screens) | 3,627px (4 screens) |
+| **prose — the reading path** | **448** | **89** |
+| scanned data (ticket values, towns, questions) | 778 | 97 |
+| chrome (nav, buttons, footer) | 122 | 51 |
+| everything in `<main>` | 1,348 | 237 |
+| **prose reading time at 200 wpm** | **2m14s** | **27s** |
+| whole page read line by line | 6m44s | 1m11s |
+| desktop height | 8,996px (10 screens) | 2,251px (2.5 screens) |
+| phone height | 15,800px (17.6 screens) | ~3,600px (4 screens) |
 | footer words (all 13 routes) | 96 → **85** | 85 |
+
+Run `node tools/word-budget.mjs` against a production build for the current figures across all
+twelve routes.
 
 **The 30-second figure is about prose, and that is the only reading of it that survives contact with
 a real page.** A ticket's field values, a list of eight town names and three table rows of questions
-are scanned, not read in order; the nav is not read at all. Of the concise page's 243 words in
-`<main>`, 71 are sentences. The four longest prose runs on the entire page are 8, 10, 10 and 10
-words — there is no paragraph to get lost in.
+are scanned, not read in order; the nav is not read at all. Of the concise page's 237 words in
+`<main>`, 89 are sentences, and the longest of them is 11 words. Someone who reads every word
+linearly takes about 71 seconds; someone *using* the page — reading the headings, the one line under
+each, and pressing the tiles — takes well under 30, which is what the brief was asking for.
 
 The rule the block list follows: **the home page answers, the inner pages explain.** Service detail
 went to `/services`, the process to `/about`, and the remaining questions to `/contact`, which is
 where the answers already were.
+
+### What is still open on this page
+
+Two things the page does not yet do, both recorded rather than quietly left:
+
+- **Nothing above the fold on a phone says what the company does.** The first service tile is
+  1.63 screens down at 390px. The hero does say it — "Repairs, maintenance and improvements" — but
+  that line is 18px of type inside a 598px panel, and the six categories are not in the nav either.
+  Fixing it properly means either a sixth item in the header nav or moving the tile row above the
+  hero's work-order ticket on small viewports, and both change the composition the client has
+  already approved at desktop. Worth a decision rather than a guess.
+- **The page promises a price in three places and states none.** The ticket shows a price field, the
+  picker says "we will quote the whole list in one price", and the meta description leads with "one
+  price" — but `concise.faq[0]` is still the placeholder asking the owner to publish a call-out fee
+  and minimum job. That is the owner's number to supply, not one to invent, so it stays a
+  placeholder; it is the single highest-value piece of copy missing from the page.
+
 
 Two things worth knowing before editing it:
 
@@ -303,20 +324,33 @@ Two things worth knowing before editing it:
 
 ### Measuring it
 
-The numbers above were taken with Playwright against a production build, not estimated:
+The numbers above come from Playwright against a production build, and the checks are in
+[`tools/`](tools/) rather than in a scratch directory, so the next person can re-run them instead of
+re-deriving them. They are not part of the build and Playwright is deliberately not an app
+dependency — point `PW_PATH` and `CHROME_PATH` at an existing install.
 
 ```bash
-npm run build && npx next start -p 4177   # serve the real build
-# then drive it with Playwright: count words in <main>, measure its height
+npm run build && npx next start -p 4177     # the checks measure the real build, not the dev server
+
+PW_PATH=~/.tools/node_modules/playwright-core CHROME_PATH=/path/to/chrome \
+  node tools/overflow-audit.mjs      # 12 routes x 8 widths: lockup, overflow, status board
+  node tools/word-budget.mjs         # prose / scanned / chrome, per route
+  node tools/mark-alignment.mjs      # how straight the row of six service marks is
+  node tools/picker-handoff.mjs      # the tile picker, end to end, both languages
+  node tools/asterisk-balance.mjs    # every placeholder mark has a footnote
 ```
 
-If you re-measure, **count text nodes, not elements.** Summing `main a` + `main span` + `main li`
-double- and triple-counts every word nested inside another of those selectors and reports a total
-about 40% too high. An earlier version of that script also read `<style>` text — `SplitFlapText`
-ships an inline stylesheet — which added 518 phantom "words" to the hero. And a shut `<details>` is
-not part of the reading path: Chrome hides it with `content-visibility`, which leaves the box
-non-zero, so a naive visibility test counts three collapsed answers as prose the reader has read.
-All three mistakes produced a confident, wrong number.
+Three measurement mistakes are written into `word-budget.mjs` because all three produced a
+confident wrong number here, and each one looked like a pass:
+
+- **Counting elements rather than text nodes.** Summing `main a` + `main span` + `main li` double-
+  and triple-counts every word nested inside another of those selectors — about 40% too high.
+- **Counting `<style>` text.** `SplitFlapText` ships an inline stylesheet; read as copy it added 518
+  phantom words to the hero. The fix for this was itself wrong once, because it was checked against
+  the wrong node.
+- **Counting a shut `<details>` as read prose.** Chrome hides accordion content with
+  `content-visibility`, which leaves the box non-zero, so a naive visibility test counts answers
+  nobody has opened.
 
 ### Motion today: four authored moments
 
@@ -371,7 +405,7 @@ src/
     StatusBoard.tsx         the split-flap status field
     sections.tsx            problem, solution, services, process, compare, areas, FAQ, CTA
     QuoteForm.tsx           the conversion surface
-    Logo.tsx, ui.tsx, LocaleShell.tsx, NotFoundPage.tsx
+    Logo.tsx, ui.tsx, LocaleShell.tsx, NotFoundPage.tsx, LangSync.tsx
   lib/
     site.ts                 ← ALL replaceable business data + routing helpers
     dict.en.ts              English copy (source of truth for structure)
@@ -384,30 +418,80 @@ src/
 assets/
   brand-book/               the source PDF, extracted pages and artwork
   build-assets.py           regenerates public/brand/ from that artwork
+tools/                      verification scripts, run against a production build
+  harness.mjs               shared Playwright setup
+  overflow-audit.mjs        every route at 8 widths
+  word-budget.mjs           prose / scanned / chrome, per route
+  mark-alignment.mjs        how straight the row of six service marks is
+  picker-handoff.mjs        the concise tile picker, end to end, both languages
+  asterisk-balance.mjs      every placeholder mark has a footnote
 ```
 
 ### The icon frame, and why the marks have numbers in them
 
 [`ServiceMarks.tsx`](src/components/ServiceMarks.tsx) draws six marks in a shared 48-unit `viewBox`
-and normalises each one inside an `IconFrame` group. The numbers in its `INK` table are measurements
-of each drawing's painted bounding box, including half a stroke on every side, and they exist
-because **a shared viewBox is not a shared silhouette.**
+and normalises each one inside an `IconFrame` group. The numbers in its `INK` table are measured ink
+boxes — what each mark actually paints, in its own coordinate space — and they exist because **a
+shared viewBox is not a shared silhouette.**
 
-Measured on the drawings as authored, the six marks' ink started at y=4, 4, 16, 6, 12 and 6 and
-ended at y=44, 40, 43, 37, 43 and 42 — a 12-unit variance. In a row of six equal tiles that reads as
-a crooked row: the handsaw floats, the door and the ladder hang low. Every mark was individually
-fine and the set was wrong. Mapping each ink box onto one shared box took the misalignment from
-**7.3px to 2.7px** as measured against the labels they sit above.
+Measured from rendering, the six marks' ink is 34.2x39.1, 37.2x33.4, 35.4x24.6, 35.4x28.4, 41.5x28.2
+and 34.6x33.4 units. In a row of six equal tiles that reads as a crooked row: the handsaw floats,
+the door hangs low. Every mark was individually fine and the set was wrong.
+
+The first attempt at this shipped and did not work, in three separate ways. All three are worth
+knowing, because each looked correct in review:
+
+- **The `INK` table was derived by hand from path data.** Fine for lines, wrong the moment a shape
+  rotates — the door is drawn at `rotate(-30)` — and it overstated the plumbing mark by 8 units, so a
+  mark that is wider than tall was scaled as if it were tall.
+- **The frame equalised the LONGEST side.** That sounds fair and is not: a wide mark comes out short,
+  so the ladder and the saw rendered 26-27 units tall against the door's 41 — a 55% spread, worse on
+  the axis the frame existed to fix. It now fits **height** and lets width fall where it may, the way
+  letters do.
+- **`vectorEffect="non-scaling-stroke"` was on the `<g>`.** It applies to graphics elements and is
+  not inherited, so every child computed to `none`, the group transform thinned the heavier marks,
+  and the set shipped with a 1.31x spread in stroke weight — precisely the defect the comment
+  claimed the attribute was preventing. `frameShapes()` now walks each mark and puts it on every
+  shape, so a shape added later cannot miss it.
+
+Measured against the labels the marks sit above, before and after the rewrite:
+
+| | before | after |
+|---|---|---|
+| ink centre misalignment | 7.3px | **0.2px** |
+| gap to label, spread | 9.0px | **1.3px** |
 
 Two notes for anyone changing a drawing:
 
-- **Recompute its `INK` row**, or the row goes crooked again in a way that is easy to see and hard
-  to attribute.
-- **`vectorEffect="non-scaling-stroke"` on the frame group is load-bearing.** A group `transform`
-  scales the stroke with everything else, so normalising would otherwise also thin the heavier
-  marks — the exterior at scale 0.815 would render its 2.8 weight at 2.28px next to the door's
-  2.51px, and the set would read as a family with one member drawn in a lighter pen. With
-  non-scaling strokes every mark renders the weight it declares.
+- **Re-measure its `INK` row**, with `tools/mark-alignment.mjs` as the check. Do not do it by hand:
+  getBBox() on the `<svg>` returns the box *after* the transform, so reading it and feeding it back
+  is circular, and arithmetic on `d` attributes cannot see a rotation.
+- **`vectorEffect` goes on the shape, never the group.** This is the one that shipped wrong, and it
+  is invisible in a code review because the attribute is right there and looks like it is doing
+  something.
+
+### Accessibility
+
+The site meets WCAG 3.1.1 — `<html lang>` — but **not from the root layout**, which is the obvious
+place and not where it ended up. Spanish pages live under `/es` and were shipping with no `lang`
+attribute at all, so a screen reader read the whole Spanish page with English pronunciation. On a
+site whose differentiator is the Spanish, that was the most serious defect in the build.
+
+The fix is [`src/components/LangSync.tsx`](src/components/LangSync.tsx), a client component, because
+the alternatives were disproportionate to one attribute: two root layouts via route groups would
+mean moving all fifteen route files and accepting a **full page reload on every language switch**,
+and a `[locale]` dynamic segment would rewrite every URL in the project. The trade is stated in the
+file: Spanish is corrected on hydration, so a visitor with JavaScript disabled still gets `lang="en"`
+on a Spanish page. That is the smaller wrong. If the site gains a locale or stops being fully static,
+take the route-group route and delete the component.
+
+Two other floors the page keeps: every text link is at least 44px tall (`.link-rule` sets
+`min-height` rather than relying on padding that happens to add up — a transparent pseudo-element
+overlay was tried first and reverted, because it enlarges the hit area while remaining invisible to
+`getBoundingClientRect` and to every automated check), and the tile picker's count sits in an
+`aria-live="polite"` region, because otherwise the control's only feedback is silent to a screen
+reader, which hears each tile's pressed state and never the total.
+
 
 ### Bilingual by construction
 

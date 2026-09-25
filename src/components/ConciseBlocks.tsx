@@ -68,7 +68,17 @@ export function ServiceTiles({
                   type="button"
                   onClick={() => onToggle(c.id)}
                   aria-pressed={on}
-                  className="group block w-full text-left"
+                  /*
+                   * `min-h-16` is the tap-target floor, and it is not cosmetic.
+                   * This button is a real control — it toggles selection and
+                   * relabels the action below it — but its visible content is a
+                   * 15px number, a 56px mark and a 15px label, so its height is
+                   * whatever those happen to add up to on the day. A floor means
+                   * the control cannot be squeezed below the 44px minimum that the
+                   * buttons elsewhere on the site already keep, by a later change
+                   * to the mark size or the label leading.
+                   */
+                  className="group block min-h-16 w-full text-left"
                 >
                   <span className="flex items-baseline justify-between gap-2">
                     <span className={`label ${on ? "text-red" : "text-navy/35"}`}>
@@ -127,18 +137,30 @@ export function ServiceTiles({
             }`}
             className="btn btn-primary"
           >
-            {selected.length
-              ? t.concise.pickerCta.replace("{n}", String(selected.length))
-              : t.concise.pickerEmpty}
+            {selected.length === 1
+              ? t.concise.pickerCtaOne
+              : selected.length
+                ? t.concise.pickerCta.replace("{n}", String(selected.length))
+                : t.concise.pickerEmpty}
           </Link>
           <Link href={route("services", locale)} className="btn btn-line">
             {t.concise.tilesCta}
           </Link>
-          {selected.length ? (
-            <span className="label text-ink-soft">
-              {selected.length} {t.concise.pickerSelected}
-            </span>
-          ) : null}
+          {/*
+           * Announced, because the count is the only feedback the picker gives
+           * and it is otherwise silent: a screen-reader user toggling tiles heard
+           * each tile's own pressed state and never heard the total, nor that the
+           * button had relabelled itself. `aria-live` on a region that is always
+           * present, rather than on a node that appears, because a region added
+           * at the same moment as its text is frequently not announced at all.
+           */}
+          <span className="label text-ink-soft" aria-live="polite">
+            {selected.length
+              ? `${selected.length} ${
+                  selected.length === 1 ? t.concise.pickerSelectedOne : t.concise.pickerSelected
+                }`
+              : ""}
+          </span>
         </div>
       </div>
     </section>
@@ -194,7 +216,7 @@ export function StepsRow({ locale, t }: { locale: Locale; t: Dict }) {
           </h2>
           <Link
             href={route("about", locale)}
-            className="label-lg border-b-2 border-red pb-1 text-cream hover:text-red"
+            className="label-lg link-rule text-cream"
           >
             {t.concise.stepsCta}
           </Link>
@@ -262,7 +284,7 @@ export function FaqShort({ locale, t }: { locale: Locale; t: Dict }) {
           </h2>
           <Link
             href={route("contact", locale)}
-            className="label-lg mt-4 inline-block border-b-2 border-red pb-1 text-navy hover:text-red"
+            className="label-lg link-rule text-navy"
           >
             {t.concise.faqAll}
           </Link>
@@ -314,7 +336,7 @@ export function AreasAndClose({ locale, t }: { locale: Locale; t: Dict }) {
           </h2>
           <Link
             href={route("areas", locale)}
-            className="label-lg border-b-2 border-red pb-1 text-navy hover:text-red"
+            className="label-lg link-rule text-navy"
           >
             {t.concise.areasCta}
           </Link>
@@ -327,13 +349,29 @@ export function AreasAndClose({ locale, t }: { locale: Locale; t: Dict }) {
             </li>
           ))}
         </ul>
+        {/*
+         * The coverage list is invented, and this is the one place on the site
+         * where eight placeholder towns were presented with nothing saying so.
+         * /service-areas and the long home both carry this note; the concise page
+         * was printing the same fabricated list without it, which made the one
+         * block of hard fact on the page the one block a reader could not check.
+         */}
+        <p className="label mt-3 text-gold-ink">* {t.areas.note}</p>
 
         <div className="mt-9 flex flex-col gap-5 border-t-2 border-navy pt-7 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <p className="display text-[clamp(1.5rem,3.4vw,2.3rem)] text-navy">
               {t.cta.title.replace(/\n/g, " ")}
             </p>
-            <p className="mt-1.5 text-[0.97rem] text-navy/70">{t.tagline}</p>
+            {/*
+             * The objection, not the tagline. This slot used to print
+             * `t.tagline` — which is already the h1 and already in the footer, and
+             * says nothing a stranger deciding whether to make contact needs. The
+             * long home puts "no obligation, no pressure, no charge for the
+             * conversation" here, and dropping it from the concise version removed
+             * the three words most likely to get someone to press the button.
+             */}
+            <p className="mt-1.5 text-[0.97rem] text-navy/70">{t.concise.closeBody}</p>
           </div>
           <div className="flex flex-wrap items-center gap-3">
             <Link href={route("contact", locale)} className="btn btn-primary">

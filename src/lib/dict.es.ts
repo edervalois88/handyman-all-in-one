@@ -51,9 +51,14 @@ export const es: Dict = {
      * vistazo. `whatWeDo.line` queda intacta para la home larga.
      */
     heroLine: "Reparaciones, mantenimiento y mejoras. Una lista, un precio, un equipo.",
-    promise: "Cuatro cosas, en cada trabajo.",
+    promise: "Cuatro promesas, en cada trabajo.",
     tilesTitle: "Qué hacemos",
-    /** "Señale una" no servía en pantalla táctil: los recuadros se tocan. */
+    /**
+     * "Toque o señale": el tratamiento de toda la página es usted (el héroe dice
+     * "Su casa", los pasos dicen "Llame" y "Reciba"). La primera versión decía
+     * "Señale" aquí y "Marque" más abajo, que junto a los posesivos formales
+     * suenan a tú y rompen el registro en la misma pantalla.
+     */
     tilesHint: "Toque o señale una para ver qué cubre.",
     tilesCta: "Servicios",
     stepsTitle: "Cómo funciona",
@@ -61,13 +66,28 @@ export const es: Dict = {
     faqTitle: "Preguntas frecuentes",
     faqAll: "Todas las preguntas",
     areasTitle: "Zonas",
-    areasCta: "Mi dirección",
+    /**
+     * "Ver mi dirección", no "Mi dirección". Al recortar las etiquetas se perdió
+     * el verbo y quedó un rótulo de campo de formulario en el sitio donde va un
+     * enlace: nada indicaba que se pudiera pulsar.
+     */
+    areasCta: "Ver mi dirección",
     pickerTitle: "¿Qué tiene pendiente?",
-    pickerHint: "Marque lo que necesita. Cotizamos toda la lista en un solo precio.",
+    /** "Indique", no "Marque": mismo registro que el resto de la página. */
+    pickerHint: "Indique lo que necesita. Cotizamos toda la lista en un solo precio.",
+    /*
+     * El español sí necesita las dos formas. "seleccionados" es masculino plural
+     * y el sustantivo al que se refiere (la lista) es femenino singular, así que
+     * con una sola selección hay que decir "seleccionado". Y "Cotizar estos 1"
+     * tiene el mismo problema: "estos" es masculino plural.
+     */
     pickerSelected: "seleccionados",
-    pickerCta: "Cotizar estos {n}",
+    pickerSelectedOne: "seleccionado",
+    pickerCta: "Cotizar estas {n}",
+    pickerCtaOne: "Cotizar esta lista",
     pickerEmpty: "Cotizar mi lista",
     pickerClear: "Limpiar",
+    closeBody: "Un precio por escrito. Sin compromiso y sin costo la conversación.",
 
     /**
      * El problema, dicho una vez. La home larga le dedicaba 138 palabras en tres
@@ -242,11 +262,28 @@ export const es: Dict = {
     boundaryTitle: "Dónde está la línea",
     boundaryBody:
       "Algunos trabajos exigen legalmente un oficio licenciado. Se lo decimos antes de que apruebe nada, y nosotros traemos al socio licenciado para que siga teniendo un solo contacto.",
+    /**
+     * Los recuadros de la home concisa usan `short`, no `name`: son seis en una
+     * fila y el nombre completo no cabe. Pero la primera versión de estos
+     * `short` recortaba justo los calificativos que limitan el alcance, y eso no
+     * es una abreviatura, es otra promesa:
+     *
+     *   · "Plomería y luz" perdía "(alcance de handyman)", que es lo único en el
+     *     recuadro que dice que no se hacen paneles ni gas.
+     *   · "Seguridad" perdía "y accesibilidad", así que un lector hispanohablante
+     *     nunca se enteraba de que la empresa hace trabajo de accesibilidad —
+     *     una línea de negocio completa que desaparecía solo en español.
+     *
+     * Los `name` completos siguen siendo la etiqueta de la casilla del
+     * formulario y los títulos de la página de servicios; estos son la versión
+     * corta que conserva el alcance. Los tres últimos sí pueden abreviarse sin
+     * perder nada.
+     */
     categories: [
       {
         id: "repairs",
         name: "Reparaciones del día a día",
-        short: "Reparaciones",
+        short: "Reparaciones del día a día",
         covers:
           "La lista que va creciendo: puertas, tablaroca, sellado, repisas, mosquiteros — resuelta en una visita en vez de en seis.",
         blurb:
@@ -267,7 +304,7 @@ export const es: Dict = {
       {
         id: "plumbing-electrical",
         name: "Plomería y electricidad (alcance de handyman)",
-        short: "Plomería y luz",
+        short: "Plomería y luz (alcance handyman)",
         covers:
           "Llaves, inodoros, trituradores, lámparas, apagadores y contactos — lo que un handyman puede hacer legalmente. Lo que pasa de esa línea va a un socio licenciado que traemos nosotros.",
         blurb:
@@ -335,7 +372,7 @@ export const es: Dict = {
       {
         id: "exterior",
         name: "Exterior y temporada",
-        short: "Exterior",
+        short: "Exterior y temporada",
         covers:
           "Canaletas, lavado a presión, cercas, preparación de tormentas e invernalización — agendado en bloques mientras el clima aguanta.",
         blurb:
@@ -359,7 +396,7 @@ export const es: Dict = {
       {
         id: "safety",
         name: "Seguridad y accesibilidad",
-        short: "Seguridad",
+        short: "Seguridad y accesibilidad",
         covers:
           "Barras de apoyo ancladas a postes, pasamanos, bandas antiderrapantes y cambio de detectores — instalaciones pequeñas que hacen una casa más segura para vivir.",
         blurb:
